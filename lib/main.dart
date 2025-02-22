@@ -161,6 +161,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     image: 'assets/images/list-panasonic.svg',
                     isSvg: true,
                   ),
+                  BrandCard(
+                    brand: 'Carrier',
+                    subtitle: 'Electronics',
+                    image: 'assets/images/list-carrier.svg',
+                    isSvg: true,
+                  ),
                 ],
               ),
             ),
@@ -298,6 +304,7 @@ class BrandDetailScreen extends StatelessWidget {
       'PANASONIC': 'Panasonic offers reliable home appliances with innovative features and durability.',
       'TOSHIBA': 'Toshiba brings quality and innovation to home appliances with their advanced technology.',
       'HITACHI': 'Hitachi provides high-quality home appliances with Japanese engineering excellence.',
+      'Carrier': 'Carrier provides high-quality HVAC solutions with American engineering excellence.',
     };
 
     return Scaffold(
@@ -328,7 +335,7 @@ class BrandDetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'About $brand',
+                    'ข้อมูลเครื่องปรับอากาศ $brand',
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -401,7 +408,20 @@ class ErrorCodeScreen extends StatelessWidget {
           'code': '5C',
           'problem': 'Drainage Problem',
           'solution': '1. Check drain hose\n2. Clean drain filter\n3. Ensure proper installation',
+        },   
+        ],     
+        'Carrier': [
+        {
+          'code': '4C',
+          'problem': 'Water Supply Issue',
+          'solution': '1. Check water supply\n2. Check inlet hose\n3. Clean inlet filter',
         },
+        {
+          'code': '5C',
+          'problem': 'Drainage Problem',
+          'solution': '1. Check drain hose\n2. Clean drain filter\n3. Ensure proper installation',
+        },
+        
         // เพิ่ม error codes อื่นๆ
       ],
       // เพิ่มข้อมูลแบรนด์อื่นๆ
