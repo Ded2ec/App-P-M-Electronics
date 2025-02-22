@@ -155,90 +155,331 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String searchQuery = '';
+  // Default colors
+  final Color _defaultCardColor = Colors.grey[200]!;
+  final Color _defaultAppColor = Colors.white;
+  final Color _defaultAppBarColor = Colors.blue;
+  
+  // Current colors
+  late Color cardBackgroundColor;
+  late Color appBackgroundColor;
+  late Color appBarColor;
+
+  List<Map<String, String>> brands = [
+    {'name': 'LG', 'subtitle': 'Electronics', 'image': 'assets/images/list-lg.svg'},
+    {'name': 'TOSHIBA', 'subtitle': 'Electronics', 'image': 'assets/images/list-toshiba.svg'},
+    {'name': 'SAMSUNG', 'subtitle': 'Electronics', 'image': 'assets/images/list-samsung.svg'},
+    {'name': 'HITACHI', 'subtitle': 'Electronics', 'image': 'assets/images/list-hitachi.svg'},
+    {'name': 'PANASONIC', 'subtitle': 'Electronics', 'image': 'assets/images/list-panasonic.svg'},
+    {'name': 'Carrier', 'subtitle': 'Electronics', 'image': 'assets/images/list-carrier.svg'},
+  ];
+
+  List<Map<String, String>> get filteredBrands {
+    return brands.where((brand) => 
+      brand['name']!.toLowerCase().contains(searchQuery.toLowerCase())
+    ).toList();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with default colors
+    resetColors();
+  }
+
+  void resetColors() {
+    setState(() {
+      cardBackgroundColor = _defaultCardColor;
+      appBackgroundColor = _defaultAppColor;
+      appBarColor = _defaultAppBarColor;
+    });
+  }
+
+  void _showColorPickerDialog(String type) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(type == 'card' ? 'เลือกสีพื้นหลัง Card' : 
+                     type == 'app' ? 'เลือกสีพื้นหลังแอป' : 'เลือกสี AppBar'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: const Text('สีเทา'),
+                tileColor: Colors.grey[200],
+                onTap: () {
+                  setState(() {
+                    if (type == 'card') {
+                      cardBackgroundColor = Colors.grey[200]!;
+                    } else if (type == 'app') {
+                      appBackgroundColor = Colors.grey[200]!;
+                    } else {
+                      appBarColor = Colors.grey[400]!;
+                    }
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('สีฟ้า'),
+                tileColor: Colors.blue[100],
+                onTap: () {
+                  setState(() {
+                    if (type == 'card') {
+                      cardBackgroundColor = Colors.blue[100]!;
+                    } else if (type == 'app') {
+                      appBackgroundColor = Colors.blue[100]!;
+                    } else {
+                      appBarColor = Colors.blue;
+                    }
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('สีเขียว'),
+                tileColor: Colors.green[100],
+                onTap: () {
+                  setState(() {
+                    if (type == 'card') {
+                      cardBackgroundColor = Colors.green[100]!;
+                    } else if (type == 'app') {
+                      appBackgroundColor = Colors.green[100]!;
+                    } else {
+                      appBarColor = Colors.green;
+                    }
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('สีชมพู'),
+                tileColor: Colors.pink[100],
+                onTap: () {
+                  setState(() {
+                    if (type == 'card') {
+                      cardBackgroundColor = Colors.pink[100]!;
+                    } else if (type == 'app') {
+                      appBackgroundColor = Colors.pink[100]!;
+                    } else {
+                      appBarColor = Colors.pink;
+                    }
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('สีส้ม'),
+                tileColor: Colors.orange[100],
+                onTap: () {
+                  setState(() {
+                    if (type == 'card') {
+                      cardBackgroundColor = Colors.orange[100]!;
+                    } else if (type == 'app') {
+                      appBackgroundColor = Colors.orange[100]!;
+                    } else {
+                      appBarColor = Colors.orange;
+                    }
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('สีม่วง'),
+                tileColor: Colors.purple[100],
+                onTap: () {
+                  setState(() {
+                    if (type == 'card') {
+                      cardBackgroundColor = Colors.purple[100]!;
+                    } else if (type == 'app') {
+                      appBackgroundColor = Colors.purple[100]!;
+                    } else {
+                      appBarColor = Colors.purple;
+                    }
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('สีเหลือง'),
+                tileColor: Colors.yellow[100],
+                onTap: () {
+                  setState(() {
+                    if (type == 'card') {
+                      cardBackgroundColor = Colors.yellow[100]!;
+                    } else if (type == 'app') {
+                      appBackgroundColor = Colors.yellow[100]!;
+                    } else {
+                      appBarColor = Colors.yellow;
+                    }
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('สีขาว'),
+                tileColor: Colors.white,
+                onTap: () {
+                  setState(() {
+                    if (type == 'card') {
+                      cardBackgroundColor = Colors.white;
+                    } else if (type == 'app') {
+                      appBackgroundColor = Colors.white;
+                    } else {
+                      appBarColor = Colors.white;
+                    }
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: appBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: appBarColor,
         title: Text(widget.title),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('ตั้งค่าสี'),
+                        IconButton(
+                          icon: const Icon(Icons.refresh),
+                          onPressed: () {
+                            resetColors();
+                            Navigator.pop(context);
+                          },
+                          tooltip: 'รีเซ็ตสีทั้งหมด',
+                        ),
+                      ],
+                    ),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: const Text('เปลี่ยนสีพื้นหลัง Card'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            _showColorPickerDialog('card');
+                          },
+                        ),
+                        ListTile(
+                          title: const Text('เปลี่ยนสีพื้นหลังแอป'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            _showColorPickerDialog('app');
+                          },
+                        ),
+                        ListTile(
+                          title: const Text('เปลี่ยนสี AppBar'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            _showColorPickerDialog('appbar');
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'แบรนด์',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+      body: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            color: appBackgroundColor,
+          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Search Bar
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: 'ค้นหาแบรนด์...',
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                    filled: true,
+                    fillColor: Colors.white,  // Add white background to search field
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'แบรนด์',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: filteredBrands.map((brand) => 
+                      BrandCard(
+                        brand: brand['name']!,
+                        subtitle: brand['subtitle']!,
+                        image: brand['image']!,
+                        isSvg: true,
+                        backgroundColor: cardBackgroundColor,
+                      ),
+                    ).toList(),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'ปัญหาการใช้งาน',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ProblemCard(
+                  title: 'Headline',
+                  description: 'Description duis aute irure dolor in reprehenderit in voluptate velit.',
+                  time: 'Today • 23 min',
+                ),
+                const SizedBox(height: 12),
+                ProblemCard(
+                  title: 'Headline',
+                  description: 'Description duis aute irure dolor in reprehenderit in voluptate velit.',
+                  time: 'Today • 23 min',
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  BrandCard(
-                    brand: 'LG',
-                    subtitle: 'Electronics',
-                    image: 'assets/images/list-lg.svg',
-                    isSvg: true,
-                  ),
-                  BrandCard(
-                    brand: 'TOSHIBA',
-                    subtitle: 'Electronics',
-                     image: 'assets/images/list-toshiba.svg',
-                    isSvg: true,
-                  ),
-                  BrandCard(
-                    brand: 'SAMSUNG',
-                    subtitle: 'Electronics',
-                    image: 'assets/images/list-samsung.svg',
-                    isSvg: true,
-                  ),
-                  BrandCard(
-                    brand: 'HITACHI',
-                    subtitle: 'Electronics',
-                    image: 'assets/images/list-hitachi.svg',
-                    isSvg: true,
-                  ),
-                  BrandCard(
-                    brand: 'PANASONIC',
-                    subtitle: 'Electronics',
-                    image: 'assets/images/list-panasonic.svg',
-                    isSvg: true,
-                  ),
-                  BrandCard(
-                    brand: 'Carrier',
-                    subtitle: 'Electronics',
-                    image: 'assets/images/list-carrier.svg',
-                    isSvg: true,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'ปัญหาการใช้งาน',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            ProblemCard(
-              title: 'Headline',
-              description: 'Description duis aute irure dolor in reprehenderit in voluptate velit.',
-              time: 'Today • 23 min',
-            ),
-            const SizedBox(height: 12),
-            ProblemCard(
-              title: 'Headline',
-              description: 'Description duis aute irure dolor in reprehenderit in voluptate velit.',
-              time: 'Today • 23 min',
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -250,6 +491,7 @@ class BrandCard extends StatelessWidget {
   final String subtitle;
   final String image;
   final bool isSvg;
+  final Color backgroundColor;
 
   const BrandCard({
     super.key,
@@ -257,13 +499,14 @@ class BrandCard extends StatelessWidget {
     required this.subtitle,
     required this.image,
     required this.isSvg,
+    this.backgroundColor = const Color(0xFFE0E0E0),
   });
 
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: 'brand-${brand}',  // Unique tag for each brand card
-      child: Material(  // Wrap with Material for proper hero animation
+      tag: 'brand-${brand}',
+      child: Material(
         child: GestureDetector(
           onTap: () {
             Navigator.of(context).push(
@@ -280,7 +523,7 @@ class BrandCard extends StatelessWidget {
             width: 150,
             margin: const EdgeInsets.only(right: 12),
             decoration: BoxDecoration(
-              color: Colors.grey[200],
+              color: backgroundColor,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
