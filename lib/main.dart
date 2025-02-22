@@ -44,17 +44,44 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => SplashScreenState();
 }
 
-class SplashScreenState extends State<SplashScreen> {
+class SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _progressController;
+  bool _showProgress = false;
+
   @override
   void initState() {
     super.initState();
-    Timer(
-      const Duration(seconds: 3),
-      () => Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MyHomePage(title: 'P&M Electronics')),
-      ),
+    
+    // Initialize the animation controller
+    _progressController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3), // Match with splash screen duration
     );
+
+    // Show progress indicator after a short delay
+    Future.delayed(const Duration(milliseconds: 100), () {
+      setState(() {
+        _showProgress = true;
+      });
+      // Start the progress animation
+      _progressController.forward();
+    });
+
+    // Navigate to home page after animation completes
+    _progressController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MyHomePage(title: 'P&M Electronics')),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _progressController.dispose();
+    super.dispose();
   }
 
   @override
@@ -63,24 +90,45 @@ class SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
           ),
-          child: Center(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: SvgPicture.asset(
-                'assets/images/output.svg',
-                width: 350,
-                height: 350,
-                fit: BoxFit.contain,
-                allowDrawingOutsideViewBox: true,
-                placeholderBuilder: (BuildContext context) => Container(
-                  padding: const EdgeInsets.all(30.0),
-                  child: const CircularProgressIndicator(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: SvgPicture.asset(
+                    'assets/images/output.svg',
+                    width: 350,
+                    height: 350,
+                    fit: BoxFit.contain,
+                    allowDrawingOutsideViewBox: true,
+                    placeholderBuilder: (BuildContext context) => Container(
+                      padding: const EdgeInsets.all(30.0),
+                      child: const CircularProgressIndicator(),
+                    ),
+                  ),
                 ),
               ),
-            ),
+              if (_showProgress) ...[
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: AnimatedBuilder(
+                    animation: _progressController,
+                    builder: (context, child) {
+                      return LinearProgressIndicator(
+                        value: _progressController.value,
+                        backgroundColor: Colors.grey[200],
+                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ],
           ),
         ),
       ),
@@ -111,7 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.blue,
+        backgroundColor: Colors.blue,
         title: Text(widget.title),
       ),
       body: SingleChildScrollView(
@@ -213,71 +261,75 @@ class BrandCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BrandDetailScreen(
-              brand: brand,
-              image: image,
-              isSvg: isSvg,
+    return Hero(
+      tag: 'brand-${brand}',  // Unique tag for each brand card
+      child: Material(  // Wrap with Material for proper hero animation
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => BrandDetailScreen(
+                  brand: brand,
+                  image: image,
+                  isSvg: isSvg,
+                ),
+              ),
+            );
+          },
+          child: Container(
+            width: 150,
+            margin: const EdgeInsets.only(right: 12),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                  child: Container(
+                    height: 120,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(8),
+                    child: isSvg
+                        ? SvgPicture.asset(
+                            image,
+                            fit: BoxFit.contain,
+                          )
+                        : Image.asset(
+                            image,
+                            fit: BoxFit.cover,
+                          ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        brand,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-        );
-      },
-      child: Container(
-        width: 150,
-        margin: const EdgeInsets.only(right: 12),
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-              child: Container(
-                height: 120,
-                width: double.infinity,
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(8),
-                child: isSvg
-                    ? SvgPicture.asset(
-                        image,
-                        fit: BoxFit.contain,
-                      )
-                    : Image.asset(
-                        image,
-                        fit: BoxFit.cover,
-                      ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    brand,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -315,19 +367,22 @@ class BrandDetailScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              height: 200,
-              width: double.infinity,
-              color: Colors.grey[200],
-              child: isSvg
-                  ? SvgPicture.asset(
-                      image,
-                      fit: BoxFit.contain,
-                    )
-                  : Image.asset(
-                      image,
-                      fit: BoxFit.contain,
-                    ),
+            Hero(
+              tag: 'brand-${brand}',  // Matching tag from BrandCard
+              child: Container(
+                height: 200,
+                width: double.infinity,
+                color: Colors.grey[200],
+                child: isSvg
+                    ? SvgPicture.asset(
+                        image,
+                        fit: BoxFit.contain,
+                      )
+                    : Image.asset(
+                        image,
+                        fit: BoxFit.contain,
+                      ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
