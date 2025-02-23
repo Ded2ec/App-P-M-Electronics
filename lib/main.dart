@@ -50,6 +50,7 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
   late AnimationController _progressController;
   bool _showProgress = false;
   bool _showText = true;
+  late Animation<double> _textOpacity;  // เพิ่ม animation สำหรับความโปร่งใส
 
   @override
   void initState() {
@@ -57,10 +58,17 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
     
     _progressController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),  // ลดเวลาลงเหลือ 2 วินาที
+      duration: const Duration(seconds: 3),  // เพิ่มเวลารวมเป็น 3 วินาที
     );
 
-    // เริ่มแสดง progress bar หลังจาก 100ms
+    _textOpacity = Tween<double>(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _progressController,
+      curve: const Interval(0.6, 1.0, curve: Curves.easeOut),  // ปรับช่วง fade out ให้ยาวขึ้น
+    ));
+
     Future.delayed(const Duration(milliseconds: 100), () {
       setState(() {
         _showProgress = true;
@@ -75,21 +83,12 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) => 
               const MyHomePage(title: 'P&M Electronics'),
-            transitionDuration: const Duration(milliseconds: 1000),  // เพิ่มเวลา transition
+            transitionDuration: const Duration(milliseconds: 1500),  // เพิ่มเวลาการเปลี่ยนหน้า
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              // ซ่อนข้อความพร้อมกับ transition
-              animation.addListener(() {
-                if (mounted) {
-                  setState(() {
-                    _showText = animation.value < 0.3;  // ซ่อนข้อความเร็วขึ้น
-                  });
-                }
-              });
-
               return FadeTransition(
-                opacity: CurvedAnimation(  // เพิ่ม curve animation
+                opacity: CurvedAnimation(  // เพิ่ม curve ให้การ fade
                   parent: animation,
-                  curve: Curves.easeIn,  // ใช้ curve แบบ easeIn
+                  curve: Curves.easeOut,
                 ),
                 child: child,
               );
@@ -118,33 +117,50 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (_showText)  // เพิ่มเงื่อนไขการแสดงข้อความ
-                DefaultTextStyle(
-                  style: const TextStyle(
-                    fontSize: 32.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
-                  child: AnimatedTextKit(
-                    animatedTexts: [
-                      RotateAnimatedText(
-                        'Banrai Soft',
-                        textStyle: const TextStyle(
-                          fontSize: 38.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
-                        ),
-                        rotateOut: true,
-                        duration: const Duration(milliseconds: 2000),  // เพิ่มเวลาเป็น 2 วินาที
-                        transitionHeight: 50,  // เพิ่มความสูงของ transition
+              AnimatedBuilder(  // Wrap text with AnimatedBuilder
+                animation: _textOpacity,
+                builder: (context, child) {
+                  return Opacity(
+                    opacity: _textOpacity.value,
+                    child: DefaultTextStyle(
+                      style: const TextStyle(
+                        fontSize: 32.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
                       ),
-                    ],
-                    totalRepeatCount: 1,
-                    pause: const Duration(milliseconds: 500),  // เพิ่มการหยุดระหว่างแอนิเมชัน
-                    displayFullTextOnTap: false,  // ปิดการแสดงข้อความเต็มเมื่อแตะ
-                    stopPauseOnTap: false,  // ปิดการหยุดเมื่อแตะ
-                  ),
-                ),
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          RotateAnimatedText(
+                            'Banrai',
+                            textStyle: const TextStyle(
+                              fontSize: 38.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                            rotateOut: true,
+                            duration: const Duration(milliseconds: 1500),
+                            transitionHeight: 50,
+                          ),
+                          TypewriterAnimatedText(
+                            'Soft',
+                            textStyle: const TextStyle(
+                              fontSize: 38.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                            speed: const Duration(milliseconds: 300),
+                            cursor: '',
+                          ),
+                        ],
+                        totalRepeatCount: 1,
+                        pause: const Duration(milliseconds: 0),
+                        displayFullTextOnTap: false,
+                        stopPauseOnTap: false,
+                      ),
+                    ),
+                  );
+                },
+              ),
               const SizedBox(height: 20),
               Center(
                 child: ClipRRect(
@@ -667,8 +683,7 @@ class BrandCard extends StatelessWidget {
               homeState.setState(() {
                 homeState.searchQuery = '';
               });
-              FocusScope.of(context).requestFocus(FocusNode());
-              await homeState.saveRecentBrand(brand);
+              homeState.saveRecentBrand(brand);
             }
             
             if (context.mounted) {
