@@ -32,6 +32,7 @@ dependencies:
     sdk: flutter
   flutter_svg: ^2.0.9
   cupertino_icons: ^1.0.2
+  shared_preferences: ^2.2.2
   
 
   # The following adds the Cupertino Icons font to your application.
@@ -78,8 +79,17 @@ flutter:
      - assets/images/list-toshiba.svg
      - assets/images/list-hitachi.svg
      - assets/images/list-lg.svg
-     - assets/images/output.svg
      - assets/images/list-carrier.svg
+     - assets/images/list-daikin.svg
+     - assets/images/list-electrolux.svg
+     - assets/images/list-gree.svg
+     - assets/images/list-haier.svg
+     - assets/images/list-hisense.svg
+     - assets/images/list-mitsubishi.svg
+     - assets/images/list-tcl.svg
+     - assets/images/list-midea.svg
+     - assets/images/output.svg
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
