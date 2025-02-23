@@ -157,9 +157,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String searchQuery = '';
   // Default colors
-  final Color _defaultCardColor = Colors.grey[200]!;
+  final Color _defaultCardColor = const Color(0xFFE0E0E0); // Original grey color
   final Color _defaultAppColor = Colors.white;
-  final Color _defaultAppBarColor = Colors.blue;
+  final Color _defaultAppBarColor = Colors.blue; // Original blue color
   
   // Current colors
   late Color cardBackgroundColor;
@@ -207,128 +207,144 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: const Text('สีเทา'),
-                tileColor: Colors.grey[200],
+                title: const Text('Coral Pink'),
+                tileColor: const Color(0xFFF88379),
                 onTap: () {
                   setState(() {
                     if (type == 'card') {
-                      cardBackgroundColor = Colors.grey[200]!;
+                      cardBackgroundColor = const Color(0xFFF88379);
                     } else if (type == 'app') {
-                      appBackgroundColor = Colors.grey[200]!;
+                      appBackgroundColor = const Color(0xFFF88379);
                     } else {
-                      appBarColor = Colors.grey[400]!;
+                      appBarColor = const Color(0xFFF88379);
                     }
                   });
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('สีฟ้า'),
-                tileColor: Colors.blue[100],
+                title: const Text('Periwinkle'),
+                tileColor: const Color(0xFFCCCCFF),
                 onTap: () {
                   setState(() {
                     if (type == 'card') {
-                      cardBackgroundColor = Colors.blue[100]!;
+                      cardBackgroundColor = const Color(0xFFCCCCFF);
                     } else if (type == 'app') {
-                      appBackgroundColor = Colors.blue[100]!;
+                      appBackgroundColor = const Color(0xFFCCCCFF);
                     } else {
-                      appBarColor = Colors.blue;
+                      appBarColor = const Color(0xFFCCCCFF);
                     }
                   });
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('สีเขียว'),
-                tileColor: Colors.green[100],
+                title: const Text('Alice Blue'),
+                tileColor: const Color(0xFFDAF0FB),
                 onTap: () {
                   setState(() {
                     if (type == 'card') {
-                      cardBackgroundColor = Colors.green[100]!;
+                      cardBackgroundColor = const Color(0xFFDAF0FB);
                     } else if (type == 'app') {
-                      appBackgroundColor = Colors.green[100]!;
+                      appBackgroundColor = const Color(0xFFDAF0FB);
                     } else {
-                      appBarColor = Colors.green;
+                      appBarColor = const Color(0xFFDAF0FB);
                     }
                   });
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('สีชมพู'),
-                tileColor: Colors.pink[100],
+                title: const Text('Champagne Pink'),
+                tileColor: const Color(0xFFFFDDCA),
                 onTap: () {
                   setState(() {
                     if (type == 'card') {
-                      cardBackgroundColor = Colors.pink[100]!;
+                      cardBackgroundColor = const Color(0xFFFFDDCA);
                     } else if (type == 'app') {
-                      appBackgroundColor = Colors.pink[100]!;
+                      appBackgroundColor = const Color(0xFFFFDDCA);
                     } else {
-                      appBarColor = Colors.pink;
+                      appBarColor = const Color(0xFFFFDDCA);
                     }
                   });
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('สีส้ม'),
-                tileColor: Colors.orange[100],
+                title: const Text('Pale Purple'),
+                tileColor: const Color(0xFFFFE1F9),
                 onTap: () {
                   setState(() {
                     if (type == 'card') {
-                      cardBackgroundColor = Colors.orange[100]!;
+                      cardBackgroundColor = const Color(0xFFFFE1F9);
                     } else if (type == 'app') {
-                      appBackgroundColor = Colors.orange[100]!;
+                      appBackgroundColor = const Color(0xFFFFE1F9);
                     } else {
-                      appBarColor = Colors.orange;
+                      appBarColor = const Color(0xFFFFE1F9);
                     }
                   });
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('สีม่วง'),
-                tileColor: Colors.purple[100],
+                title: const Text('Celeste'),
+                tileColor: const Color(0xFFBFF6FA),
                 onTap: () {
                   setState(() {
                     if (type == 'card') {
-                      cardBackgroundColor = Colors.purple[100]!;
+                      cardBackgroundColor = const Color(0xFFBFF6FA);
                     } else if (type == 'app') {
-                      appBackgroundColor = Colors.purple[100]!;
+                      appBackgroundColor = const Color(0xFFBFF6FA);
                     } else {
-                      appBarColor = Colors.purple;
+                      appBarColor = const Color(0xFFBFF6FA);
                     }
                   });
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('สีเหลือง'),
-                tileColor: Colors.yellow[100],
+                title: const Text('Tea Green'),
+                tileColor: const Color(0xFFCDFAA7),
                 onTap: () {
                   setState(() {
                     if (type == 'card') {
-                      cardBackgroundColor = Colors.yellow[100]!;
+                      cardBackgroundColor = const Color(0xFFCDFAA7);
                     } else if (type == 'app') {
-                      appBackgroundColor = Colors.yellow[100]!;
+                      appBackgroundColor = const Color(0xFFCDFAA7);
                     } else {
-                      appBarColor = Colors.yellow;
+                      appBarColor = const Color(0xFFCDFAA7);
                     }
                   });
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('สีขาว'),
-                tileColor: Colors.white,
+                title: const Text('Maize'),
+                tileColor: const Color(0xFFFEF584),
                 onTap: () {
                   setState(() {
                     if (type == 'card') {
-                      cardBackgroundColor = Colors.white;
+                      cardBackgroundColor = const Color(0xFFFEF584);
                     } else if (type == 'app') {
-                      appBackgroundColor = Colors.white;
+                      appBackgroundColor = const Color(0xFFFEF584);
                     } else {
-                      appBarColor = Colors.white;
+                      appBarColor = const Color(0xFFFEF584);
+                    }
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Mimi Pink'),
+                tileColor: const Color(0xFFFFD5DF),
+                onTap: () {
+                  setState(() {
+                    if (type == 'card') {
+                      cardBackgroundColor = const Color(0xFFFFD5DF);
+                    } else if (type == 'app') {
+                      appBackgroundColor = const Color(0xFFFFD5DF);
+                    } else {
+                      appBarColor = const Color(0xFFFFD5DF);
                     }
                   });
                   Navigator.pop(context);
@@ -348,6 +364,11 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: appBarColor,
         title: Text(widget.title),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(30),
+          ),
+        ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(
@@ -377,7 +398,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ListTile(
-                          title: const Text('เปลี่ยนสีพื้นหลัง Card'),
+                          title: const Text('เปลี่ยนสีแถบด้านบน'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            _showColorPickerDialog('appbar');
+                          },
+                        ),
+                        ListTile(
+                          title: const Text('เปลี่ยนสีพื้นหลัง เมนู'),
                           onTap: () {
                             Navigator.pop(context);
                             _showColorPickerDialog('card');
@@ -388,13 +416,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           onTap: () {
                             Navigator.pop(context);
                             _showColorPickerDialog('app');
-                          },
-                        ),
-                        ListTile(
-                          title: const Text('เปลี่ยนสี AppBar'),
-                          onTap: () {
-                            Navigator.pop(context);
-                            _showColorPickerDialog('appbar');
                           },
                         ),
                       ],
