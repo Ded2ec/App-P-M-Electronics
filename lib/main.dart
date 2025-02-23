@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,32 +49,52 @@ class SplashScreen extends StatefulWidget {
 class SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   late AnimationController _progressController;
   bool _showProgress = false;
+  bool _showText = true;
 
   @override
   void initState() {
     super.initState();
     
-    // Initialize the animation controller
     _progressController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3), // Match with splash screen duration
+      duration: const Duration(seconds: 2),  // ลดเวลาลงเหลือ 2 วินาที
     );
 
-    // Show progress indicator after a short delay
+    // เริ่มแสดง progress bar หลังจาก 100ms
     Future.delayed(const Duration(milliseconds: 100), () {
       setState(() {
         _showProgress = true;
       });
-      // Start the progress animation
       _progressController.forward();
     });
 
-    // Navigate to home page after animation completes
     _progressController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const MyHomePage(title: 'P&M Electronics')),
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => 
+              const MyHomePage(title: 'P&M Electronics'),
+            transitionDuration: const Duration(milliseconds: 1000),  // เพิ่มเวลา transition
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              // ซ่อนข้อความพร้อมกับ transition
+              animation.addListener(() {
+                if (mounted) {
+                  setState(() {
+                    _showText = animation.value < 0.3;  // ซ่อนข้อความเร็วขึ้น
+                  });
+                }
+              });
+
+              return FadeTransition(
+                opacity: CurvedAnimation(  // เพิ่ม curve animation
+                  parent: animation,
+                  curve: Curves.easeIn,  // ใช้ curve แบบ easeIn
+                ),
+                child: child,
+              );
+            },
+          ),
         );
       }
     });
@@ -97,6 +118,34 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if (_showText)  // เพิ่มเงื่อนไขการแสดงข้อความ
+                DefaultTextStyle(
+                  style: const TextStyle(
+                    fontSize: 32.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
+                  child: AnimatedTextKit(
+                    animatedTexts: [
+                      RotateAnimatedText(
+                        'Banrai Soft',
+                        textStyle: const TextStyle(
+                          fontSize: 38.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                        rotateOut: true,
+                        duration: const Duration(milliseconds: 2000),  // เพิ่มเวลาเป็น 2 วินาที
+                        transitionHeight: 50,  // เพิ่มความสูงของ transition
+                      ),
+                    ],
+                    totalRepeatCount: 1,
+                    pause: const Duration(milliseconds: 500),  // เพิ่มการหยุดระหว่างแอนิเมชัน
+                    displayFullTextOnTap: false,  // ปิดการแสดงข้อความเต็มเมื่อแตะ
+                    stopPauseOnTap: false,  // ปิดการหยุดเมื่อแตะ
+                  ),
+                ),
+              const SizedBox(height: 20),
               Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(30),
@@ -157,6 +206,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String searchQuery = '';
+  TextEditingController searchController = TextEditingController();
   List<String> recentBrands = [];  // เพิ่มตัวแปรเก็บประวัติ
   
   // Default colors
@@ -365,189 +415,221 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: appBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: appBarColor,
-        toolbarHeight: 160,
-        title: Column(
-          children: [
-            Text(widget.title),
-            const SizedBox(height: 16),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'ค้นหาแบรนด์...',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+    return GestureDetector(
+      onTap: () {
+        searchController.clear();
+        setState(() {
+          searchQuery = '';
+        });
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
+        backgroundColor: appBackgroundColor,
+        appBar: AppBar(
+          backgroundColor: appBarColor,
+          toolbarHeight: 160,
+          title: Column(
+            children: [
+              Text(widget.title),
+              const SizedBox(height: 16),
+              GestureDetector(
+                onTap: () {
+                  // Prevent the outer GestureDetector from triggering
+                },
+                child: TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    hintText: 'ค้นหาแบรนด์...',
+                    prefixIcon: IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: () {
+                        searchController.clear();
+                        setState(() {
+                          searchQuery = '';
+                        });
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      },
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value;
+                    });
+                  },
+                  enableInteractiveSelection: true,
+                  autofocus: false,
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                filled: true,
-                fillColor: Colors.white,
               ),
-              onChanged: (value) {
-                setState(() {
-                  searchQuery = value;
-                });
+            ],
+          ),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(30),
+            ),
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(
+                Icons.settings,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('ตั้งค่าสี'),
+                          IconButton(
+                            icon: const Icon(Icons.refresh),
+                            onPressed: () {
+                              resetColors();
+                              Navigator.pop(context);
+                            },
+                            tooltip: 'รีเซ็ตสีทั้งหมด',
+                          ),
+                        ],
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            title: const Text('เปลี่ยนสีแถบด้านบน'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              _showColorPickerDialog('appbar');
+                            },
+                          ),
+                          ListTile(
+                            title: const Text('เปลี่ยนสีพื้นหลัง เมนู'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              _showColorPickerDialog('card');
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
               },
             ),
           ],
         ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(30),
-          ),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.settings,
-              color: Colors.white,
+        body: SafeArea(
+          child: Container(
+            decoration: BoxDecoration(
+              color: appBackgroundColor,
             ),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('ตั้งค่าสี'),
-                        IconButton(
-                          icon: const Icon(Icons.refresh),
-                          onPressed: () {
-                            resetColors();
-                            Navigator.pop(context);
-                          },
-                          tooltip: 'รีเซ็ตสีทั้งหมด',
-                        ),
-                      ],
-                    ),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          title: const Text('เปลี่ยนสีแถบด้านบน'),
-                          onTap: () {
-                            Navigator.pop(context);
-                            _showColorPickerDialog('appbar');
-                          },
-                        ),
-                        ListTile(
-                          title: const Text('เปลี่ยนสีพื้นหลัง เมนู'),
-                          onTap: () {
-                            Navigator.pop(context);
-                            _showColorPickerDialog('card');
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            color: appBackgroundColor,
-          ),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'แบรนด์',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: filteredBrands.map((brand) => 
-                      BrandCard(
-                        brand: brand['name']!,
-                        subtitle: brand['subtitle']!,
-                        image: brand['image']!,
-                        isSvg: true,
-                        backgroundColor: cardBackgroundColor,
-                      ),
-                    ).toList(),
-                  ),
-                ),
-                if (recentBrands.isNotEmpty) ...[
-                  const SizedBox(height: 24),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   const Text(
-                    'เข้าชมล่าสุด',
+                    'แบรนด์',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Column(  // เปลี่ยนจาก SingleChildScrollView เป็น Column
-                    children: recentBrands.map((brandName) {
-                      final brand = brands.firstWhere(
-                        (b) => b['name'] == brandName,
-                        orElse: () => brands[0],
-                      );
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Container(
-                          width: double.infinity,  // ให้กว้างเต็มหน้าจอ
-                          decoration: BoxDecoration(
-                            color: cardBackgroundColor,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: ListTile(
-                            leading: SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: SvgPicture.asset(
-                                brand['image']!,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                            title: Text(
-                              brand['name']!,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: Text(brand['subtitle']!),
-                            onTap: () async {  // เพิ่ม async
-                              // บันทึกประวัติก่อนนำทางไปหน้ารายละเอียด
-                              if (context.findAncestorStateOfType<_MyHomePageState>() != null) {
-                                await context  // รอให้บันทึกเสร็จก่อนนำทางไปหน้าถัดไป
-                                    .findAncestorStateOfType<_MyHomePageState>()!
-                                    .saveRecentBrand(brand['name']!);
-                              }
-                              if (context.mounted) {  // ตรวจสอบว่า context ยังใช้งานได้
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => BrandDetailScreen(
-                                      brand: brand['name']!,
-                                      image: brand['image']!,
-                                      isSvg: true,
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                          ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: filteredBrands.map((brand) => 
+                        BrandCard(
+                          brand: brand['name']!,
+                          subtitle: brand['subtitle']!,
+                          image: brand['image']!,
+                          isSvg: true,
+                          backgroundColor: cardBackgroundColor,
                         ),
-                      );
-                    }).toList(),
+                      ).toList(),
+                    ),
                   ),
+                  if (recentBrands.isNotEmpty) ...[
+                    const SizedBox(height: 24),
+                    const Text(
+                      'เข้าชมล่าสุด',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Column(  // เปลี่ยนจาก SingleChildScrollView เป็น Column
+                      children: recentBrands.map((brandName) {
+                        final brand = brands.firstWhere(
+                          (b) => b['name'] == brandName,
+                          orElse: () => brands[0],
+                        );
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Container(
+                            width: double.infinity,  // ให้กว้างเต็มหน้าจอ
+                            decoration: BoxDecoration(
+                              color: cardBackgroundColor,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: ListTile(
+                              leading: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: SvgPicture.asset(
+                                  brand['image']!,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                              title: Text(
+                                brand['name']!,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(brand['subtitle']!),
+                              onTap: () async {  // เพิ่ม async
+                                // บันทึกประวัติก่อนนำทางไปหน้ารายละเอียด
+                                if (context.findAncestorStateOfType<_MyHomePageState>() != null) {
+                                  await context  // รอให้บันทึกเสร็จก่อนนำทางไปหน้าถัดไป
+                                      .findAncestorStateOfType<_MyHomePageState>()!
+                                      .saveRecentBrand(brand['name']!);
+                                }
+                                if (context.mounted) {  // ตรวจสอบว่า context ยังใช้งานได้
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => BrandDetailScreen(
+                                        brand: brand['name']!,
+                                        image: brand['image']!,
+                                        isSvg: true,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),
@@ -578,14 +660,18 @@ class BrandCard extends StatelessWidget {
       tag: 'brand-$brand',
       child: Material(
         child: GestureDetector(
-          onTap: () async {  // เพิ่ม async
-            // บันทึกประวัติก่อนนำทางไปหน้ารายละเอียด
+          onTap: () async {
             if (context.findAncestorStateOfType<_MyHomePageState>() != null) {
-              await context  // รอให้บันทึกเสร็จก่อนนำทางไปหน้าถัดไป
-                  .findAncestorStateOfType<_MyHomePageState>()!
-                  .saveRecentBrand(brand);
+              final homeState = context.findAncestorStateOfType<_MyHomePageState>()!;
+              homeState.searchController.clear();
+              homeState.setState(() {
+                homeState.searchQuery = '';
+              });
+              FocusScope.of(context).requestFocus(FocusNode());
+              await homeState.saveRecentBrand(brand);
             }
-            if (context.mounted) {  // ตรวจสอบว่า context ยังใช้งานได้
+            
+            if (context.mounted) {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => BrandDetailScreen(
@@ -701,78 +787,90 @@ class BrandDetailScreen extends StatelessWidget {
     'MIDEA': 'แบรนด์จีนที่เป็นผู้ผลิตเครื่องปรับอากาศรายใหญ่ระดับโลก มีระบบ Flash Cooling ทำให้เย็นเร็ว เทคโนโลยี i-Clean ช่วยทำความสะอาดตัวเอง รองรับการควบคุมผ่านแอปสมาร์ทโฟน'
     };
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(brand),
-        backgroundColor: Colors.blue,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Hero(
-              tag: 'brand-$brand',  // Matching tag from BrandCard
-              child: Container(
-                height: 200,
-                width: double.infinity,
-                color: Colors.grey[200],
-                child: isSvg
-                    ? SvgPicture.asset(
-                        image,
-                        fit: BoxFit.contain,
-                      )
-                    : Image.asset(
-                        image,
-                        fit: BoxFit.contain,
-                      ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'ข้อมูลเครื่องปรับอากาศ $brand',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    brandDescriptions[brand] ?? 'Brand description not available.',
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 24),
-                  Center(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ErrorCodeScreen(brand: brand),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.error_outline, color: Colors.red),
-                      label: const Text(
-                        'รหัสข้อผิดพลาด',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 32,
-                          vertical: 16,
+    return WillPopScope(
+      onWillPop: () async {
+        if (context.findAncestorStateOfType<_MyHomePageState>() != null) {
+          final homeState = context.findAncestorStateOfType<_MyHomePageState>()!;
+          homeState.searchController.clear();
+          homeState.setState(() {
+            homeState.searchQuery = '';
+          });
+        }
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(brand),
+          backgroundColor: Colors.blue,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Hero(
+                tag: 'brand-$brand',  // Matching tag from BrandCard
+                child: Container(
+                  height: 200,
+                  width: double.infinity,
+                  color: Colors.grey[200],
+                  child: isSvg
+                      ? SvgPicture.asset(
+                          image,
+                          fit: BoxFit.contain,
+                        )
+                      : Image.asset(
+                          image,
+                          fit: BoxFit.contain,
                         ),
-                        backgroundColor: Colors.white,
-                        side: const BorderSide(color: Colors.red),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'ข้อมูลเครื่องปรับอากาศ $brand',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 16),
+                    Text(
+                      brandDescriptions[brand] ?? 'Brand description not available.',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 24),
+                    Center(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ErrorCodeScreen(brand: brand),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.error_outline, color: Colors.red),
+                        label: const Text(
+                          'รหัสข้อผิดพลาด',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 32,
+                            vertical: 16,
+                          ),
+                          backgroundColor: Colors.white,
+                          side: const BorderSide(color: Colors.red),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -961,7 +1059,7 @@ class ErrorCodeScreen extends StatelessWidget {
         {
           'code': 'E6',
           'problem': 'มอเตอร์พัดลมคอยล์เย็นผิดปกติ',
-          'solution': '1. ตรวจสอบมอเตอร์\n2. กำจัดสิ่งกีดขวาง\n3. เปลี่ยนถ้าเสีย'
+          'solution': '1. ตรวจสอบมอเตอร์\n2. กำจัดสิ่งกีดขวาง\n3. เปลี่ยนมอเตอร์'
         },
         {
           'code': 'E9',
