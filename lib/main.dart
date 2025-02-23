@@ -196,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     loadSavedColors();
-    loadRecentBrands();  // โหลดประวัติเมื่อเริ่มต้น
+    loadRecentBrands();  
   }
 
   Future<void> loadSavedColors() async {
@@ -221,7 +221,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBackgroundColor = _defaultAppColor;
       appBarColor = _defaultAppBarColor;
     });
-    saveColors(); // Save the default colors
+    saveColors(); 
   }
 
   Future<void> loadRecentBrands() async {
@@ -370,7 +370,30 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: appBackgroundColor,
       appBar: AppBar(
         backgroundColor: appBarColor,
-        title: Text(widget.title),
+        toolbarHeight: 160,
+        title: Column(
+          children: [
+            Text(widget.title),
+            const SizedBox(height: 16),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'ค้นหาแบรนด์...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
+            ),
+          ],
+        ),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(30),
@@ -437,25 +460,6 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Search Bar
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'ค้นหาแบรนด์...',
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                    filled: true,
-                    fillColor: Colors.white,  // Add white background to search field
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      searchQuery = value;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
                 const Text(
                   'แบรนด์',
                   style: TextStyle(
