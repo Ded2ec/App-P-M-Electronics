@@ -8,30 +8,15 @@ void main() {
   runApp(const MyApp());
 }
 
+// ====== Main App Configuration ======
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'P&M Electronics',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const SplashScreen(),
@@ -39,6 +24,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// ====== Splash Screen Page ======
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -50,7 +36,9 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
   late AnimationController _progressController;
   bool _showProgress = false;
   bool _showText = true;
-  late Animation<double> _textOpacity;  // เพิ่ม animation สำหรับความโปร่งใส
+  late Animation<double> _textOpacity;
+  late Animation<double> _imageOpacity;
+  late Animation<double> _progressOpacity;
 
   @override
   void initState() {
@@ -58,7 +46,7 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
     
     _progressController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3),  // เพิ่มเวลารวมเป็น 3 วินาที
+      duration: const Duration(seconds: 3),
     );
 
     _textOpacity = Tween<double>(
@@ -66,7 +54,23 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
       end: 0.0,
     ).animate(CurvedAnimation(
       parent: _progressController,
-      curve: const Interval(0.6, 1.0, curve: Curves.easeOut),  // ปรับช่วง fade out ให้ยาวขึ้น
+      curve: const Interval(0.6, 1.0, curve: Curves.easeOut),
+    ));
+
+    _imageOpacity = Tween<double>(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _progressController,
+      curve: const Interval(0.6, 1.0, curve: Curves.easeOut),
+    ));
+
+    _progressOpacity = Tween<double>(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _progressController,
+      curve: const Interval(0.6, 1.0, curve: Curves.easeOut),
     ));
 
     Future.delayed(const Duration(milliseconds: 100), () {
@@ -83,10 +87,10 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) => 
               const MyHomePage(title: 'P&M Electronics'),
-            transitionDuration: const Duration(milliseconds: 1500),  // เพิ่มเวลาการเปลี่ยนหน้า
+            transitionDuration: const Duration(milliseconds: 1500), 
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(
-                opacity: CurvedAnimation(  // เพิ่ม curve ให้การ fade
+                opacity: CurvedAnimation( 
                   parent: animation,
                   curve: Curves.easeOut,
                 ),
@@ -114,83 +118,85 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
           decoration: const BoxDecoration(
             color: Colors.white,
           ),
+          width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              AnimatedBuilder(  // Wrap text with AnimatedBuilder
+              AnimatedBuilder(
                 animation: _textOpacity,
                 builder: (context, child) {
                   return Opacity(
                     opacity: _textOpacity.value,
-                    child: DefaultTextStyle(
-                      style: const TextStyle(
-                        fontSize: 32.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
-                      child: AnimatedTextKit(
-                        animatedTexts: [
-                          RotateAnimatedText(
-                            'Banrai',
-                            textStyle: const TextStyle(
-                              fontSize: 38.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue,
+                    child: Container( 
+                      height: 50, 
+                      alignment: Alignment.center, 
+                      child: DefaultTextStyle(
+                        style: const TextStyle(
+                          fontSize: 32.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                        child: AnimatedTextKit(
+                          isRepeatingAnimation: false, 
+                          animatedTexts: [
+                            RotateAnimatedText(
+                              'Air Tech',
+                              textStyle: const TextStyle(
+                                fontSize: 38.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                              rotateOut: false, 
+                              duration: const Duration(milliseconds: 1500),
                             ),
-                            rotateOut: true,
-                            duration: const Duration(milliseconds: 1500),
-                            transitionHeight: 50,
-                          ),
-                          TypewriterAnimatedText(
-                            'Soft',
-                            textStyle: const TextStyle(
-                              fontSize: 38.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue,
-                            ),
-                            speed: const Duration(milliseconds: 300),
-                            cursor: '',
-                          ),
-                        ],
-                        totalRepeatCount: 1,
-                        pause: const Duration(milliseconds: 0),
-                        displayFullTextOnTap: false,
-                        stopPauseOnTap: false,
+                          ],
+                          totalRepeatCount: 1,
+                          displayFullTextOnTap: false,
+                          stopPauseOnTap: false,
+                        ),
                       ),
                     ),
                   );
                 },
               ),
               const SizedBox(height: 20),
-              Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: SvgPicture.asset(
-                    'assets/images/output.svg',
-                    width: 350,
-                    height: 350,
-                    fit: BoxFit.contain,
-                    allowDrawingOutsideViewBox: true,
-                    placeholderBuilder: (BuildContext context) => Container(
-                      padding: const EdgeInsets.all(30.0),
-                      child: const CircularProgressIndicator(),
+              FadeTransition(
+                opacity: _imageOpacity,
+                child: Container(  
+                  width: 350,
+                  height: 350,
+                  alignment: Alignment.center, 
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: SvgPicture.asset(
+                      'assets/images/output.svg',
+                      fit: BoxFit.contain,
+                      allowDrawingOutsideViewBox: true,
+                      placeholderBuilder: (BuildContext context) => Container(
+                        padding: const EdgeInsets.all(30.0),
+                        child: const CircularProgressIndicator(),
+                      ),
                     ),
                   ),
                 ),
               ),
               if (_showProgress) ...[
                 const SizedBox(height: 40),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
-                  child: AnimatedBuilder(
-                    animation: _progressController,
-                    builder: (context, child) {
-                      return LinearProgressIndicator(
-                        value: _progressController.value,
-                        backgroundColor: Colors.grey[200],
-                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-                      );
-                    },
+                FadeTransition(
+                  opacity: _progressOpacity,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: AnimatedBuilder(
+                      animation: _progressController,
+                      builder: (context, child) {
+                        return LinearProgressIndicator(
+                          value: _progressController.value,
+                          backgroundColor: Colors.grey[200],
+                          valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],
@@ -202,17 +208,9 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
   }
 }
 
+// ====== Home Page ======
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -223,14 +221,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String searchQuery = '';
   TextEditingController searchController = TextEditingController();
-  List<String> recentBrands = [];  // เพิ่มตัวแปรเก็บประวัติ
+  List<String> recentBrands = []; 
   
-  // Default colors
+
   final Color _defaultCardColor = const Color(0xFFE0E0E0);
   final Color _defaultAppColor = Colors.white;
   final Color _defaultAppBarColor = Colors.blue;
   
-  // Current colors
+
   late Color cardBackgroundColor;
   late Color appBackgroundColor;
   late Color appBarColor;
@@ -299,11 +297,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> saveRecentBrand(String brand) async {
     final prefs = await SharedPreferences.getInstance();
-    setState(() {  // เพิ่ม setState เพื่ออัพเดทหน้าจอทันที
-      recentBrands.remove(brand);  // ลบรายการเดิมถ้ามี
-      recentBrands.insert(0, brand);  // เพิ่มรายการใหม่ไว้ด้านบนสุด
-      if (recentBrands.length > 3) {  // เปลี่ยนจาก 2 เป็น 3
-        recentBrands = recentBrands.sublist(0, 3);  // เก็บแค่ 3 รายการล่าสุด
+    setState(() { 
+      recentBrands.remove(brand); 
+      recentBrands.insert(0, brand); 
+      if (recentBrands.length > 3) { 
+        recentBrands = recentBrands.sublist(0, 3); 
       }
     });
     await prefs.setStringList('recentBrands', recentBrands);
@@ -317,107 +315,159 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(type == 'card' ? 'เลือกสีพื้นหลัง Card' : 'เลือกสี AppBar'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
+            children: type == 'card' ? [
+              // สีอ่อนสำหรับ Card
               ListTile(
-                title: const Text('Ocean Breeze'),
-                tileColor: const Color(0xFF2193B0),
+                title: const Text('Soft Blue'),
+                tileColor: const Color(0xFFE3F2FD),
                 onTap: () {
                   setState(() {
-                    if (type == 'card') {
-                      cardBackgroundColor = const Color(0xFF6DD5ED);
-                    } else {
-                      appBarColor = const Color(0xFF6DD5ED);
-                    }
+                    cardBackgroundColor = const Color(0xFFE3F2FD);
                   });
                   saveColors();
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('Sunset Vibes'),
-                tileColor: const Color(0xFFFF416C),
+                title: const Text('Soft Pink'),
+                tileColor: const Color(0xFFFCE4EC),
                 onTap: () {
                   setState(() {
-                    if (type == 'card') {
-                      cardBackgroundColor = const Color(0xFFFF4B2B);
-                    } else {
-                      appBarColor = const Color(0xFFFF4B2B);
-                    }
+                    cardBackgroundColor = const Color(0xFFFCE4EC);
                   });
                   saveColors();
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('Purple Dream'),
-                tileColor: const Color(0xFF8E2DE2),
+                title: const Text('Soft Green'),
+                tileColor: const Color(0xFFE8F5E9),
                 onTap: () {
                   setState(() {
-                    if (type == 'card') {
-                      cardBackgroundColor = const Color(0xFF4A00E0);
-                    } else {
-                      appBarColor = const Color(0xFF4A00E0);
-                    }
+                    cardBackgroundColor = const Color(0xFFE8F5E9);
                   });
                   saveColors();
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('Fresh Mint'),
-                tileColor: const Color(0xFF00B09B),
+                title: const Text('Soft Purple'),
+                tileColor: const Color(0xFFF3E5F5),
                 onTap: () {
                   setState(() {
-                    if (type == 'card') {
-                      cardBackgroundColor = const Color(0xFF96C93D);
-                    } else {
-                      appBarColor = const Color(0xFF96C93D);
-                    }
+                    cardBackgroundColor = const Color(0xFFF3E5F5);
                   });
                   saveColors();
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('Golden Hour'),
-                tileColor: const Color(0xFFF7971E),
+                title: const Text('Soft Yellow'),
+                tileColor: const Color(0xFFFFFDE7),
                 onTap: () {
                   setState(() {
-                    if (type == 'card') {
-                      cardBackgroundColor = const Color(0xFFFFD200);
-                    } else {
-                      appBarColor = const Color(0xFFFFD200);
-                    }
+                    cardBackgroundColor = const Color(0xFFFFFDE7);
                   });
                   saveColors();
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('Berry Bliss'),
-                tileColor: const Color(0xFFE94057),
+                title: const Text('Soft Orange'),
+                tileColor: const Color(0xFFFFF3E0),
                 onTap: () {
                   setState(() {
-                    if (type == 'card') {
-                      cardBackgroundColor = const Color(0xFF8A2387);
-                    } else {
-                      appBarColor = const Color(0xFF8A2387);
-                    }
+                    cardBackgroundColor = const Color(0xFFFFF3E0);
                   });
                   saveColors();
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title: const Text('Sky Blue'),
-                tileColor: const Color(0xFF00C6FB),
+                title: const Text('Soft Cyan'),
+                tileColor: const Color(0xFFE0F7FA),
                 onTap: () {
                   setState(() {
-                    if (type == 'card') {
-                      cardBackgroundColor = const Color(0xFF005BEA);
-                    } else {
-                      appBarColor = const Color(0xFF005BEA);
-                    }
+                    cardBackgroundColor = const Color(0xFFE0F7FA);
+                  });
+                  saveColors();
+                  Navigator.pop(context);
+                },
+              ),
+            ] : [
+              // สีเข้มสำหรับ AppBar
+              ListTile(
+                title: const Text('Blue'),
+                tileColor: Colors.blue,
+                onTap: () {
+                  setState(() {
+                    appBarColor = Colors.blue;
+                  });
+                  saveColors();
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Red'),
+                tileColor: Colors.red,
+                onTap: () {
+                  setState(() {
+                    appBarColor = Colors.red;
+                  });
+                  saveColors();
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Green'),
+                tileColor: Colors.green,
+                onTap: () {
+                  setState(() {
+                    appBarColor = Colors.green;
+                  });
+                  saveColors();
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Purple'),
+                tileColor: Colors.purple,
+                onTap: () {
+                  setState(() {
+                    appBarColor = Colors.purple;
+                  });
+                  saveColors();
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Orange'),
+                tileColor: Colors.orange,
+                onTap: () {
+                  setState(() {
+                    appBarColor = Colors.orange;
+                  });
+                  saveColors();
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Teal'),
+                tileColor: Colors.teal,
+                onTap: () {
+                  setState(() {
+                    appBarColor = Colors.teal;
+                  });
+                  saveColors();
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Indigo'),
+                tileColor: Colors.indigo,
+                onTap: () {
+                  setState(() {
+                    appBarColor = Colors.indigo;
                   });
                   saveColors();
                   Navigator.pop(context);
@@ -457,7 +507,6 @@ class _MyHomePageState extends State<MyHomePage> {
               const SizedBox(height: 16),
               GestureDetector(
                 onTap: () {
-                  // Prevent the outer GestureDetector from triggering
                 },
                 child: TextField(
                   controller: searchController,
@@ -589,7 +638,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    Column(  // เปลี่ยนจาก SingleChildScrollView เป็น Column
+                    Column(  
                       children: recentBrands.map((brandName) {
                         final brand = brands.firstWhere(
                           (b) => b['name'] == brandName,
@@ -598,7 +647,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: Container(
-                            width: double.infinity,  // ให้กว้างเต็มหน้าจอ
+                            width: double.infinity, 
                             decoration: BoxDecoration(
                               color: cardBackgroundColor,
                               borderRadius: BorderRadius.circular(12),
@@ -619,14 +668,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               subtitle: Text(brand['subtitle']!),
-                              onTap: () async {  // เพิ่ม async
-                                // บันทึกประวัติก่อนนำทางไปหน้ารายละเอียด
+                              onTap: () async { 
+                               
                                 if (context.findAncestorStateOfType<_MyHomePageState>() != null) {
-                                  await context  // รอให้บันทึกเสร็จก่อนนำทางไปหน้าถัดไป
+                                  await context 
                                       .findAncestorStateOfType<_MyHomePageState>()!
                                       .saveRecentBrand(brand['name']!);
                                 }
-                                if (context.mounted) {  // ตรวจสอบว่า context ยังใช้งานได้
+                                if (context.mounted) { 
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) => BrandDetailScreen(
@@ -654,6 +703,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+// ====== Brand Card Widget ======
 class BrandCard extends StatelessWidget {
   final String brand;
   final String subtitle;
@@ -758,6 +808,7 @@ class BrandCard extends StatelessWidget {
   }
 }
 
+// ====== Brand Detail Page ======
 class BrandDetailScreen extends StatelessWidget {
   final String brand;
   final String image;
@@ -822,7 +873,7 @@ class BrandDetailScreen extends StatelessWidget {
           child: Column(
             children: [
               Hero(
-                tag: 'brand-$brand',  // Matching tag from BrandCard
+                tag: 'brand-$brand', 
                 child: Container(
                   height: 200,
                   width: double.infinity,
@@ -892,6 +943,7 @@ class BrandDetailScreen extends StatelessWidget {
   }
 }
 
+// ====== Error Code Page ======
 class ErrorCodeScreen extends StatelessWidget {
   final String brand;
 
@@ -1171,6 +1223,7 @@ class ErrorCodeScreen extends StatelessWidget {
   }
 }
 
+// ====== Problem Card Widget ======
 class ProblemCard extends StatelessWidget {
   final String title;
   final String description;
