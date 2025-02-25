@@ -579,6 +579,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 child: TextField(
                   controller: searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value;
+                    });
+                  },
                   decoration: InputDecoration(
                     hintText: 'ค้นหาแบรนด์...',
                     hintStyle: TextStyle(color: Colors.grey[400]),
