@@ -662,43 +662,48 @@ class _MyHomePageState extends State<MyHomePage> {
               color: appBackgroundColor,
             ),
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
                     'แบรนด์',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    physics: const BouncingScrollPhysics(),
                     child: Row(
                       children: filteredBrands.map((brand) => 
-                        BrandCard(
-                          brand: brand['name']!,
-                          subtitle: brand['subtitle']!,
-                          image: brand['image']!,
-                          isSvg: true,
-                          backgroundColor: cardBackgroundColor,
-                          isOutdoorOnly: brand['isOutdoorOnly']!,
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: BrandCard(
+                            brand: brand['name']!,
+                            subtitle: brand['subtitle']!,
+                            image: brand['image']!,
+                            isSvg: true,
+                            backgroundColor: cardBackgroundColor,
+                            isOutdoorOnly: brand['isOutdoorOnly']!,
+                          ),
                         ),
                       ).toList(),
                     ),
                   ),
                   if (recentBrands.isNotEmpty) ...[
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 28),
                     const Text(
                       'เข้าชมล่าสุด',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
                     Column(  
                       children: recentBrands.map((brandName) {
                         final brand = brands.firstWhere(
@@ -815,94 +820,105 @@ class BrandCard extends StatelessWidget {
             }
           },
           child: Container(
-            width: 150,
-            height: 180,
-            margin: const EdgeInsets.only(right: 12),
+            width: 200,
+            height: 280,
             decoration: BoxDecoration(
               color: backgroundColor,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Center(
-                    child: SvgPicture.asset(
-                      image,
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.contain,
+                  flex: 3,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16),
+                      ),
+                    ),
+                    child: Center(
+                      child: SvgPicture.asset(
+                        image,
+                        width: 140,
+                        height: 140,
+                        fit: BoxFit.contain,
+                        placeholderBuilder: (BuildContext context) => Container(
+                          width: 140,
+                          height: 140,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: FutureBuilder<SharedPreferences>(
-                    future: SharedPreferences.getInstance(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) return const CircularProgressIndicator();
-                      
-                      final prefs = snapshot.data!;
-                      final textColor = Color(prefs.getInt('textColor') ?? Colors.black.value);
-                      
-                      return LayoutBuilder(
-                        builder: (context, constraints) {
-                          final textSpan = TextSpan(
-                            text: brand,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: textColor,
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: backgroundColor,
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(16),
+                        bottomRight: Radius.circular(16),
+                      ),
+                    ),
+                    child: FutureBuilder<SharedPreferences>(
+                      future: SharedPreferences.getInstance(),
+                      builder: (context, snapshot) {
+                        final textColor = snapshot.hasData 
+                            ? Color(snapshot.data!.getInt('textColor') ?? Colors.black.value)
+                            : Colors.black;
+                        
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              brand,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: textColor,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          );
-                          final textPainter = TextPainter(
-                            text: textSpan,
-                            textDirection: TextDirection.ltr,
-                            maxLines: 1,
-                          );
-                          textPainter.layout(maxWidth: constraints.maxWidth);
-                          
-                          final exceedsWidth = textPainter.width > (constraints.maxWidth - 20);
-
-                          return Container(
-                            height: 60,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  brand,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: textColor,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                            const SizedBox(height: 8),
+                            if (isOutdoorOnly)
+                              const Text(
+                                'Outdoor Unit',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w500,
                                 ),
-                                if (isOutdoorOnly)
-                                  Text(
-                                    exceedsWidth ? '(ตัวนอก)' : ' (ตัวนอก)',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                if (!isOutdoorOnly)
-                                  Text(
-                                    subtitle,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    },
+                              )
+                            else
+                              Text(
+                                subtitle,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey[800],
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],
