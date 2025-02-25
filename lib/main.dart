@@ -553,42 +553,50 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: appBackgroundColor,
         appBar: AppBar(
           backgroundColor: appBarColor,
-          toolbarHeight: 160,
+          elevation: 0,
+          toolbarHeight: 140,
           title: Column(
             children: [
-              Text(widget.title),
-              const SizedBox(height: 16),
-              GestureDetector(
-                onTap: () {
-                },
+              Text(
+                widget.title,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
                 child: TextField(
                   controller: searchController,
                   decoration: InputDecoration(
                     hintText: 'ค้นหาแบรนด์...',
-                    prefixIcon: IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {
-                        searchController.clear();
-                        setState(() {
-                          searchQuery = '';
-                        });
-                        FocusScope.of(context).requestFocus(FocusNode());
-                      },
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                    filled: true,
-                    fillColor: Colors.white,
+                    hintStyle: TextStyle(color: Colors.grey[400]),
+                    prefixIcon: const Icon(Icons.search, color: Colors.blue),
+                    suffixIcon: searchQuery.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear, color: Colors.grey),
+                          onPressed: () {
+                            searchController.clear();
+                            setState(() {
+                              searchQuery = '';
+                            });
+                          },
+                        )
+                      : null,
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      searchQuery = value;
-                    });
-                  },
-                  enableInteractiveSelection: true,
-                  autofocus: false,
                 ),
               ),
             ],
@@ -599,174 +607,221 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           actions: <Widget>[
-            IconButton(
-              icon: const Icon(
-                Icons.settings,
-                color: Colors.white,
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0, bottom: 8.0),
+              child: Container(
+                alignment: Alignment.bottomCenter,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.settings,
+                    size: 26,
+                  ),
+                  onPressed: () => _showSettingsDialog(context),
+                ),
               ),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('ตั้งค่าสี'),
-                          IconButton(
-                            icon: const Icon(Icons.refresh),
-                            onPressed: () {
-                              resetColors();
-                              Navigator.pop(context);
-                            },
-                            tooltip: 'รีเซ็ตสีทั้งหมด',
-                          ),
-                        ],
-                      ),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            title: const Text('เปลี่ยนสีแถบด้านบน'),
-                            onTap: () {
-                              Navigator.pop(context);
-                              _showColorPickerDialog('appbar');
-                            },
-                          ),
-                          ListTile(
-                            title: const Text('เปลี่ยนสีพื้นหลัง เมนู'),
-                            onTap: () {
-                              Navigator.pop(context);
-                              _showColorPickerDialog('card');
-                            },
-                          ),
-                          ListTile(
-                            title: const Text('เปลี่ยนสีตัวหนังสือ'),
-                            onTap: () {
-                              Navigator.pop(context);
-                              _showColorPickerDialog('text');
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
             ),
           ],
         ),
         body: SafeArea(
-          child: Container(
-            decoration: BoxDecoration(
-              color: appBackgroundColor,
-            ),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'แบรนด์',
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(24, 24, 24, 16),
+                  child: Text(
+                    'แบรนด์ยอดนิยม',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
+                ),
+                SizedBox(
+                  height: 300,
+                  child: ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
+                    scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(),
-                    child: Row(
-                      children: filteredBrands.map((brand) => 
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: BrandCard(
-                            brand: brand['name']!,
-                            subtitle: brand['subtitle']!,
-                            image: brand['image']!,
-                            isSvg: true,
-                            backgroundColor: cardBackgroundColor,
-                            isOutdoorOnly: brand['isOutdoorOnly']!,
-                          ),
+                    itemCount: filteredBrands.length,
+                    itemBuilder: (context, index) {
+                      final brand = filteredBrands[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: BrandCard(
+                          brand: brand['name']!,
+                          subtitle: brand['subtitle']!,
+                          image: brand['image']!,
+                          isSvg: true,
+                          backgroundColor: cardBackgroundColor,
+                          isOutdoorOnly: brand['isOutdoorOnly']!,
                         ),
-                      ).toList(),
-                    ),
+                      );
+                    },
                   ),
-                  if (recentBrands.isNotEmpty) ...[
-                    const SizedBox(height: 28),
-                    const Text(
+                ),
+                if (recentBrands.isNotEmpty) ...[
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(24, 16, 24, 8),
+                    child: Text(
                       'เข้าชมล่าสุด',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    Column(  
-                      children: recentBrands.map((brandName) {
-                        final brand = brands.firstWhere(
-                          (b) => b['name'] == brandName,
-                          orElse: () => brands[0],
-                        );
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Container(
-                            width: double.infinity, 
-                            decoration: BoxDecoration(
-                              color: cardBackgroundColor,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: ListTile(
-                              leading: SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: SvgPicture.asset(
-                                  brand['image']!,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                              title: Text(
-                                brand['name']!,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: brandTextColor,
-                                ),
-                              ),
-                              subtitle: Text(brand['subtitle']!),
-                              onTap: () async { 
-                               
-                                if (context.findAncestorStateOfType<_MyHomePageState>() != null) {
-                                  await context 
-                                      .findAncestorStateOfType<_MyHomePageState>()!
-                                      .saveRecentBrand(brand['name']!);
-                                }
-                                if (context.mounted) { 
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => BrandDetailScreen(
-                                        brand: brand['name']!,
-                                        image: brand['image']!,
-                                        isSvg: true,
-                                        isOutdoorOnly: brand['isOutdoorOnly']!,
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: recentBrands.length,
+                    itemBuilder: (context, index) {
+                      final brandName = recentBrands[index];
+                      final brand = brands.firstWhere(
+                        (b) => b['name'] == brandName,
+                        orElse: () => brands[0],
+                      );
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        child: Card(
+                          elevation: 1,
+                          color: cardBackgroundColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                        );
-                      }).toList(),
-                    ),
-                  ],
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            leading: Container(
+                              width: 36,
+                              height: 36,
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  width: 1,
+                                ),
+                              ),
+                              child: SvgPicture.asset(
+                                brand['image']!,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            title: Text(
+                              brand['name']!,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: brandTextColor,
+                                fontSize: 14,
+                              ),
+                            ),
+                            subtitle: Text(
+                              brand['subtitle']!,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: brandTextColor.withOpacity(0.7),
+                              ),
+                            ),
+                            trailing: Icon(
+                              Icons.chevron_right,
+                              size: 16,
+                              color: brandTextColor.withOpacity(0.7),
+                            ),
+                            onTap: () async {
+                              await saveRecentBrand(brand['name']!);
+                              if (context.mounted) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BrandDetailScreen(
+                                      brand: brand['name']!,
+                                      image: brand['image']!,
+                                      isSvg: true,
+                                      isOutdoorOnly: brand['isOutdoorOnly']!,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ],
-              ),
+              ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  void _showSettingsDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'ตั้งค่าธีม',
+                style: TextStyle(fontSize: 20),
+              ),
+              IconButton(
+                icon: const Icon(Icons.refresh),
+                onPressed: () {
+                  resetColors();
+                  Navigator.pop(context);
+                },
+                tooltip: 'รีเซ็ตสีทั้งหมด',
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildSettingsTile(
+                'เปลี่ยนสีแถบด้านบน',
+                Icons.palette,
+                () {
+                  Navigator.pop(context);
+                  _showColorPickerDialog('appbar');
+                },
+              ),
+              _buildSettingsTile(
+                'เปลี่ยนสีพื้นหลังเมนู',
+                Icons.format_paint,
+                () {
+                  Navigator.pop(context);
+                  _showColorPickerDialog('card');
+                },
+              ),
+              _buildSettingsTile(
+                'เปลี่ยนสีตัวหนังสือ',
+                Icons.text_fields,
+                () {
+                  Navigator.pop(context);
+                  _showColorPickerDialog('text');
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSettingsTile(String title, IconData icon, VoidCallback onTap) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.blue),
+      title: Text(title),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: onTap,
     );
   }
 }
@@ -820,8 +875,8 @@ class BrandCard extends StatelessWidget {
             }
           },
           child: Container(
-            width: 200,
-            height: 280,
+            width: 180,
+            height: 260,
             decoration: BoxDecoration(
               color: backgroundColor,
               borderRadius: BorderRadius.circular(16),
@@ -1074,15 +1129,15 @@ class ErrorCodeScreen extends StatefulWidget {
 
 class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
   String searchQuery = '';
-  late Color brandTextColor;
+  Color brandTextColor = Colors.black;
 
   @override
   void initState() {
     super.initState();
-    loadTextColor();
+    _loadTextColor();
   }
 
-  Future<void> loadTextColor() async {
+  Future<void> _loadTextColor() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       brandTextColor = Color(prefs.getInt('textColor') ?? Colors.black.value);
@@ -1550,9 +1605,9 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
                   child: ExpansionTile(
                     title: Text(
                       'Error ${error['code']}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: brandTextColor,
+                        color: Colors.black,
                       ),
                     ),
                     subtitle: Column(
@@ -1564,13 +1619,14 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
                               const Icon(
                                 Icons.lightbulb_outline,
                                 size: 16,
-                                color: Colors.amber,
+                                color: Colors.red,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 'ไฟกระพริบ ${error['LED_blink']} ครั้ง',
-                                style: TextStyle(
-                                  color: brandTextColor,
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
@@ -1587,22 +1643,12 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Text(
-                                  'วิธีแก้ไข:',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: brandTextColor,
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                const Icon(
-                                  Icons.build,
-                                  size: 20,
-                                  color: Colors.grey,
-                                ),
-                              ],
+                            Text(
+                              'วิธีแก้ไข:',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: brandTextColor,
+                              ),
                             ),
                             const SizedBox(height: 8),
                             Text(
