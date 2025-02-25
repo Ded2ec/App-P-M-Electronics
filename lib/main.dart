@@ -219,10 +219,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late Color appBackgroundColor;
+  late Color brandTextColor;
+  final searchController = TextEditingController();
   String searchQuery = '';
-  TextEditingController searchController = TextEditingController();
-  List<String> recentBrands = []; 
-  
+  List<String> recentBrands = [];
 
   final Color _defaultCardColor = const Color(0xFFE0E0E0);
   final Color _defaultAppColor = Colors.white;
@@ -230,45 +231,72 @@ class _MyHomePageState extends State<MyHomePage> {
   
 
   late Color cardBackgroundColor;
-  late Color appBackgroundColor;
   late Color appBarColor;
 
-  List<Map<String, String>> brands = [
-    {'name': 'SAMSUNG', 'image': 'assets/images/list-samsung.svg', 'subtitle': 'Air Conditioner'},
-    {'name': 'PANASONIC', 'image': 'assets/images/list-panasonic.svg', 'subtitle': 'Air Conditioner'},
-    {'name': 'TOSHIBA', 'image': 'assets/images/list-toshiba.svg', 'subtitle': 'Air Conditioner'},
-    {'name': 'HITACHI', 'image': 'assets/images/list-hitachi.svg', 'subtitle': 'Air Conditioner'},
-    {'name': 'LG', 'image': 'assets/images/list-lg.svg', 'subtitle': 'Air Conditioner'},
-    {'name': 'CARRIER', 'image': 'assets/images/list-carrier.svg', 'subtitle': 'Air Conditioner'},
-    {'name': 'DAIKIN', 'image': 'assets/images/list-daikin.svg', 'subtitle': 'Air Conditioner'},
-    {'name': 'ELECTROLUX', 'image': 'assets/images/list-electrolux.svg', 'subtitle': 'Air Conditioner'},
-    {'name': 'GREE', 'image': 'assets/images/list-gree.svg', 'subtitle': 'Air Conditioner'},
-    {'name': 'HAIER', 'image': 'assets/images/list-haier.svg', 'subtitle': 'Air Conditioner'},
-    {'name': 'HISENSE', 'image': 'assets/images/list-hisense.svg', 'subtitle': 'Air Conditioner'},
-    {'name': 'MITSUBISHI', 'image': 'assets/images/list-mitsubishi.svg', 'subtitle': 'Air Conditioner'},
-    {'name': 'TCL', 'image': 'assets/images/list-tcl.svg', 'subtitle': 'Air Conditioner'},
-    {'name': 'MIDEA', 'image': 'assets/images/list-midea.svg', 'subtitle': 'Air Conditioner'}
+  final List<Color> textColorOptions = [
+    Colors.black,      // Default
+    Colors.blue,       // Blue
+    Colors.red,       // Red
+    Colors.green,     // Green
+    Colors.purple,    // Purple
+    Colors.orange,    // Orange
+    Colors.teal,      // Teal
+    Colors.indigo,    // Indigo
   ];
 
-  List<Map<String, String>> get filteredBrands {
-    return brands.where((brand) => 
-      brand['name']!.toLowerCase().contains(searchQuery.toLowerCase())
+  // Add color name mapping
+  final Map<Color, String> colorNames = {
+    Colors.black: 'สีดำ',
+    Colors.blue: 'สีน้ำเงิน',
+    Colors.red: 'สีแดง',
+    Colors.green: 'สีเขียว',
+    Colors.purple: 'สีม่วง',
+    Colors.orange: 'สีส้ม',
+    Colors.teal: 'สีเขียวมิ้นท์',
+    Colors.indigo: 'สีน้ำเงินเข้ม',
+  };
+
+  List<Map<String, dynamic>> brands = [
+    {'name': 'SAMSUNG', 'image': 'assets/images/list-samsung.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
+    {'name': 'PANASONIC', 'image': 'assets/images/list-panasonic.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
+    {'name': 'TOSHIBA', 'image': 'assets/images/list-toshiba.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
+    {'name': 'HITACHI', 'image': 'assets/images/list-hitachi.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
+    {'name': 'LG', 'image': 'assets/images/list-lg.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
+    {'name': 'CARRIER', 'image': 'assets/images/list-carrier.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
+    {'name': 'DAIKIN', 'image': 'assets/images/list-daikin.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
+    {'name': 'ELECTROLUX', 'image': 'assets/images/list-electrolux.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
+    {'name': 'GREE', 'image': 'assets/images/list-gree.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
+    {'name': 'HAIER', 'image': 'assets/images/list-haier.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': true},
+    {'name': 'HISENSE', 'image': 'assets/images/list-hisense.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': true},
+    {'name': 'MITSUBISHI', 'image': 'assets/images/list-mitsubishi.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
+    {'name': 'TCL', 'image': 'assets/images/list-tcl.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
+    {'name': 'MIDEA', 'image': 'assets/images/list-midea.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false}
+  ];
+
+  List<Map<String, dynamic>> getFilteredBrands() {
+    if (searchQuery.isEmpty) {
+      return brands;
+    }
+    return brands.where((brand) =>
+      brand['name']!.toLowerCase().contains(searchQuery.toLowerCase()) ||
+      brand['subtitle']!.toLowerCase().contains(searchQuery.toLowerCase())
     ).toList();
   }
 
   @override
   void initState() {
     super.initState();
-    loadSavedColors();
-    loadRecentBrands();  
+    _loadColors();
+    _loadRecentBrands();
   }
 
-  Future<void> loadSavedColors() async {
+  Future<void> _loadColors() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
+      appBackgroundColor = Color(prefs.getInt('backgroundColor') ?? Colors.white.value);
       cardBackgroundColor = Color(prefs.getInt('cardColor') ?? _defaultCardColor.value);
-      appBackgroundColor = Color(prefs.getInt('appColor') ?? _defaultAppColor.value);
       appBarColor = Color(prefs.getInt('appBarColor') ?? _defaultAppBarColor.value);
+      brandTextColor = Color(prefs.getInt('textColor') ?? Colors.black.value);
     });
   }
 
@@ -277,6 +305,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await prefs.setInt('cardColor', cardBackgroundColor.value);
     await prefs.setInt('appColor', appBackgroundColor.value);
     await prefs.setInt('appBarColor', appBarColor.value);
+    await prefs.setInt('textColor', brandTextColor.value);
   }
 
   void resetColors() {
@@ -284,11 +313,12 @@ class _MyHomePageState extends State<MyHomePage> {
       cardBackgroundColor = _defaultCardColor;
       appBackgroundColor = _defaultAppColor;
       appBarColor = _defaultAppBarColor;
+      brandTextColor = Colors.black;
     });
     saveColors(); 
   }
 
-  Future<void> loadRecentBrands() async {
+  Future<void> _loadRecentBrands() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       recentBrands = prefs.getStringList('recentBrands') ?? [];
@@ -312,10 +342,27 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(type == 'card' ? 'เลือกสีพื้นหลัง Card' : 'เลือกสี AppBar'),
+          title: Text(type == 'card' ? 'เลือกสีพื้นหลัง Card' : 
+                     type == 'appbar' ? 'เลือกสี AppBar' : 'เลือกสีตัวหนังสือ'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: type == 'card' ? [
+            children: type == 'text' ? [
+              // Text color options with names
+              ...textColorOptions.map((color) => ListTile(
+                title: Text(
+                  colorNames[color] ?? 'สี',
+                  style: TextStyle(color: color),
+                ),
+                tileColor: Colors.transparent,
+                onTap: () {
+                  setState(() {
+                    brandTextColor = color;
+                  });
+                  saveColors();
+                  Navigator.pop(context);
+                },
+              )).toList(),
+            ] : type == 'card' ? [
               // สีอ่อนสำหรับ Card
               ListTile(
                 title: const Text('Soft Blue'),
@@ -488,6 +535,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (appBackgroundColor == null || brandTextColor == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final filteredBrands = getFilteredBrands();
+
     return GestureDetector(
       onTap: () {
         searchController.clear();
@@ -587,6 +640,13 @@ class _MyHomePageState extends State<MyHomePage> {
                               _showColorPickerDialog('card');
                             },
                           ),
+                          ListTile(
+                            title: const Text('เปลี่ยนสีตัวหนังสือ'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              _showColorPickerDialog('text');
+                            },
+                          ),
                         ],
                       ),
                     );
@@ -624,6 +684,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           image: brand['image']!,
                           isSvg: true,
                           backgroundColor: cardBackgroundColor,
+                          isOutdoorOnly: brand['isOutdoorOnly']!,
                         ),
                       ).toList(),
                     ),
@@ -663,8 +724,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                               title: Text(
                                 brand['name']!,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
+                                  color: brandTextColor,
                                 ),
                               ),
                               subtitle: Text(brand['subtitle']!),
@@ -682,6 +744,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         brand: brand['name']!,
                                         image: brand['image']!,
                                         isSvg: true,
+                                        isOutdoorOnly: brand['isOutdoorOnly']!,
                                       ),
                                     ),
                                   );
@@ -710,6 +773,7 @@ class BrandCard extends StatelessWidget {
   final String image;
   final bool isSvg;
   final Color backgroundColor;
+  final bool isOutdoorOnly;
 
   const BrandCard({
     super.key,
@@ -717,7 +781,8 @@ class BrandCard extends StatelessWidget {
     required this.subtitle,
     required this.image,
     required this.isSvg,
-    this.backgroundColor = const Color(0xFFE0E0E0),
+    required this.backgroundColor,
+    required this.isOutdoorOnly,
   });
 
   @override
@@ -743,6 +808,7 @@ class BrandCard extends StatelessWidget {
                     brand: brand,
                     image: image,
                     isSvg: isSvg,
+                    isOutdoorOnly: isOutdoorOnly,
                   ),
                 ),
               );
@@ -750,6 +816,7 @@ class BrandCard extends StatelessWidget {
           },
           child: Container(
             width: 150,
+            height: 180,
             margin: const EdgeInsets.only(right: 12),
             decoration: BoxDecoration(
               color: backgroundColor,
@@ -758,45 +825,84 @@ class BrandCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                  child: Container(
-                    height: 120,
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(8),
-                    child: isSvg
-                        ? SvgPicture.asset(
-                            image,
-                            fit: BoxFit.contain,
-                          )
-                        : Image.asset(
-                            image,
-                            fit: BoxFit.cover,
-                          ),
+                Expanded(
+                  child: Center(
+                    child: SvgPicture.asset(
+                      image,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        brand,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
+                  child: FutureBuilder<SharedPreferences>(
+                    future: SharedPreferences.getInstance(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return const CircularProgressIndicator();
+                      
+                      final prefs = snapshot.data!;
+                      final textColor = Color(prefs.getInt('textColor') ?? Colors.black.value);
+                      
+                      return LayoutBuilder(
+                        builder: (context, constraints) {
+                          final textSpan = TextSpan(
+                            text: brand,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: textColor,
+                            ),
+                          );
+                          final textPainter = TextPainter(
+                            text: textSpan,
+                            textDirection: TextDirection.ltr,
+                            maxLines: 1,
+                          );
+                          textPainter.layout(maxWidth: constraints.maxWidth);
+                          
+                          final exceedsWidth = textPainter.width > (constraints.maxWidth - 20);
+
+                          return Container(
+                            height: 60,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  brand,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: textColor,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                if (isOutdoorOnly)
+                                  Text(
+                                    exceedsWidth ? '(ตัวนอก)' : ' (ตัวนอก)',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                if (!isOutdoorOnly)
+                                  Text(
+                                    subtitle,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
               ],
@@ -810,49 +916,38 @@ class BrandCard extends StatelessWidget {
 
 // ====== Brand Detail Page ======
 class BrandDetailScreen extends StatelessWidget {
+  static final Map<String, String> brandDescriptions = {
+    'SAMSUNG': 'แบรนด์ระดับโลกที่โดดเด่นด้านนวัตกรรม AI และเทคโนโลยีสมาร์ทโฮม มีระบบ SmartThings ควบคุมผ่านสมาร์ทโฟน ฟีเจอร์ AI Auto Cooling ปรับการทำงานอัตโนมัติตามการใช้งานและสภาพห้อง พร้อมระบบฟอกอากาศและประหยัดพลังงาน',
+    'PANASONIC': 'แบรนด์ญี่ปุ่นที่มีประวัติยาวนานในการผลิตเครื่องใช้ไฟฟ้า โดดเด่นด้านเทคโนโลยี Inverter ที่ให้พลังงานคงที่ในระดับกลางและต่ำ มีระบบฟอกอากาศและควบคุมความชื้นอัตโนมัติ การออกแบบที่ทันสมัยและประหยัดพลังงาน',
+    'TOSHIBA': 'แบรนด์ญี่ปุ่นที่มีความเชี่ยวชาญด้านเทคโนโลยีและนวัตกรรม มีระบบ Self-Cleaning ป้องกันเชื้อราและแบคทีเรีย เทคโนโลยี Twin-Cooling พร้อมเซ็นเซอร์ 13 จุดเพื่อประสิทธิภาพการทำความเย็นสูงสุด',
+    'HITACHI': 'แบรนด์ญี่ปุ่นที่มีนวัตกรรม Frost Wash ทำความสะอาดตัวเองด้วยการแช่แข็งและละลายน้ำแข็ง ระบบ Stainless Clean ป้องกันแบคทีเรียและฝุ่น มาพร้อมเทคโนโลยี IoT ควบคุมผ่านแอปพลิเคชัน',
+    'LG': 'แบรนด์เกาหลีที่โดดเด่นด้านดีไซน์และเทคโนโลยี AI มีระบบ Dual Inverter Compressor ประหยัดพลังงานและลดเสียงรบกวน ฟังก์ชัน ThinQ ควบคุมแอร์ผ่านสมาร์ทโฟน มีระบบฟอกอากาศและฆ่าเชื้อแบคทีเรีย',
+    'CARRIER': 'แบรนด์อเมริกันที่เป็นผู้นำด้านระบบปรับอากาศ มีเทคโนโลยี Smart Auto Mode ปรับความเร็วพัดลมอัตโนมัติตามคุณภาพอากาศ ระบบกรองอากาศประสิทธิภาพสูง และการควบคุมอุณหภูมิที่แม่นยำ',
+    'DAIKIN': 'แบรนด์ญี่ปุ่นที่มีชื่อเสียงด้านเทคโนโลยีระบบปรับอากาศระดับโลก มีระบบ Streamer Discharge ที่ช่วยฟอกอากาศและฆ่าเชื้อโรค เทคโนโลยี Inverter ประหยัดพลังงานสูง คอมเพรสเซอร์ทนทาน และระบบควบคุมอุณหภูมิแม่นยำ',
+    'ELECTROLUX': 'แบรนด์สวีเดนที่ขึ้นชื่อเรื่องดีไซน์และคุณภาพ เทคโนโลยี Air Purification ช่วยฟอกอากาศให้บริสุทธิ์ ระบบ I-Feel ปรับอุณหภูมิให้เหมาะสมอัตโนมัติ ดีไซน์ทันสมัยและเสียงเงียบ',
+    'GREE': 'แบรนด์จีนที่เป็นหนึ่งในผู้ผลิตแอร์รายใหญ่ของโลก มีเทคโนโลยี Cold Plasma ฆ่าเชื้อโรคและฟอกอากาศ ระบบ Self-Cleaning ลดการสะสมของฝุ่นและเชื้อรา ใช้คอมเพรสเซอร์ที่ทนทานและเงียบ',
+    'HAIER': 'แบรนด์จีนที่มีความเชี่ยวชาญด้านอุปกรณ์เครื่องใช้ไฟฟ้า เทคโนโลยี Self-Cleaning ป้องกันเชื้อราและแบคทีเรีย ระบบ Hyper PCB ทำให้ทำงานได้เสถียรแม้ไฟตก คอมเพรสเซอร์ทนทานและประหยัดพลังงาน',
+    'HISENSE': 'แบรนด์จีนที่มีความเชี่ยวชาญด้านเทคโนโลยีดิจิทัล ระบบ Hi-Nano กำจัดเชื้อแบคทีเรียและไวรัส โหมด I Feel ปรับอุณหภูมิตามตำแหน่งของรีโมท คอมเพรสเซอร์ทนทาน และมีโหมดประหยัดพลังงาน',
+    'MITSUBISHI': 'แบรนด์ญี่ปุ่นที่ขึ้นชื่อเรื่องความทนทานและประหยัดพลังงาน ระบบ Fast Cooling ทำให้เย็นเร็วทันใจ เทคโนโลยี Dual Barrier Coating ลดการสะสมของฝุ่นและคราบน้ำมัน ใช้น้ำยาทำความเย็น R32 ที่เป็นมิตรต่อสิ่งแวดล้อม',
+    'TCL': 'แบรนด์จีนที่ให้ความคุ้มค่าราคาประหยัด ระบบ Gentle Breeze กระจายลมได้อย่างนุ่มนวล คอมเพรสเซอร์ Inverter ช่วยประหยัดไฟ ดีไซน์ทันสมัย รองรับการควบคุมผ่านแอป',
+    'MIDEA': 'แบรนด์จีนที่เป็นผู้ผลิตเครื่องปรับอากาศรายใหญ่ระดับโลก มีระบบ Flash Cooling ทำให้เย็นเร็ว เทคโนโลยี i-Clean ช่วยทำความสะอาดตัวเอง รองรับการควบคุมผ่านแอปสมาร์ทโฟน'
+  };
+
   final String brand;
   final String image;
   final bool isSvg;
+  final bool isOutdoorOnly;
 
   const BrandDetailScreen({
     required this.brand,
     required this.image,
-    this.isSvg = false,
+    required this.isSvg,
+    required this.isOutdoorOnly,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, String> brandDescriptions = {
-    'SAMSUNG': 'แบรนด์ระดับโลกที่โดดเด่นด้านนวัตกรรม AI และเทคโนโลยีสมาร์ทโฮม มีระบบ SmartThings ควบคุมผ่านสมาร์ทโฟน ฟีเจอร์ AI Auto Cooling ปรับการทำงานอัตโนมัติตามการใช้งานและสภาพห้อง พร้อมระบบฟอกอากาศและประหยัดพลังงาน',
-
-    'PANASONIC': 'แบรนด์ญี่ปุ่นที่มีประวัติยาวนานในการผลิตเครื่องใช้ไฟฟ้า โดดเด่นด้านเทคโนโลยี Inverter ที่ให้พลังงานคงที่ในระดับกลางและต่ำ มีระบบฟอกอากาศและควบคุมความชื้นอัตโนมัติ การออกแบบที่ทันสมัยและประหยัดพลังงาน',
-
-    'TOSHIBA': 'แบรนด์ญี่ปุ่นที่มีความเชี่ยวชาญด้านเทคโนโลยีและนวัตกรรม มีระบบ Self-Cleaning ป้องกันเชื้อราและแบคทีเรีย เทคโนโลยี Twin-Cooling พร้อมเซ็นเซอร์ 13 จุดเพื่อประสิทธิภาพการทำความเย็นสูงสุด',
-
-    'HITACHI': 'แบรนด์ญี่ปุ่นที่มีนวัตกรรม Frost Wash ทำความสะอาดตัวเองด้วยการแช่แข็งและละลายน้ำแข็ง ระบบ Stainless Clean ป้องกันแบคทีเรียและฝุ่น มาพร้อมเทคโนโลยี IoT ควบคุมผ่านแอปพลิเคชัน',
-
-    'LG': 'แบรนด์เกาหลีที่โดดเด่นด้านดีไซน์และเทคโนโลยี AI มีระบบ Dual Inverter Compressor ประหยัดพลังงานและลดเสียงรบกวน ฟังก์ชัน ThinQ ควบคุมแอร์ผ่านสมาร์ทโฟน มีระบบฟอกอากาศและฆ่าเชื้อแบคทีเรีย',
-
-    'CARRIER': 'แบรนด์อเมริกันที่เป็นผู้นำด้านระบบปรับอากาศ มีเทคโนโลยี Smart Auto Mode ปรับความเร็วพัดลมอัตโนมัติตามคุณภาพอากาศ ระบบกรองอากาศประสิทธิภาพสูง และการควบคุมอุณหภูมิที่แม่นยำ',
-
-    'DAIKIN': 'แบรนด์ญี่ปุ่นที่มีชื่อเสียงด้านเทคโนโลยีระบบปรับอากาศระดับโลก มีระบบ Streamer Discharge ที่ช่วยฟอกอากาศและฆ่าเชื้อโรค เทคโนโลยี Inverter ประหยัดพลังงานสูง คอมเพรสเซอร์ทนทาน และระบบควบคุมอุณหภูมิแม่นยำ',
-
-    'ELECTROLUX': 'แบรนด์สวีเดนที่ขึ้นชื่อเรื่องดีไซน์และคุณภาพ เทคโนโลยี Air Purification ช่วยฟอกอากาศให้บริสุทธิ์ ระบบ I-Feel ปรับอุณหภูมิให้เหมาะสมอัตโนมัติ ดีไซน์ทันสมัยและเสียงเงียบ',
-
-    'GREE': 'แบรนด์จีนที่เป็นหนึ่งในผู้ผลิตแอร์รายใหญ่ของโลก มีเทคโนโลยี Cold Plasma ฆ่าเชื้อโรคและฟอกอากาศ ระบบ Self-Cleaning ลดการสะสมของฝุ่นและเชื้อรา ใช้คอมเพรสเซอร์ที่ทนทานและเงียบ',
-
-    'HAIER': 'แบรนด์จีนที่มีความเชี่ยวชาญด้านอุปกรณ์เครื่องใช้ไฟฟ้า เทคโนโลยี Self-Cleaning ป้องกันเชื้อราและแบคทีเรีย ระบบ Hyper PCB ทำให้ทำงานได้เสถียรแม้ไฟตก คอมเพรสเซอร์ทนทานและประหยัดพลังงาน',
-
-    'HISENSE': 'แบรนด์จีนที่มีความเชี่ยวชาญด้านเทคโนโลยีดิจิทัล ระบบ Hi-Nano กำจัดเชื้อแบคทีเรียและไวรัส โหมด I Feel ปรับอุณหภูมิตามตำแหน่งของรีโมท คอมเพรสเซอร์ทนทาน และมีโหมดประหยัดพลังงาน',
-
-    'MITSUBISHI': 'แบรนด์ญี่ปุ่นที่ขึ้นชื่อเรื่องความทนทานและประหยัดพลังงาน ระบบ Fast Cooling ทำให้เย็นเร็วทันใจ เทคโนโลยี Dual Barrier Coating ลดการสะสมของฝุ่นและคราบน้ำมัน ใช้น้ำยาทำความเย็น R32 ที่เป็นมิตรต่อสิ่งแวดล้อม',
-
-    'TCL': 'แบรนด์จีนที่ให้ความคุ้มค่าราคาประหยัด ระบบ Gentle Breeze กระจายลมได้อย่างนุ่มนวล คอมเพรสเซอร์ Inverter ช่วยประหยัดไฟ ดีไซน์ทันสมัย รองรับการควบคุมผ่านแอป',
-
-    'MIDEA': 'แบรนด์จีนที่เป็นผู้ผลิตเครื่องปรับอากาศรายใหญ่ระดับโลก มีระบบ Flash Cooling ทำให้เย็นเร็ว เทคโนโลยี i-Clean ช่วยทำความสะอาดตัวเอง รองรับการควบคุมผ่านแอปสมาร์ทโฟน'
-    };
-
     return WillPopScope(
       onWillPop: () async {
         if (context.findAncestorStateOfType<_MyHomePageState>() != null) {
@@ -873,7 +968,7 @@ class BrandDetailScreen extends StatelessWidget {
           child: Column(
             children: [
               Hero(
-                tag: 'brand-$brand', 
+                tag: 'brand-$brand',
                 child: Container(
                   height: 200,
                   width: double.infinity,
@@ -913,7 +1008,10 @@ class BrandDetailScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ErrorCodeScreen(brand: brand),
+                              builder: (context) => ErrorCodeScreen(
+                                brand: brand,
+                                isOutdoorOnly: isOutdoorOnly,
+                              ),
                             ),
                           );
                         },
@@ -944,14 +1042,235 @@ class BrandDetailScreen extends StatelessWidget {
 }
 
 // ====== Error Code Page ======
-class ErrorCodeScreen extends StatelessWidget {
+class ErrorCodeScreen extends StatefulWidget {
   final String brand;
+  final bool isOutdoorOnly;
 
-  const ErrorCodeScreen({required this.brand, Key? key}) : super(key: key);
+  const ErrorCodeScreen({
+    required this.brand,
+    required this.isOutdoorOnly,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<ErrorCodeScreen> createState() => _ErrorCodeScreenState();
+}
+
+class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
+  String searchQuery = '';
+  late Color brandTextColor;
+
+  @override
+  void initState() {
+    super.initState();
+    loadTextColor();
+  }
+
+  Future<void> loadTextColor() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      brandTextColor = Color(prefs.getInt('textColor') ?? Colors.black.value);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, List<Map<String, String>>> errorCodes = {
+    final String baseBrand = widget.brand.split(' (')[0];
+    final bool hasOuterText = widget.brand.contains('(ตัวนอก)');
+
+    final Map<String, List<Map<String, dynamic>>> errorCodes = {
+      'TCL': [
+    {
+        'code': 'P0',
+        'problem': 'บอร์ด IPM module ทำงานผิดพลาด',
+        'solution': '-'
+    },
+    {
+        'code': 'P1',
+        'problem': 'แรงดันไฟฟ้าสูงหรือต่ำเกินไป',
+        'solution': '-'
+    },
+    {
+        'code': 'P2',
+        'problem': 'กระแสไฟฟ้าสูงเกินไป',
+        'solution': '-'
+    },
+    {
+        'code': 'P4',
+        'problem': 'เซนเซอร์ตรวจวัดอุณหภูมิท่อ Discharge outdoor มีอุณหภูมิสูงเกินไป',
+        'solution': '-'
+    },
+    {
+        'code': 'P5',
+        'problem': 'ตรวจสอบระบบน้ำยาในโหมด Cooling เนื่องจากอุณหภูมิท่อทางเข้าของส่วน Subcooling',
+        'solution': '-'
+    },
+    {
+        'code': 'P6',
+        'problem': 'ตรวจสอบระบบน้ำยาในโหมด Cooling เนื่องจากท่อมีอุณหภูมิสูงเกินไป',
+        'solution': '-'
+    },
+    {
+        'code': 'P7',
+        'problem': 'ตรวจสอบระบบน้ำยาในโหมด Heating เนื่องจากท่อมีอุณหภูมิสูงเกินไป',
+        'solution': '-'
+    },
+    {
+        'code': 'P8',
+        'problem': 'เซนเซอร์ตรวจวัดอุณหภูมิภายนอกค่าสูงหรือต่ำเกินไป',
+        'solution': '-'
+    },
+    {
+        'code': 'P9',
+        'problem': 'คอมเพรสเซอร์ทำงานผิดปกติ',
+        'solution': '-'
+    },
+    {
+        'code': 'PA',
+        'problem': 'การสื่อสารผิดพลาด สำหรับ TOP / Preset mode มีปัญหา',
+        'solution': '-'
+    },
+    {
+        'code': 'F0',
+        'problem': 'เซนเซอร์รับคำสั่งหรือตรวจสอบความรู้สึกของผู้ใช้งานทำงานผิดพลาด',
+        'solution': '-'
+    },
+    {
+        'code': 'F1',
+        'problem': 'โมดูลตรวจสอบกำลังไฟทำงานผิดพลาด',
+        'solution': '-'
+    },
+    {
+        'code': 'F2',
+        'problem': 'เซนเซอร์อุณหภูมิของท่อ Discharge ทำงานผิดพลาด',
+        'solution': '-'
+    },
+    {
+        'code': 'F3',
+        'problem': 'อุณหภูมิของคอยล์ร้อนผิดปกติ',
+        'solution': '-'
+    },
+    {
+        'code': 'F4',
+        'problem': 'ระบบการไหลของน้ำยาผิดปกติ',
+        'solution': '-'
+    },
+    {
+        'code': 'F5',
+        'problem': 'ตรวจจับกระแสไฟฟ้าสูงเกินไป / PFC สูงเกินไป',
+        'solution': '-'
+    },
+    {
+        'code': 'F6',
+        'problem': 'กระแสไฟฟ้าวงจรของคอมเพรสเซอร์',
+        'solution': '-'
+    },
+    {
+        'code': 'F7',
+        'problem': 'อุณหภูมิของบอร์ดโมดูลผิดปกติ',
+        'solution': '-'
+    },
+    {
+        'code': 'F8',
+        'problem': 'ตัวของ 4-Way สูงผิดปกติ',
+        'solution': '-'
+    },
+    {
+        'code': 'F9',
+        'problem': 'วงจรทดสอบอุณหภูมิของบอร์ดโมดูลทำงานผิดพลาด',
+        'solution': '-'
+    },
+    {
+        'code': 'FA',
+        'problem': 'วงจรทดสอบกระแสเฟสของคอมเพรสเซอร์ทำงานผิดพลาด',
+        'solution': '-'
+    },
+    {
+        'code': 'Fb',
+        'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันการทำความเย็นหรือทำความร้อนเกินไปในโหมด Cooling/โหมด Heating',
+        'solution': '-'
+    },
+    {
+        'code': 'FC',
+        'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันการใช้พลังงานสูงเกินไป',
+        'solution': '-'
+    },
+    {
+        'code': 'FE',
+        'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันการกินกระแสของมอเตอร์โมดูล (เฟสของคอมเพรสเซอร์)',
+        'solution': '-'
+    },
+    {
+        'code': 'FF',
+        'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันอุณหภูมิของมอเตอร์โมดูล',
+        'solution': '-'
+    },
+    {
+        'code': 'FH',
+        'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันการทำงานของคอมเพรสเซอร์',
+        'solution': '-'
+    },
+    {
+        'code': 'FP',
+        'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันการเกิดแผ่นน้ำแข็ง',
+        'solution': '-'
+    },
+    {
+        'code': 'FU',
+        'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันการบกพร่องส่วนอื่นๆ',
+        'solution': '-'
+    },
+    {
+        'code': 'FJ',
+        'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันอุณหภูมิของท่อ Discharge',
+        'solution': '-'
+    },
+    {
+        'code': 'Fn',
+        'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันการกินกระแสของส่วน Outdoor',
+        'solution': '-'
+    },
+    {
+        'code': 'H1',
+        'problem': 'การสลับระบบการทำความเย็นแรงดันสูงผิดปกติ',
+        'solution': '-'
+    },
+    {
+        'code': 'H2',
+        'problem': 'การสลับระบบการทำความเย็นแรงดันต่ำผิดปกติ',
+        'solution': '-'
+    },
+    {
+        'code': 'BJ',
+        'problem': 'เซนเซอร์วัดความชื้นทำงานผิดพลาด',
+        'solution': '-'
+    },
+    {
+        'code': 'BF',
+        'problem': 'TVOC เซ็นเซอร์ มีปัญหา',
+        'solution': '-'
+    },
+    {
+        'code': 'BD',
+        'problem': 'มอเตอร์พัดลมดูดอากาศมีปัญหา',
+        'solution': '-'
+    },
+    {
+        'code': 'D4',
+        'problem': 'ระบบระบายน้ำทิ้งมีปัญหา',
+        'solution': '-'
+    },
+    {
+        'code': '2A 3A 4A 5A 6A 7A 8A 9A 0A',
+        'problem': 'ถ้าปิดโหมดสแตนบาย โหลดบกเลิกออกโดยการกดปุ่ม GEN หรือโหมดกดปุ่มจนกว่าหน้าจอโทรโชว์ OF แล้วปล่อยมือ ประมาณ 5 วินาทีพัดลมก็จะหยุดไปหลังจากนั้นคอมเพรสเซอร์จะกลับมาทำงาน 100% หรือ เป็นเดิมที',
+        'solution': '-'
+    },
+    {
+        'code': 'CF PP SA AP',
+        'problem': 'ไม่ใช่ error code แต่มันคือการส่งสัญญาณเพื่อเชื่อมต่อหา wifi ในลักษณะนี้จะมีในแอร์รุ่นที่เชื่อมต่อ wifi ได้ครับ เป็นการทำงานปกติ',
+        'solution': '-'
+    }
+    ],
       'SAMSUNG': [
         {
           'code': '4C/4E',
@@ -1085,139 +1404,205 @@ class ErrorCodeScreen extends StatelessWidget {
       ],
       'HAIER': [
         {
-          'code': 'E1',
-          'problem': 'เซ็นเซอร์อุณหภูมิห้องผิดปกติ',
-          'solution': '1. ตรวจสอบการเชื่อมต่อเซ็นเซอร์\n2. เปลี่ยนเซ็นเซอร์\n3. ตรวจสอบแผงวงจร'
-        },
-        {
-          'code': 'E2',
-          'problem': 'เซ็นเซอร์อุณหภูมิภายนอกผิดปกติ',
-          'solution': '1. ตรวจสอบการเชื่อมต่อเซ็นเซอร์\n2. เปลี่ยนถ้าเสีย\n3. ตรวจสอบสายไฟ'
+          'code': 'E12',
+          'LED_blink': 1,
+          'problem': 'ข้อมูลใน EEPROM เสียหาย',
+          'solution': '-'
         },
         {
           'code': 'F1',
-          'problem': 'คอมเพรสเซอร์ทำงานหนักเกินไป',
-          'solution': '1. ตรวจสอบน้ำยา\n2. ทำความสะอาดระบบ\n3. ตรวจสอบคอมเพรสเซอร์'
+          'LED_blink': 2,
+          'problem': 'เซนเซอร์ในห้อง',
+          'solution': '-'
+        },
+        {
+          'code': 'F22',
+          'LED_blink': 3,
+          'problem': 'การแสดงฟังก์ชั่นการสูญเสียกำลังไฟ',
+          'solution': '-'
+        },
+        {
+          'code': 'F3',
+          'LED_blink': 4,
+          'problem': 'การป้องกัน รันฟ์สร้อยกระทำงานบกพร่อง และเซนเซอร์ในห้อง',
+          'solution': '-'
+        },
+        {
+          'code': 'F20',
+          'LED_blink': 6,
+          'problem': 'มอเตอร์เข้าไม่ถึงเครื่องสูงสุด หรือ ล้ำเกินไป',
+          'solution': '-'
+        },
+        {
+          'code': 'F4',
+          'LED_blink': 8,
+          'problem': 'อุณหภูมิที่ท่อท่อเย็นวัดที่ท่อกลางๆ สูงเกินไป',
+          'solution': '-'
+        },
+        {
+          'code': 'F21',
+          'LED_blink': 10,
+          'problem': 'เซนเซอร์ป้องกันน้ำซึมการทำแห้งคอนเดนเซอร์เสีย',
+          'solution': '-'
+        },
+        {
+          'code': 'F6',
+          'LED_blink': 12,
+          'problem': 'เซนเซอร์ตรวจจับอุณหภูมิกระเปาะเปียกเสีย',
+          'solution': '-'
+        },
+        {
+          'code': 'F25',
+          'LED_blink': 13,
+          'problem': 'เซนเซอร์ตรวจจับอุณหภูมิที่ท่อกลางเสีย',
+          'solution': '-'
+        },
+        {
+          'code': 'F11',
+          'LED_blink': 18,
+          'problem': 'วงจรการจับค่าตำแหน่งของมอเตอร์เสียหา',
+          'solution': '-'
+        },
+        {
+          'code': 'F28',
+          'LED_blink': 19,
+          'problem': 'เซนเซอร์ในห้อง',
+          'solution': '-'
+        },
+        {
+          'code': 'F2',
+          'LED_blink': 24,
+          'problem': 'คอมเพรสเซอร์ไม่การะแสไฟ',
+          'solution': '-'
+        },
+        {
+          'code': 'F23',
+          'LED_blink': 25,
+          'problem': 'การแสดงฟังก์ชั่นของกระแสไฟที่เข้าไฟเยอะๆ สูงไป',
+          'solution': '-'
         }
       ],
-      'HISENSE': [
+       'HISENSE': [
         {
           'code': 'E1',
-          'problem': 'คอยล์เย็นผิดปกติ',
-          'solution': '1. ตรวจสอบคอยล์เย็น\n2. ตรวจสอบการเชื่อมต่อ\n3. รีเซ็ตไฟ'
-        },
-        {
-          'code': 'F0',
-          'problem': 'น้ำยารั่ว',
-          'solution': '1. ตรวจหารอยรั่ว\n2. ซ่อมรอยรั่ว\n3. เติมน้ำยา'
-        },
-        {
-          'code': 'H6',
-          'problem': 'มอเตอร์พัดลมผิดปกติ',
-          'solution': '1. ตรวจสอบมอเตอร์พัดลม\n2. กำจัดสิ่งกีดขวาง\n3. เปลี่ยนถ้าจำเป็น'
-        }
-      ],
-      'MITSUBISHI': [
-        {
-          'code': 'E1',
-          'problem': 'เซ็นเซอร์อุณหภูมิผิดปกติ',
-          'solution': '1. ตรวจสอบการเชื่อมต่อเซ็นเซอร์\n2. เปลี่ยนเซ็นเซอร์\n3. ตรวจสอบแผงวงจร'
-        },
-        {
-          'code': 'E6',
-          'problem': 'มอเตอร์พัดลมคอยล์เย็นผิดปกติ',
-          'solution': '1. ตรวจสอบมอเตอร์\n2. กำจัดสิ่งกีดขวาง\n3. เปลี่ยนมอเตอร์'
-        },
-        {
-          'code': 'E9',
-          'problem': 'ปั๊มระบายน้ำผิดปกติ',
-          'solution': '1. ตรวจสอบปั๊มระบายน้ำ\n2. ทำความสะอาดท่อระบายน้ำ\n3. ตรวจสอบลูกลอยน้ำ'
-        }
-      ],
-      'TCL': [
-        {
-          'code': 'E1',
-          'problem': 'เซ็นเซอร์อุณหภูมิห้องเสีย',
-          'solution': '1. ตรวจสอบเซ็นเซอร์\n2. เปลี่ยนถ้าชำรุด\n3. ตรวจสอบการเชื่อมต่อ'
-        },
-        {
-          'code': 'E2',
-          'problem': 'เซ็นเซอร์ท่อทำความเย็นเสีย',
-          'solution': '1. ตรวจสอบเซ็นเซอร์\n2. ตรวจสอบสายไฟ\n3. เปลี่ยนเซ็นเซอร์'
-        },
-        {
-          'code': 'E4',
-          'problem': 'มอเตอร์พัดลมผิดปกติ',
-          'solution': '1. ตรวจสอบมอเตอร์พัดลม\n2. กำจัดสิ่งกีดขวาง\n3. เปลี่ยนมอเตอร์'
-        }
-      ],
-      'MIDEA': [
-        {
-          'code': 'E1',
-          'problem': 'เซ็นเซอร์อุณหภูมิห้องเสีย',
-          'solution': '1. ตรวจสอบการเชื่อมต่อเซ็นเซอร์\n2. เปลี่ยนเซ็นเซอร์\n3. ตรวจสอบแผงวงจร'
-        },
-        {
-          'code': 'F0',
-          'problem': 'โหมดกู้คืนน้ำยา',
-          'solution': '1. ตรวจสอบระดับน้ำยา\n2. ตรวจหารอยรั่ว\n3. ต้องการการซ่อมบำรุง'
-        },
-        {
-          'code': 'E6',
-          'problem': 'การสื่อสารผิดพลาด',
-          'solution': '1. ตรวจสอบสายไฟ\n2. รีเซ็ตไฟ\n3. ตรวจสอบแผงควบคุม'
+          'problem': 'ล็อคประตูมีปัญหา',
+          'solution': '1. ตรวจสอบกลไกล็อคประตู\n2. ตรวจสอบการปิดประตูให้สนิท'
         }
       ]
     };
 
-    final brandCodes = errorCodes[brand] ?? [];
+    final brandCodes = errorCodes[widget.brand] ?? [];
+    final filteredCodes = brandCodes.where((error) =>
+      error['code']!.toLowerCase().contains(searchQuery.toLowerCase()) ||
+      error['problem']!.toLowerCase().contains(searchQuery.toLowerCase())
+    ).toList();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('$brand Error Codes'),
+        title: Text('${widget.brand} Error Code'),
         backgroundColor: Colors.blue,
       ),
-      body: ListView.builder(
-        itemCount: brandCodes.length,
-        itemBuilder: (context, index) {
-          final error = brandCodes[index];
-          return Card(
-            margin: const EdgeInsets.all(8),
-            child: ExpansionTile(
-              title: Text(
-                'Error ${error['code']}',
-                style: const TextStyle(fontWeight: FontWeight.bold),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'ค้นหารหัสข้อผิดพลาดหรือปัญหา...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                filled: true,
+                fillColor: Colors.white,
               ),
-              subtitle: Text(error['problem'] ?? ''),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          const Text(
-                            'วิธีแก้ไข:',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(width: 8),
-                          const Icon(
-                            Icons.build,
-                            size: 20,
-                            color: Colors.grey,
-                          ),
-                        ],
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredCodes.length,
+              itemBuilder: (context, index) {
+                final error = filteredCodes[index];
+                return Card(
+                  margin: const EdgeInsets.all(8),
+                  child: ExpansionTile(
+                    title: Text(
+                      'Error ${error['code']}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: brandTextColor,
                       ),
-                      const SizedBox(height: 8),
-                      Text(error['solution'] ?? ''),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (widget.brand == 'HAIER' && error['LED_blink'] != null)
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.lightbulb_outline,
+                                size: 16,
+                                color: Colors.amber,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                'ไฟกระพริบ ${error['LED_blink']} ครั้ง',
+                                style: TextStyle(
+                                  color: brandTextColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        Text(
+                          error['problem'] ?? '',
+                          style: TextStyle(color: brandTextColor),
+                        ),
+                      ],
+                    ),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'วิธีแก้ไข:',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: brandTextColor,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                const Icon(
+                                  Icons.build,
+                                  size: 20,
+                                  color: Colors.grey,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              error['solution'] ?? '',
+                              style: TextStyle(color: brandTextColor),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ],
+                );
+              },
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
@@ -1279,3 +1664,4 @@ class ProblemCard extends StatelessWidget {
     );
   }
 }
+
