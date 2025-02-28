@@ -1026,6 +1026,12 @@ class BrandDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     if (brand == 'CARRIER') {
       return const CarrierErrorCodePage();
+    } else if (brand == 'DAIKIN') {
+      return const DaikinErrorCodePage();
+    } else if (brand == 'TCL') {
+      return const TclErrorCodePage();
+    } else if (brand == 'HAIER') {
+      return const HaierErrorCodePage();
     }
     return WillPopScope(
       onWillPop: () async {
@@ -1162,192 +1168,192 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
     {
         'code': 'P0',
         'problem': 'บอร์ด IPM module ทำงานผิดพลาด',
-        'solution': '-'
+       
     },
     {
         'code': 'P1',
         'problem': 'แรงดันไฟฟ้าสูงหรือต่ำเกินไป',
-        'solution': '-'
+       
     },
     {
         'code': 'P2',
         'problem': 'กระแสไฟฟ้าสูงเกินไป',
-        'solution': '-'
+       
     },
     {
         'code': 'P4',
         'problem': 'เซนเซอร์ตรวจวัดอุณหภูมิท่อ Discharge outdoor มีอุณหภูมิสูงเกินไป',
-        'solution': '-'
+       
     },
     {
         'code': 'P5',
         'problem': 'ตรวจสอบระบบน้ำยาในโหมด Cooling เนื่องจากอุณหภูมิท่อทางเข้าของส่วน Subcooling',
-        'solution': '-'
+       
     },
     {
         'code': 'P6',
         'problem': 'ตรวจสอบระบบน้ำยาในโหมด Cooling เนื่องจากท่อมีอุณหภูมิสูงเกินไป',
-        'solution': '-'
+       
     },
     {
         'code': 'P7',
         'problem': 'ตรวจสอบระบบน้ำยาในโหมด Heating เนื่องจากท่อมีอุณหภูมิสูงเกินไป',
-        'solution': '-'
+       
     },
     {
         'code': 'P8',
         'problem': 'เซนเซอร์ตรวจวัดอุณหภูมิภายนอกค่าสูงหรือต่ำเกินไป',
-        'solution': '-'
+       
     },
     {
         'code': 'P9',
         'problem': 'คอมเพรสเซอร์ทำงานผิดปกติ',
-        'solution': '-'
+       
     },
     {
         'code': 'PA',
         'problem': 'การสื่อสารผิดพลาด สำหรับ TOP / Preset mode มีปัญหา',
-        'solution': '-'
+       
     },
     {
         'code': 'F0',
         'problem': 'เซนเซอร์รับคำสั่งหรือตรวจสอบความรู้สึกของผู้ใช้งานทำงานผิดพลาด',
-        'solution': '-'
+       
     },
     {
         'code': 'F1',
         'problem': 'โมดูลตรวจสอบกำลังไฟทำงานผิดพลาด',
-        'solution': '-'
+       
     },
     {
         'code': 'F2',
         'problem': 'เซนเซอร์อุณหภูมิของท่อ Discharge ทำงานผิดพลาด',
-        'solution': '-'
+       
     },
     {
         'code': 'F3',
         'problem': 'อุณหภูมิของคอยล์ร้อนผิดปกติ',
-        'solution': '-'
+       
     },
     {
         'code': 'F4',
         'problem': 'ระบบการไหลของน้ำยาผิดปกติ',
-        'solution': '-'
+       
     },
     {
         'code': 'F5',
         'problem': 'ตรวจจับกระแสไฟฟ้าสูงเกินไป / PFC สูงเกินไป',
-        'solution': '-'
+       
     },
     {
         'code': 'F6',
         'problem': 'กระแสไฟฟ้าวงจรของคอมเพรสเซอร์',
-        'solution': '-'
+       
     },
     {
         'code': 'F7',
         'problem': 'อุณหภูมิของบอร์ดโมดูลผิดปกติ',
-        'solution': '-'
+       
     },
     {
         'code': 'F8',
         'problem': 'ตัวของ 4-Way สูงผิดปกติ',
-        'solution': '-'
+       
     },
     {
         'code': 'F9',
         'problem': 'วงจรทดสอบอุณหภูมิของบอร์ดโมดูลทำงานผิดพลาด',
-        'solution': '-'
+       
     },
     {
         'code': 'FA',
         'problem': 'วงจรทดสอบกระแสเฟสของคอมเพรสเซอร์ทำงานผิดพลาด',
-        'solution': '-'
+       
     },
     {
         'code': 'Fb',
         'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันการทำความเย็นหรือทำความร้อนเกินไปในโหมด Cooling/โหมด Heating',
-        'solution': '-'
+       
     },
     {
         'code': 'FC',
         'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันการใช้พลังงานสูงเกินไป',
-        'solution': '-'
+       
     },
     {
         'code': 'FE',
         'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันการกินกระแสของมอเตอร์โมดูล (เฟสของคอมเพรสเซอร์)',
-        'solution': '-'
+       
     },
     {
         'code': 'FF',
         'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันอุณหภูมิของมอเตอร์โมดูล',
-        'solution': '-'
+       
     },
     {
         'code': 'FH',
         'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันการทำงานของคอมเพรสเซอร์',
-        'solution': '-'
+       
     },
     {
         'code': 'FP',
         'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันการเกิดแผ่นน้ำแข็ง',
-        'solution': '-'
+       
     },
     {
         'code': 'FU',
         'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันการบกพร่องส่วนอื่นๆ',
-        'solution': '-'
+       
     },
     {
         'code': 'FJ',
         'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันอุณหภูมิของท่อ Discharge',
-        'solution': '-'
+       
     },
     {
         'code': 'Fn',
         'problem': 'จำกัด/ลดความถี่ เพื่อป้องกันการกินกระแสของส่วน Outdoor',
-        'solution': '-'
+       
     },
     {
         'code': 'H1',
         'problem': 'การสลับระบบการทำความเย็นแรงดันสูงผิดปกติ',
-        'solution': '-'
+       
     },
     {
         'code': 'H2',
         'problem': 'การสลับระบบการทำความเย็นแรงดันต่ำผิดปกติ',
-        'solution': '-'
+       
     },
     {
         'code': 'BJ',
         'problem': 'เซนเซอร์วัดความชื้นทำงานผิดพลาด',
-        'solution': '-'
+       
     },
     {
         'code': 'BF',
         'problem': 'TVOC เซ็นเซอร์ มีปัญหา',
-        'solution': '-'
+       
     },
     {
         'code': 'BD',
         'problem': 'มอเตอร์พัดลมดูดอากาศมีปัญหา',
-        'solution': '-'
+       
     },
     {
         'code': 'D4',
         'problem': 'ระบบระบายน้ำทิ้งมีปัญหา',
-        'solution': '-'
+       
     },
     {
         'code': '2A 3A 4A 5A 6A 7A 8A 9A 0A',
         'problem': 'ถ้าปิดโหมดสแตนบาย โหลดบกเลิกออกโดยการกดปุ่ม GEN หรือโหมดกดปุ่มจนกว่าหน้าจอโทรโชว์ OF แล้วปล่อยมือ ประมาณ 5 วินาทีพัดลมก็จะหยุดไปหลังจากนั้นคอมเพรสเซอร์จะกลับมาทำงาน 100% หรือ เป็นเดิมที',
-        'solution': '-'
+       
     },
     {
         'code': 'CF PP SA AP',
         'problem': 'ไม่ใช่ error code แต่มันคือการส่งสัญญาณเพื่อเชื่อมต่อหา wifi ในลักษณะนี้จะมีในแอร์รุ่นที่เชื่อมต่อ wifi ได้ครับ เป็นการทำงานปกติ',
-        'solution': '-'
+       
     }
       ],
       'SAMSUNG': [
@@ -1449,19 +1455,31 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
       ],
       'DAIKIN': [
         {
-          'code': 'A1',
-          'problem': 'แผงวงจรมีปัญหา',
-          'solution': '1. ตรวจสอบการเชื่อมต่อแผงวงจร\n2. รีเซ็ตไฟ\n3. เปลี่ยนแผงวงจรถ้าจำเป็น'
+          'code': ' on Remote H6',
+          'problem': 'คอมเพรสเซอร์กินกระแสสูง',
         },
         {
-          'code': 'A5',
-          'problem': 'ระบบป้องกันน้ำแข็ง/ความร้อนเกิน',
-          'solution': '1. ทำความสะอาดแผ่นกรองอากาศ\n2. ตรวจสอบน้ำยา\n3. ตรวจสอบสิ่งกีดขวาง'
+          'code': 'on Remote H9',
+          'problem': 'เซนเซอร์อุณหภูมิอากาศของชุดคอยล์ร้อนผิดปกติ',
         },
+        {
+          'code': 'J3',
+          'problem': 'เซนเซอร์อุณหภูมิท่อด้านส่งผิดปกติ',
+        }
+        ,
+        {
+          'code': 'J6',
+          'problem': 'เซนเซอร์อุณหภูมิแลกเปลี่ยนความร้อนผิดปกติ',
+        }
+         ,
+        {
+          'code': 'J8',
+          'problem': 'เซนเซอร์อุณหภูมิท่อของเหลวผิดปกติ',
+        }
+         ,
         {
           'code': 'E7',
-          'problem': 'มอเตอร์พัดลมทำงานผิดปกติ',
-          'solution': '1. ตรวจสอบมอเตอร์พัดลม\n2. กำจัดสิ่งกีดขวาง\n3. เปลี่ยนถ้าชำรุด'
+          'problem': 'มอเตอร์พัดลมคอยล์ร้อนเสียหรือ PCB เสีย',
         }
       ],
       'GREE': [
@@ -1486,79 +1504,79 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
           'code': 'E12',
           'LED_blink': 1,
           'problem': 'ข้อมูลใน EEPROM เสียหาย',
-          'solution': '-'
+         
         },
         {
           'code': 'F1',
           'LED_blink': 2,
           'problem': 'เซนเซอร์ในห้อง',
-          'solution': '-'
+         
         },
         {
           'code': 'F22',
           'LED_blink': 3,
           'problem': 'การแสดงฟังก์ชั่นการสูญเสียกำลังไฟ',
-          'solution': '-'
+         
         },
         {
           'code': 'F3',
           'LED_blink': 4,
           'problem': 'การป้องกัน รันฟ์สร้อยกระทำงานบกพร่อง และเซนเซอร์ในห้อง',
-          'solution': '-'
+         
         },
         {
           'code': 'F20',
           'LED_blink': 6,
           'problem': 'มอเตอร์เข้าไม่ถึงเครื่องสูงสุด หรือ ล้ำเกินไป',
-          'solution': '-'
+         
         },
         {
           'code': 'F4',
           'LED_blink': 8,
           'problem': 'อุณหภูมิที่ท่อท่อเย็นวัดที่ท่อกลางๆ สูงเกินไป',
-          'solution': '-'
+         
         },
         {
           'code': 'F21',
           'LED_blink': 10,
           'problem': 'เซนเซอร์ป้องกันน้ำซึมการทำแห้งคอนเดนเซอร์เสีย',
-          'solution': '-'
+         
         },
         {
           'code': 'F6',
           'LED_blink': 12,
           'problem': 'เซนเซอร์ตรวจจับอุณหภูมิกระเปาะเปียกเสีย',
-          'solution': '-'
+         
         },
         {
           'code': 'F25',
           'LED_blink': 13,
           'problem': 'เซนเซอร์ตรวจจับอุณหภูมิที่ท่อกลางเสีย',
-          'solution': '-'
+         
         },
         {
           'code': 'F11',
           'LED_blink': 18,
           'problem': 'วงจรการจับค่าตำแหน่งของมอเตอร์เสียหา',
-          'solution': '-'
+         
         },
         {
           'code': 'F28',
           'LED_blink': 19,
           'problem': 'เซนเซอร์ในห้อง',
-          'solution': '-'
+         
         },
         {
           'code': 'F2',
           'LED_blink': 24,
           'problem': 'คอมเพรสเซอร์ไม่การะแสไฟ',
-          'solution': '-'
+         
         },
         {
           'code': 'F23',
           'LED_blink': 25,
           'problem': 'การแสดงฟังก์ชั่นของกระแสไฟที่เข้าไฟเยอะๆ สูงไป',
-          'solution': '-'
+         
         }
       ],
        'HISENSE': [
@@ -1890,7 +1908,7 @@ class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
     "problem": "สายเข็นเชอร์อุณหภูมิติจชาร์จ หลุดหรือซอร์ท",
     "status": "ดับหมด",
     "control": "แสดงผลเมื่อพบข้อบกพร่อง",
-    "solution": "1. ตรวจสอบเซ็นเชอร์อุณหภูมิติจชาร์จ(TD) \n                2. ตรวจสอบ PC. บอร์ด"
+    "solution": "1. ตรวจสอบเซ็นเซอร์อุณหภูมิติจชาร์จ(TD) \n                2. ตรวจสอบ PC. บอร์ด"
   },
   {
     "group": "PC บอร์ดภายใน",
@@ -1918,7 +1936,91 @@ class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
     "solution": "เมื่อทำงานได้ประมาณ 20 วินาทีวงจรอ่านตำแหน่งพบว่าบกพร่องต้องเปลี่ยนคอมเพรสเซอร์"
   }
     ],
+    '03': [
+      {
+        "group": "ปัญหาอื่นรวมคอมเพรสเซอร์",
+    "code": "07",
+    "problem": "สัญญาณอนุกรมทำงานเริมต้นหลังจากนั้นหยุดส่ง\n   (1) เทอร์โมสคัทคอมเพรสเซอร์ตัดหรือสารทำความเย็นขาด, รั่ว\n   (2) ไฟฟ้ากระพริบ",
+    "status": "ทำงานต่อเนื่อ",
+    "control": "กระพริบเมื่อไม่มีสัญญาณตอบกลับปกติเมื่อสัญญาณรีเซ็ท",
+    "solution": "1. ตัดต่อด้วยช่วงเวลาประมาณ 10-40นาที (ไม่มีรหัสบกพร่องเกิดขึ้น)ตรวจสอบสารทำความเย็นรั่วขาด\n                2. เครื่องทำงานปกติขณะทดสอบถ้ามีสัญญาณอนุกรมระหว่าง ขา 2 กับ 3 จุดต่อคอยล์เย็นเปลี่ยนบอร์คอินเวอร์เดอร์ ถ้าไม่มีสัญญาณขา 2 กับ 3 เปลี่ยนบอร์ดชุคคอยล์เย็น"
+      },
+         {
+        "group": "ปัญหาอื่นรวมคอมเพรสเซอร์",
+    "code": "1d",
+    "problem": "คอมเพรสเซอร์ไม่หมุน(วงจะป้องกันไม่ทำงานเมื่อคอมทำงาน)",
+    "status": "ดับหมด",
+    "control": "แสดงผลเมื่อพบข้อบกพร่อง",
+    "solution": "1. คอมเพรสเซอร์เสีย\n                2. ใส่สายคอมเพรสเซอร์ผิด(เฟสผิด)"
+      },
+      {
+              "group": "ปัญหาอื่นรวมคอมเพรสเซอร์",
+    "code": "1E",
+    "problem": "คุณหภูมิคิงชาร์จเกิน 117°C",
+    "status": "ดับหมด",
+    "control": "แสดงผลเมื่อพบข้อบกพร่อง",
+    "solution": "1. ตรวจเซ็นเซอร์ติจชาร์จ (TD) \n                2. เอาอากาศออก\n                3. PMV เสีย"
+      },
+       {
+              "group": "ปัญหาอื่นรวมคอมเพรสเซอร์",
+    "code": "1F",
+    "problem": "คอมเพรสเซอร์เลีย",
+    "status": "ดับหมด",
+    "control": "แสดงผลเมื่อพบข้อบกพร่อง",
+    "solution": "1. วัดแรงดันไฟฟ้า（220V士 10%6） \n                2. ระบบทำความเย็นโหลดเกิน ดูการติดตั้งและการระบายลมคอยล์ร้อนไม่ย้อนกลับ"
+      },
+      {
+         "group": "ปัญหาอื่นรวมคอมเพรสเซอร์",
+    "code": "08",
+    "problem": "วาล์ว 4 ทางทำงานย้อนกลับ(เซ็นเซอร์ TC มีค่าต่ำในช่วงทำความร้อน)",
+    "status": "ทำงานต่อเนื่อง",
+    "control": "-",
+    "solution": "1. ตรวจสอบการทำงานวาล์ว 4 ทาง"
+      },
+    ]
   };
+
+  List<Map<String, String>> _getFilteredData() {
+    // If no main code is selected, combine all data from all main codes
+    if (selectedMainCode.isEmpty) {
+      List<Map<String, String>> allData = [];
+      errorData.values.forEach((codeList) {
+        allData.addAll(codeList);
+      });
+      
+      // Apply search filter if exists
+      if (searchQuery.isNotEmpty) {
+        return allData.where((error) =>
+          error['code']!.toLowerCase().contains(searchQuery) ||
+          error['problem']!.toLowerCase().contains(searchQuery) ||
+          error['solution']!.toLowerCase().contains(searchQuery)
+    ).toList();
+      }
+      
+      return allData;
+    }
+    
+    // If main code is selected, filter by main code
+    var filteredList = errorData[selectedMainCode]!;
+    
+    // Apply group filter if selected
+    if (selectedGroup.isNotEmpty) {
+      filteredList = filteredList.where((error) => 
+        error['group'] == selectedGroup
+      ).toList();
+    }
+    
+    // Apply search filter if exists
+    if (searchQuery.isNotEmpty) {
+      filteredList = filteredList.where((error) =>
+        error['code']!.toLowerCase().contains(searchQuery) ||
+        error['problem']!.toLowerCase().contains(searchQuery) ||
+        error['solution']!.toLowerCase().contains(searchQuery)
+      ).toList();
+    }
+    
+    return filteredList;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -2000,18 +2102,66 @@ class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
                         ),
                       ),
                 ],
-              ),
             ),
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: _getFilteredData().length,
               itemBuilder: (context, index) {
                 final error = _getFilteredData()[index];
+                // Find the main code for this error
+                String mainCode = '';
+                errorData.forEach((key, value) {
+                  if (value.any((e) => e['code'] == error['code'])) {
+                    mainCode = key;
+                  }
+                });
+
                 return Card(
                   margin: const EdgeInsets.all(8),
                   child: ExpansionTile(
-                    title: Text('Error Code: ${error['code']}'),
-                    // subtitle: Text(error['problem'] ?? ''),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text('Error Code: ${error['code']}'),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.blue.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                'รหัสหลัก: $mainCode',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.blue[700],
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            'กลุ่ม: ${error['group']}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[700],
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -2078,27 +2228,456 @@ class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
       ),
     );
   }
+}
 
-  List<Map<String, String>> _getFilteredData() {
-    if (selectedMainCode.isEmpty) return [];
-    
-    var filteredList = errorData[selectedMainCode]!;
-    
-    if (selectedGroup.isNotEmpty) {
-      filteredList = filteredList.where((error) => 
-        error['group'] == selectedGroup
-      ).toList();
+// Add this new class after the ErrorCodeScreen class
+class DaikinErrorCodePage extends StatefulWidget {
+  const DaikinErrorCodePage({Key? key}) : super(key: key);
+
+  @override
+  _DaikinErrorCodePageState createState() => _DaikinErrorCodePageState();
+}
+
+class _DaikinErrorCodePageState extends State<DaikinErrorCodePage> {
+  String searchQuery = '';
+
+  final List<Map<String, String>> daikinErrors = [
+    {
+      'code': 'H6',
+      'problem': 'คอมเพรสเซอร์กินกระแสสูง',
+    },
+    {
+      'code': 'H9',
+      'problem': 'เซนเซอร์อุณหภูมิอากาศของชุดคอยล์ร้อนผิดปกติ',
+    },
+    {
+      'code': 'J3',
+      'problem': 'เซนเซอร์อุณหภูมิท่อด้านส่งผิดปกติ',
+    },
+    {
+      'code': 'J6',
+      'problem': 'เซนเซอร์อุณหภูมิแลกเปลี่ยนความร้อนผิดปกติ',
+    },
+    {
+      'code': 'J8',
+      'problem': 'เซนเซอร์อุณหภูมิท่อของเหลวผิดปกติ',
+    },
+    {
+      'code': 'E7',
+      'problem': 'มอเตอร์พัดลมคอยล์ร้อนเสียหรือ PCB เสีย',
+    },
+  ];
+
+  List<Map<String, String>> get filteredErrors {
+    if (searchQuery.isEmpty) {
+      return daikinErrors;
     }
-    
-    if (searchQuery.isNotEmpty) {
-      filteredList = filteredList.where((error) =>
-        error['code']!.toLowerCase().contains(searchQuery) ||
-        error['problem']!.toLowerCase().contains(searchQuery) ||
-        error['solution']!.toLowerCase().contains(searchQuery)
-      ).toList();
+    return daikinErrors.where((error) =>
+      error['code']!.toLowerCase().contains(searchQuery.toLowerCase()) ||
+      error['problem']!.toLowerCase().contains(searchQuery.toLowerCase())
+    ).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('DAIKIN Error Codes'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'ค้นหารหัสข้อผิดพลาดหรือปัญหา...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredErrors.length,
+              itemBuilder: (context, index) {
+                final error = filteredErrors[index];
+                return Card(
+                  margin: const EdgeInsets.all(8),
+                  child: ListTile(
+                    title: Text(
+                      'Error ${error['code']}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    subtitle: Text(
+                      error['problem']!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TclErrorCodePage extends StatefulWidget {
+  const TclErrorCodePage({Key? key}) : super(key: key);
+
+  @override
+  _TclErrorCodePageState createState() => _TclErrorCodePageState();
+}
+
+class _TclErrorCodePageState extends State<TclErrorCodePage> {
+  String searchQuery = '';
+
+  final List<Map<String, String>> tclErrors = [
+    {
+      'code': 'P0',
+      'problem': 'บอร์ด IPM module ทำงานผิดพลาด',
+    },
+    {
+      'code': 'P1',
+      'problem': 'แรงดันไฟฟ้าสูงหรือต่ำเกินไป',
+    },
+    {
+      'code': 'P2',
+      'problem': 'กระแสไฟฟ้าสูงเกินไป',
+    },
+    {
+      'code': 'P4',
+      'problem': 'เซนเซอร์ตรวจวัดอุณหภูมิท่อ Discharge outdoor มีอุณหภูมิสูงเกินไป',
+    },
+    {
+      'code': 'P5',
+      'problem': 'ตรวจสอบระบบน้ำยาในโหมด Cooling เนื่องจากอุณหภูมิท่อทางเข้าของส่วน Subcooling',
+    },
+    {
+      'code': 'P6',
+      'problem': 'ตรวจสอบระบบน้ำยาในโหมด Cooling เนื่องจากท่อมีอุณหภูมิสูงเกินไป',
+    },
+    {
+      'code': 'P7',
+      'problem': 'ตรวจสอบระบบน้ำยาในโหมด Heating เนื่องจากท่อมีอุณหภูมิสูงเกินไป',
+    },
+    {
+      'code': 'P8',
+      'problem': 'เซนเซอร์ตรวจวัดอุณหภูมิภายนอกค่าสูงหรือต่ำเกินไป',
+    },
+    {
+      'code': 'P9',
+      'problem': 'คอมเพรสเซอร์ทำงานผิดปกติ',
+    },
+    {
+      'code': 'PA',
+      'problem': 'การสื่อสารผิดพลาด สำหรับ TOP / Preset mode มีปัญหา',
+    },
+    {
+      'code': 'F0',
+      'problem': 'เซนเซอร์รับคำสั่งหรือตรวจสอบความรู้สึกของผู้ใช้งานทำงานผิดพลาด',
+    },
+    {
+      'code': 'F1',
+      'problem': 'โมดูลตรวจสอบกำลังไฟทำงานผิดพลาด',
+    },
+    {
+      'code': 'F2',
+      'problem': 'เซนเซอร์อุณหภูมิของท่อ Discharge ทำงานผิดพลาด',
+    },
+    {
+      'code': 'F3',
+      'problem': 'อุณหภูมิของคอยล์ร้อนผิดปกติ',
+    },
+    {
+      'code': 'F4',
+      'problem': 'ระบบการไหลของน้ำยาผิดปกติ',
+    },
+    {
+      'code': 'F5',
+      'problem': 'ตรวจจับกระแสไฟฟ้าสูงเกินไป / PFC สูงเกินไป',
+    },
+    {
+      'code': 'F6',
+      'problem': 'กระแสไฟฟ้าวงจรของคอมเพรสเซอร์',
     }
-    
-    return filteredList;
+  ];
+
+  List<Map<String, String>> get filteredErrors {
+    if (searchQuery.isEmpty) {
+      return tclErrors;
+    }
+    return tclErrors.where((error) =>
+      error['code']!.toLowerCase().contains(searchQuery.toLowerCase()) ||
+      error['problem']!.toLowerCase().contains(searchQuery.toLowerCase())
+    ).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('TCL Error Codes'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'ค้นหารหัสข้อผิดพลาดหรือปัญหา...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredErrors.length,
+              itemBuilder: (context, index) {
+                final error = filteredErrors[index];
+                return Card(
+                  margin: const EdgeInsets.all(8),
+                  child: ListTile(
+                    title: Text(
+                      'Error ${error['code']}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    subtitle: Text(
+                      error['problem']!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HaierErrorCodePage extends StatefulWidget {
+  const HaierErrorCodePage({Key? key}) : super(key: key);
+
+  @override
+  _HaierErrorCodePageState createState() => _HaierErrorCodePageState();
+}
+
+class _HaierErrorCodePageState extends State<HaierErrorCodePage> {
+  String searchQuery = '';
+
+  final List<Map<String, dynamic>> haierErrors = [
+   {
+          'code': 'E12',
+          'LED_blink': 1,
+          'problem': 'ข้อมูลใน EEPROM เสียหาย',
+          
+        },
+        {
+          'code': 'F1',
+          'LED_blink': 2,
+          'problem': 'เซนเซอร์ในห้อง',
+          
+        },
+        {
+          'code': 'F22',
+          'LED_blink': 3,
+          'problem': 'การแสดงฟังก์ชั่นการสูญเสียกำลังไฟ',
+          
+        },
+        {
+          'code': 'F3',
+          'LED_blink': 4,
+          'problem': 'การป้องกัน รันฟ์สร้อยกระทำงานบกพร่อง และเซนเซอร์ในห้อง',
+          
+        },
+        {
+          'code': 'F20',
+          'LED_blink': 6,
+          'problem': 'มอเตอร์เข้าไม่ถึงเครื่องสูงสุด หรือ ล้ำเกินไป',
+          
+        },
+        {
+          'code': 'F4',
+          'LED_blink': 8,
+          'problem': 'อุณหภูมิที่ท่อท่อเย็นวัดที่ท่อกลางๆ สูงเกินไป',
+          
+        },
+        {
+          'code': 'F21',
+          'LED_blink': 10,
+          'problem': 'เซนเซอร์ป้องกันน้ำซึมการทำแห้งคอนเดนเซอร์เสีย',
+          
+        },
+        {
+          'code': 'F6',
+          'LED_blink': 12,
+          'problem': 'เซนเซอร์ตรวจจับอุณหภูมิกระเปาะเปียกเสีย',
+          
+        },
+        {
+          'code': 'F25',
+          'LED_blink': 13,
+          'problem': 'เซนเซอร์ตรวจจับอุณหภูมิที่ท่อกลางเสีย',
+          
+        },
+        {
+          'code': 'F11',
+          'LED_blink': 18,
+          'problem': 'วงจรการจับค่าตำแหน่งของมอเตอร์เสียหา',
+          
+        },
+        {
+          'code': 'F28',
+          'LED_blink': 19,
+          'problem': 'เซนเซอร์ในห้อง',
+          
+        },
+        {
+          'code': 'F2',
+          'LED_blink': 24,
+          'problem': 'คอมเพรสเซอร์ไม่การะแสไฟ',
+          
+        },
+        {
+          'code': 'F23',
+          'LED_blink': 25,
+          'problem': 'การแสดงฟังก์ชั่นของกระแสไฟที่เข้าไฟเยอะๆ สูงไป',
+          
+        }
+    // Add other HAIER error codes here
+  ];
+
+  List<Map<String, dynamic>> get filteredErrors {
+    if (searchQuery.isEmpty) {
+      return haierErrors;
+    }
+    return haierErrors.where((error) =>
+      error['code'].toString().toLowerCase().contains(searchQuery.toLowerCase()) ||
+      error['problem'].toString().toLowerCase().contains(searchQuery.toLowerCase())
+    ).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('HAIER Error Codes'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'ค้นหารหัสข้อผิดพลาดหรือปัญหา...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredErrors.length,
+              itemBuilder: (context, index) {
+                final error = filteredErrors[index];
+                return Card(
+                  margin: const EdgeInsets.all(8),
+                  child: ListTile(
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Error ${error['code']}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 8), // Add spacing
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.lightbulb_outline,
+                              size: 16,
+                              color: Colors.red,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              'ไฟกระพริบ ${error['LED_blink']} ครั้ง',
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(top: 8), // Add spacing
+                      child: Text(
+                        error['problem'],
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
