@@ -1024,6 +1024,9 @@ class BrandDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (brand == 'CARRIER') {
+      return const CarrierErrorCodePage();
+    }
     return WillPopScope(
       onWillPop: () async {
         if (context.findAncestorStateOfType<_MyHomePageState>() != null) {
@@ -1346,7 +1349,7 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
         'problem': 'ไม่ใช่ error code แต่มันคือการส่งสัญญาณเพื่อเชื่อมต่อหา wifi ในลักษณะนี้จะมีในแอร์รุ่นที่เชื่อมต่อ wifi ได้ครับ เป็นการทำงานปกติ',
         'solution': '-'
     }
-    ],
+      ],
       'SAMSUNG': [
         {
           'code': '4C/4E',
@@ -1428,9 +1431,9 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
         }
       ],
       'CARRIER': [
-        {
-          'code': 'E1',
-          'problem': 'มอเตอร์พัดลมภายในผิดปกติ',
+            {
+              'code': 'E1',
+              'problem': 'มอเตอร์พัดลมภายในผิดปกติ',
           'solution': '1. ตรวจสอบการเชื่อมต่อมอเตอร์พัดลม\n2. เปลี่ยนมอเตอร์พัดลมถ้าเสีย\n3. ตรวจสอบแผงควบคุม'
         },
         {
@@ -1636,9 +1639,52 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
                               ),
                             ],
                           ),
-                        Text(
-                          error['problem'] ?? '',
-                          style: TextStyle(color: brandTextColor),
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Problem: ',
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(text: error['problem'] ?? ''),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Status: ',
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(text: error['status'] ?? ''),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Control: ',
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(text: error['control'] ?? ''),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Solution: ',
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(text: error['solution'] ?? ''),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -1729,6 +1775,330 @@ class ProblemCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+// เพิ่ม CarrierErrorCodePage class ใหม่
+class CarrierErrorCodePage extends StatefulWidget {
+  const CarrierErrorCodePage({Key? key}) : super(key: key);
+
+  @override
+  _CarrierErrorCodePageState createState() => _CarrierErrorCodePageState();
+}
+
+class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
+  String searchQuery = '';
+  String selectedMainCode = '';
+  String selectedGroup = '';
+
+  // Add these constants at the top of the class
+  static const String PROBLEM_LABEL = 'สาเหตุของปัญหา : ';
+  static const String STATUS_LABEL = 'สภาวะทำงาน : ';
+  static const String CONTROL_LABEL = 'จุดสังเกตุ : ';
+  static const String SOLUTION_LABEL = 'การแก้ไข : ';
+
+  final Map<String, List<Map<String, String>>> errorData = {
+    '00': [
+      {
+        'group': 'PC บอร์ด/ภายใน',
+        'code': '0C',
+        'problem': 'เซ็นเซอร์อุณหภูมิห้อง(TA)ขาดหรือขอร์ท',
+        'status': 'ทำงานต่อเนื่อง',
+        'control': 'แสดงว่าพบข้อบกพร่อง',
+        'solution': '1. วัดเซ็นเซอร์อุณหภูมิห้อง\n \t\t             2. ถ้าเซ็นเซอร์ปกติตรวจ PC. บอร์ค',
+      },
+        {
+        'group': 'PC บอร์ด/ภายใน',
+        'code': '0D',
+        'problem': 'สายสัญญาณไฟฟ้า (PowerTA) หลวมหรือหลุด',
+        'status': 'หยุดทำงาน',
+        'control': 'แสงดมลเมื่อพบข้อบกพร่อง',
+        'solution': '1. ตรวจสอบสายไฟฟ้า\n \t\t             2. รีเซ็ตเครื่องหรือรีบูต PC นอก',
+      },
+        {
+        'group': 'PC บอร์ด/ภายใน',
+        'code': '11',
+        'problem': 'ปัญหาจาก PC. บอร์ด อื่นๆ',
+        'status': 'ดับหมด',
+        'control': 'แสดงว่าเมื่อพบข้อบกพร่อง',
+        'solution': 'เปลี่ยน PC. บอร์ค',
+      },
+        {
+        'group': 'ไม่แสดง',
+        'code': '12',
+        'problem': 'ปัญหาจาก PC. บอร์ด อื่นๆ',
+        'status': 'ทำงานต่อเนื่อง',
+        'control': 'แสดงผลเมื่อพบข้อบกพร่อง 01',
+        'solution': 'เปลี่ยน PC บอร์ด',
+      }
+      // เพิ่มข้อมูลอื่นๆs
+    ],
+    '01': [
+      {
+        'group': 'สายเชื่อมต่อสัญญาณอนุกรม',
+        'code': '04',
+        'problem': 'ไม่มีสัญญาณตอบกลับไปยังภายในเมื่อเริ่มทำงาน\n \t\t (1) สารเชื่อมต่อเสียง \n \t\t (2)สารทำความเย็นรั่วขาด เทอร์โมฯคอมเพรสเซอร์ทำงาน',
+        'status': 'ทำงานต่อเนื่อง',
+        'control': 'กระพริบเมื่อไม่มีสัญญาณตอบกลับปกติเมื่อสัญญาณรีเซ็ท',
+        'solution': '1. เมื่อภายนอกไม่ทำงาน \n \t\t(1) วัดสายเชื่อมต่อและแก้ไข\n \t\t(2) วัดฟิวส์ 25A ชุดอินเวอร์เตอร์\n \t\t(3) ตรวจฟิวส์ 3.15A บนบอร์ดอินเวอร์เตอร์\n 2. ถ้ามีรหัสอีน ให้ดูเทอร์โมลดัทคอมเพรสเซอร์ตัด และปริมาณสารทำความเย็นรั่ว หรือขาด\n3. เครื่องทำงานปกติขณะทดสอบ ถ้ามีสัญญาณอนุกรมระหว่างขา 2 กับ 3 จุดต่อภายในเปลี่ยนบอร์ดอินเวอร์เตอร์ ถ้าไม่มีสัญญาณขา 2 กับ 3 เปลี่ยนบอร์ดชุดภายใน',
+      },
+       {
+        'group': 'สายเชื่อมต่อสัญญาณอนุกรม',
+        'code': '05',
+        'problem': 'ไม่มีคำสั่งสัญญาณไปยังภายนอก',
+        'status': 'ทำงานต่อเนื่อง',
+        'control': 'กระพริบเมื่อไม่มีสัญญาณตอบกลับปกติเมื่อสัญญาณรีเซ็ท',
+        'solution': 'เครื่องทำงานปกติขณะทดสอบถ้ามีสัญญาณอนุกรมระหว่าง ขา 2 กับ 3 จุดต่อภายในเปลี่ยนบอร์ดอินเวอร์เตอร์ ถ้าไม่มีสัญญาณขา 2 กับ 3 เปลี่ยนบอร์ดชุดภายใน',
+      },
+    ],
+      '02': [
+       {
+    "group": "PC บอร์ดภายใน",
+    "code": "14",
+    "problem": "วงจรป้องกันกระแสเย็น-เวอร์เตอร์เกินทำงาน(ทำงานช่วงสั้นๆ)",
+    "status": "ดับหมด",
+    "control": "แสดงผลเมื่อพบข้อบกพร่อง",
+    "solution": "เมื่อเปิดอีกครั้งการทำงานทั้งหมดหยุดทันทีเปลี่ยน PC. บอร์ด"
+  },
+  {
+    "group": "PC บอร์ดภายใน",
+    "code": "16",
+    "problem": "วงจรตรวจสอบคำแหน่งมอเตอร์ซอร์ท",
+    "status": "ดับหมด",
+    "control": "แสดงผลเมื่อพบข้อบกพร่อง",
+    "solution": "1. ถอดสายต่อคอมเพรสเซอร์ออกวงจรอ่านต่ำแหน่งไม่ทำงานเปลี่ยน PC. บอร์ด \n                2. วัดความด้านทานชดลวดคอม-เพรสเซอร์พบว่าซอร์ทเปลี่ยนคอมเพรสเซอร์"
+  },
+  {
+    "group": "PC บอร์ดภายใน",
+    "code": "17",
+    "problem": "วงจรวัดกระแสทำงานผิดพลาด",
+    "status": "ดับหมด",
+    "control": "แสดงผลเมื่อพบข้อบกพร่อง",
+    "solution": "เมื่อเปิดอีกครั้งการทำงานทั้งหมดหยุดทันทีเปลี่ยน PC. บอร์ด"
+  },
+  {
+    "group": "PC บอร์ดภายใน",
+    "code": "18",
+    "problem": "สายเซ็นเชอร์อุณหภูมิอากาศ ภายนอกขาด หมุด หรือ ซอร์ท",
+    "status": "ดับหมด",
+    "control": "แสดงผลเมื่อพบข้อบกพร่อง",
+    "solution": "1. วัดเซ็นเซอร์อุณหภูมิภายนอก(TE.) \n                2. ตรวจสอบ PC. บอร์ด"
+  },
+  {
+    "group": "PC บอร์ดภายใน",
+    "code": "19",
+    "problem": "สายเข็นเชอร์อุณหภูมิติจชาร์จ หลุดหรือซอร์ท",
+    "status": "ดับหมด",
+    "control": "แสดงผลเมื่อพบข้อบกพร่อง",
+    "solution": "1. ตรวจสอบเซ็นเชอร์อุณหภูมิติจชาร์จ(TD) \n                2. ตรวจสอบ PC. บอร์ด"
+  },
+  {
+    "group": "PC บอร์ดภายใน",
+    "code": "1A",
+    "problem": "ระบบขับพัดลมภายนอกทำงาน ผิดพลาด",
+    "status": "ดับหมด",
+    "control": "แสดงผลเมื่อพบข้อบกพร่อง",
+    "solution": "ตัวอ่านตำแหน่งทำงานผิดพลาดวงจรกระแสเกินทำงานจากมอเตอร์ติดชัดเป็นต้นเปลี่ยนPC. บอร์ดหรือมอเตอร์พัดลม"
+  }
+  ,
+  {
+    "group": "ไม่แสดงผล",
+    "code": "1b",
+    "problem": "เซ็นเซอร์วัดอุณภูมิภายนอกเสีย)",
+    "status": "ทำงานต่อเนื่อง",
+    "control": "-",
+    "solution": "1. วัดเซ็นเซอร์ภายนอก(TE) \n 2. ตรวจสอบ PC. บอร์ด"
+  },
+  {
+    "group": "PC บอร์ดภายนอก",
+    "code": "1C",
+    "problem": "วงจรขับคอมเพรสเซอร์เมียคอมเพรสเซอร์เสีย(ติดขัด เป็นต้น)",
+    "status": "ดับหมด",
+    "control": "แสดงผลเมื่อพบข้อบกพร่อง",
+    "solution": "เมื่อทำงานได้ประมาณ 20 วินาทีวงจรอ่านตำแหน่งพบว่าบกพร่องต้องเปลี่ยนคอมเพรสเซอร์"
+  }
+    ],
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('CARRIER Error Codes'),
+      ),
+      body: Column(
+        children: [
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'ค้นหารหัสข้อผิดพลาดหรือปัญหา...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value.toLowerCase();
+                });
+              },
+            ),
+          ),
+          // Main Code Selection
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text('รหัสหลัก:', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                ...errorData.keys.map((code) => 
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: FilterChip(
+                      label: Text(code),
+                      selected: selectedMainCode == code,
+                      onSelected: (selected) {
+                        setState(() {
+                          selectedMainCode = selected ? code : '';
+                          selectedGroup = '';
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (selectedMainCode.isNotEmpty)
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('กลุ่ม:', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  ...errorData[selectedMainCode]!
+                      .map((e) => e['group']!)
+                      .toSet()
+                      .map((group) => 
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: FilterChip(
+                            label: Text(group),
+                            selected: selectedGroup == group,
+                            onSelected: (selected) {
+                              setState(() {
+                                selectedGroup = selected ? group : '';
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                ],
+              ),
+            ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _getFilteredData().length,
+              itemBuilder: (context, index) {
+                final error = _getFilteredData()[index];
+                return Card(
+                  margin: const EdgeInsets.all(8),
+                  child: ExpansionTile(
+                    title: Text('Error Code: ${error['code']}'),
+                    // subtitle: Text(error['problem'] ?? ''),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: PROBLEM_LABEL,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: error['problem'] ?? ''),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: STATUS_LABEL,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: error['status'] ?? ''),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: CONTROL_LABEL,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: error['control'] ?? ''),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: SOLUTION_LABEL,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: error['solution'] ?? ''),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Map<String, String>> _getFilteredData() {
+    if (selectedMainCode.isEmpty) return [];
+    
+    var filteredList = errorData[selectedMainCode]!;
+    
+    if (selectedGroup.isNotEmpty) {
+      filteredList = filteredList.where((error) => 
+        error['group'] == selectedGroup
+      ).toList();
+    }
+    
+    if (searchQuery.isNotEmpty) {
+      filteredList = filteredList.where((error) =>
+        error['code']!.toLowerCase().contains(searchQuery) ||
+        error['problem']!.toLowerCase().contains(searchQuery) ||
+        error['solution']!.toLowerCase().contains(searchQuery)
+      ).toList();
+    }
+    
+    return filteredList;
   }
 }
 
