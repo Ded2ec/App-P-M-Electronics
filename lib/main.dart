@@ -83,7 +83,7 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
     _progressController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         Navigator.pushReplacement(
-          context,
+        context,
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) => 
               const MyHomePage(title: 'P&M Electronics'),
@@ -169,14 +169,14 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
                   alignment: Alignment.center, 
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(30),
-                    child: SvgPicture.asset(
-                      'assets/images/output.svg',
-                      fit: BoxFit.contain,
-                      allowDrawingOutsideViewBox: true,
-                      placeholderBuilder: (BuildContext context) => Container(
-                        padding: const EdgeInsets.all(30.0),
-                        child: const CircularProgressIndicator(),
-                      ),
+          child: SvgPicture.asset(
+            'assets/images/output.svg',
+            fit: BoxFit.contain,
+            allowDrawingOutsideViewBox: true,
+            placeholderBuilder: (BuildContext context) => Container(
+              padding: const EdgeInsets.all(30.0),
+              child: const CircularProgressIndicator(),
+            ),
                     ),
                   ),
                 ),
@@ -551,7 +551,7 @@ class _MyHomePageState extends State<MyHomePage> {
       },
       child: Scaffold(
         backgroundColor: appBackgroundColor,
-        appBar: AppBar(
+      appBar: AppBar(
           backgroundColor: appBarColor,
           elevation: 0,
           toolbarHeight: 140,
@@ -630,24 +630,24 @@ class _MyHomePageState extends State<MyHomePage> {
         body: SafeArea(
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
                 const Padding(
                   padding: EdgeInsets.fromLTRB(24, 24, 24, 16),
                   child: Text(
                     'แบรนด์ยอดนิยม',
-                    style: TextStyle(
+              style: TextStyle(
                       fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
                 ),
                 SizedBox(
                   height: 300,
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    scrollDirection: Axis.horizontal,
+              scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(),
                     itemCount: filteredBrands.length,
                     itemBuilder: (context, index) {
@@ -658,7 +658,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           brand: brand['name']!,
                           subtitle: brand['subtitle']!,
                           image: brand['image']!,
-                          isSvg: true,
+                    isSvg: true,
                           backgroundColor: cardBackgroundColor,
                           isOutdoorOnly: brand['isOutdoorOnly']!,
                         ),
@@ -717,8 +717,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             title: Text(
                               brand['name']!,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
                                 color: brandTextColor,
                                 fontSize: 14,
                               ),
@@ -868,21 +868,21 @@ class BrandCard extends StatelessWidget {
             
             if (context.mounted) {
               Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => BrandDetailScreen(
-                    brand: brand,
-                    image: image,
-                    isSvg: isSvg,
+          MaterialPageRoute(
+            builder: (context) => BrandDetailScreen(
+              brand: brand,
+              image: image,
+              isSvg: isSvg,
                     isOutdoorOnly: isOutdoorOnly,
-                  ),
-                ),
-              );
+            ),
+          ),
+        );
             }
-          },
-          child: Container(
+      },
+      child: Container(
             width: 180,
             height: 260,
-            decoration: BoxDecoration(
+        decoration: BoxDecoration(
               color: backgroundColor,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
@@ -892,12 +892,12 @@ class BrandCard extends StatelessWidget {
                   offset: const Offset(0, 4),
                 ),
               ],
-            ),
-            child: Column(
-              children: [
+        ),
+        child: Column(
+          children: [
                 Expanded(
                   flex: 3,
-                  child: Container(
+              child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -917,9 +917,9 @@ class BrandCard extends StatelessWidget {
                           height: 140,
                           child: const Center(
                             child: CircularProgressIndicator(),
-                          ),
-                        ),
                       ),
+              ),
+            ),
                     ),
                   ),
                 ),
@@ -942,14 +942,14 @@ class BrandCard extends StatelessWidget {
                             : Colors.black;
                         
                         return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              brand,
+                children: [
+                  Text(
+                    brand,
                               style: TextStyle(
                                 fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.bold,
                                 color: textColor,
                               ),
                               maxLines: 1,
@@ -966,22 +966,22 @@ class BrandCard extends StatelessWidget {
                                 ),
                               )
                             else
-                              Text(
-                                subtitle,
-                                style: TextStyle(
+                  Text(
+                    subtitle,
+                    style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey[800],
-                                ),
+                    ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                              ),
-                          ],
+                  ),
+                ],
                         );
                       },
                     ),
-                  ),
-                ),
-              ],
+              ),
+            ),
+          ],
             ),
           ),
         ),
@@ -1048,80 +1048,80 @@ class BrandDetailScreen extends StatelessWidget {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(brand),
-          backgroundColor: Colors.blue,
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
+      appBar: AppBar(
+        title: Text(brand),
+        backgroundColor: Colors.blue,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
               Hero(
                 tag: 'brand-$brand',
                 child: Container(
-                  height: 200,
-                  width: double.infinity,
-                  color: Colors.grey[200],
-                  child: isSvg
-                      ? SvgPicture.asset(
-                          image,
-                          fit: BoxFit.contain,
-                        )
-                      : Image.asset(
-                          image,
-                          fit: BoxFit.contain,
+              height: 200,
+              width: double.infinity,
+              color: Colors.grey[200],
+              child: isSvg
+                  ? SvgPicture.asset(
+                      image,
+                      fit: BoxFit.contain,
+                    )
+                  : Image.asset(
+                      image,
+                      fit: BoxFit.contain,
                         ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
+                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
                       'ข้อมูลเครื่องปรับอากาศ $brand',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      brandDescriptions[brand] ?? 'Brand description not available.',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 24),
-                    Center(
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    brandDescriptions[brand] ?? 'Brand description not available.',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 24),
+                  Center(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
                               builder: (context) => ErrorCodeScreen(
                                 brand: brand,
                                 isOutdoorOnly: isOutdoorOnly,
                               ),
-                            ),
-                          );
-                        },
+                          ),
+                        );
+                      },
                         icon: const Icon(Icons.error_outline, color: Colors.red),
                         label: const Text(
                           'รหัสข้อผิดพลาด',
                           style: TextStyle(color: Colors.red),
                         ),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 32,
-                            vertical: 16,
-                          ),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 16,
+                        ),
                           backgroundColor: Colors.white,
                           side: const BorderSide(color: Colors.red),
-                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
+          ],
           ),
         ),
       ),
@@ -1427,7 +1427,7 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
           'solution': '1. ตรวจสอบปั๊มระบายน้ำ\n2. ทำความสะอาดท่อที่อุดตัน\n3. ทำความสะอาดตัวกรอง'
         }
       ],
-      'LG': [
+        'LG': [
         {
           'code': 'UE',
           'problem': 'น้ำหนักไม่สมดุล',
@@ -1737,13 +1737,13 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
           Expanded(
             child: ListView.builder(
               itemCount: filteredCodes.length,
-              itemBuilder: (context, index) {
+        itemBuilder: (context, index) {
                 final error = filteredCodes[index];
-                return Card(
-                  margin: const EdgeInsets.all(8),
-                  child: ExpansionTile(
-                    title: Text(
-                      'Error ${error['code']}',
+          return Card(
+            margin: const EdgeInsets.all(8),
+            child: ExpansionTile(
+              title: Text(
+                'Error ${error['code']}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
@@ -1775,8 +1775,8 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
                             children: [
                               TextSpan(
                                 text: 'Problem: ',
-                                style: const TextStyle(fontWeight: FontWeight.bold),
-                              ),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
                               TextSpan(text: error['problem'] ?? ''),
                             ],
                           ),
@@ -1819,31 +1819,31 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
                         ),
                       ],
                     ),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
                             Text(
                               'วิธีแก้ไข:',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: brandTextColor,
                               ),
-                            ),
-                            const SizedBox(height: 8),
+                      ),
+                      const SizedBox(height: 8),
                             Text(
                               error['solution'] ?? '',
                               style: TextStyle(color: brandTextColor),
                             ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
-                );
-              },
+                ),
+              ],
+            ),
+          );
+        },
             ),
           ),
         ],
@@ -1871,7 +1871,7 @@ class ProblemCard extends StatelessWidget {
       elevation: 2,
       margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -2242,10 +2242,10 @@ class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
                             const SizedBox(width: 8),
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                              decoration: BoxDecoration(
+      decoration: BoxDecoration(
                                 color: Colors.blue.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+        borderRadius: BorderRadius.circular(12),
+      ),
                               child: Text(
                                 'รหัสหลัก: $mainCode',
                                 style: TextStyle(
@@ -2666,8 +2666,8 @@ class _TclErrorCodePageState extends State<TclErrorCodePage> {
           // แถบเลือกกลุ่ม
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
+      child: Row(
+        children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Wrap(
@@ -2709,12 +2709,15 @@ class _TclErrorCodePageState extends State<TclErrorCodePage> {
                   margin: const EdgeInsets.all(8),
                   child: ListTile(
                     title: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          'Error ${error['code']}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                        Expanded(
+                          child: Text(
+                            'Error ${error['code']}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -2916,12 +2919,12 @@ class _HaierErrorCodePageState extends State<HaierErrorCodePage> {
                   margin: const EdgeInsets.all(8),
                   child: ListTile(
                     title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
                           'Error ${error['code']}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
@@ -2934,7 +2937,7 @@ class _HaierErrorCodePageState extends State<HaierErrorCodePage> {
                               color: Colors.red,
                             ),
                             const SizedBox(width: 4),
-                            Text(
+                Text(
                               'ไฟกระพริบ ${error['LED_blink']} ครั้ง',
                               style: const TextStyle(
                                 color: Colors.red,
@@ -3200,84 +3203,35 @@ class _LGErrorCodePageState extends State<LGErrorCodePage> {
                 return Card(
                   margin: const EdgeInsets.all(8),
                   child: ListTile(
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    title: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Wrap(
-                          spacing: 8,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            error['code']!.length > 15 ? 
-                            Text(
-                              'Error ${error['code']}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ) :
-                            // แสดง error code ที่ยาวแบบแบ่ง 2 บรรทัด
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Error ${error['code']!.substring(0, error['code']!.length ~/ 2)}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                Text(
-                                  '     ${error['code']!.substring(error['code']!.length ~/ 2)}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 4),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 2,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[200],
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Text(
-                                      groupName,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey[700],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                        Expanded(
+                          child: Text(
+                            'Error ${error['code']}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
                             ),
-                            // แสดง tag กลุ่มในบรรทัดที่สองสำหรับ error code ที่ยาว
-                            if (error['code']!.length > 15)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Text(
-                                    groupName,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey[700],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            groupName,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[700],
+                            ),
+                          ),
                         ),
                       ],
                     ),
