@@ -1032,7 +1032,10 @@ class BrandDetailScreen extends StatelessWidget {
       return const TclErrorCodePage();
     } else if (brand == 'HAIER') {
       return const HaierErrorCodePage();
+    } else if (brand == 'LG') {
+      return const LGErrorCodePage();
     }
+    
     return WillPopScope(
       onWillPop: () async {
         if (context.findAncestorStateOfType<_MyHomePageState>() != null) {
@@ -1428,12 +1431,122 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
         {
           'code': 'UE',
           'problem': 'น้ำหนักไม่สมดุล',
-          'solution': '1. จัดเรียงของให้สมดุล\n2. ตรวจสอบระดับเครื่อง\n3. ลดปริมาณของ'
         },
         {
           'code': 'OE',
           'problem': 'ปัญหาการระบายน้ำ',
-          'solution': '1. ตรวจสอบตัวกรองน้ำทิ้ง\n2. ตรวจสอบท่อระบายน้ำ\n3. ตรวจสอบปั๊ม'
+        },
+        {
+          'code': 'LE',
+          'problem': 'ข้อผิดพลาดของเซ็นเซอร์รั่วไหล',
+        },
+        {
+          'code': 'LO',
+          'problem': 'แรงดันต่ำในระบบ',
+        },
+        {
+          'code': 'nG',
+          'problem': 'ตรวจพบการรั่วของก๊าซ',
+        },
+        {
+          'code': 'PC',
+          'problem': 'ข้อผิดพลาดของวงจร PFC',
+        },
+        {
+          'code': 'PC1',
+          'problem': 'ข้อผิดพลาดของเซ็นเซอร์กระแสไฟฟ้า PFC',
+        },
+        {
+          'code': 'PC2', 
+          'problem': 'ข้อผิดพลาดของเซ็นเซอร์แรงดันไฟฟ้า PFC',
+        },
+        {
+          'code': 'PC3',
+          'problem': 'ข้อผิดพลาดของวงจรควบคุม PFC',
+        },
+        {
+          'code': 'PC4',
+          'problem': 'ข้อผิดพลาดของวงจรตรวจจับกระแสไฟฟ้า PFC',
+        },
+        {
+          'code': 'PH',
+          'problem': 'อุณหภูมิฮีตซิงค์สูงผิดปกติ',
+        },
+        {
+          'code': 'PO',
+          'problem': 'แรงดันสูงในระบบ',
+        },
+        {
+          'code': 'PS',
+          'problem': 'ข้อผิดพลาดของแหล่งจ่ายไฟ DC',
+        },
+        {
+          'code': 'AE',
+          'problem': 'ข้อผิดพลาดของระบบอัตโนมัติ',
+        },
+        {
+          'code': 'CE',
+          'problem': 'ข้อผิดพลาดในการสื่อสาร',
+        },
+        {
+          'code': 'H1',
+          'problem': 'ข้อผิดพลาดของระบบควบคุมความชื้น',
+        },
+        {
+          'code': 'HE',
+          'problem': 'ข้อผิดพลาดของระบบทำความร้อน',
+        },
+        {
+          'code': 'HH',
+          'problem': 'อุณหภูมิสูงผิดปกติ',
+        },
+        {
+          'code': 'HO',
+          'problem': 'ข้อผิดพลาดของเซ็นเซอร์อุณหภูมิภายนอก',
+        },
+        {
+          'code': 'L1',
+          'problem': 'ข้อผิดพลาดของเซ็นเซอร์ระดับน้ำ',
+        },
+        {
+          'code': 'L2',
+          'problem': 'ระดับน้ำต่ำ',
+        },
+        {
+          'code': 'L3',
+          'problem': 'ระดับน้ำสูง',
+        },
+        {
+          'code': 'dF',
+          'problem': 'ข้อผิดพลาดในการละลายน้ำแข็ง',
+        },
+        {
+          'code': 'FF',
+          'problem': 'ข้อผิดพลาดของพัดลม',
+        },
+        {
+          'code': 'IF',
+          'problem': 'ข้อผิดพลาดของระบบกรองอากาศ',
+        },
+        {
+          'code': 'OF',
+          'problem': 'ข้อผิดพลาดของระบบระบายอากาศ',
+        },
+        {
+          'code': 'P1',
+          'problem': 'ข้อผิดพลาดของปั๊มระบายน้ำ',
+        },
+        {
+          'code': 'P2',
+          'problem': 'ข้อผิดพลาดของระบบป้องกันความดันสูง',
+        },
+        {
+          'code': 'P3',
+          'problem': 'ข้อผิดพลาดของระบบป้องกันความดันต่ำ',
+        },
+        {
+          'code': 'P4',
+          'problem': 'ข้อผิดพลาดของระบบป้องกันอุณหภูมิ',
         }
       ],
       'CARRIER': [
@@ -2348,86 +2461,180 @@ class TclErrorCodePage extends StatefulWidget {
 
 class _TclErrorCodePageState extends State<TclErrorCodePage> {
   String searchQuery = '';
+  String selectedGroup = '';
 
-  final List<Map<String, String>> tclErrors = [
+  // กำหนดกลุ่มข้อมูล TCL
+  final Map<String, List<Map<String, String>>> errorGroups = {
+   "อาการเสีย": [
     {
-      'code': 'P0',
-      'problem': 'บอร์ด IPM module ทำงานผิดพลาด',
+      "code": "P0",
+      "problem": "บอร์ด IPM module ทำงานผิดพลาด"
     },
     {
-      'code': 'P1',
-      'problem': 'แรงดันไฟฟ้าสูงหรือต่ำเกินไป',
+      "code": "P1",
+      "problem": "แรงดันไฟฟ้าต่ำหรือสูงเกินไป"
     },
     {
-      'code': 'P2',
-      'problem': 'กระแสไฟฟ้าสูงเกินไป',
+      "code": "P2",
+      "problem": "กระแสไฟฟ้าสูงเกินไป"
     },
     {
-      'code': 'P4',
-      'problem': 'เซนเซอร์ตรวจวัดอุณหภูมิท่อ Discharge outdoor มีอุณหภูมิสูงเกินไป',
+      "code": "P4",
+      "problem": "เซนเซอร์ตรวจวัดอุณหภูมิท่อ Discharge outdoor มีอุณหภูมิสูงเกินไป"
     },
     {
-      'code': 'P5',
-      'problem': 'ตรวจสอบระบบน้ำยาในโหมด Cooling เนื่องจากอุณหภูมิท่อทางเข้าของส่วน Subcooling',
+      "code": "P5",
+      "problem": "ตรวจสอบระบบน้ำยาในโหมด Cooling เนื่องจากอุณหภูมิของท่อ Subcooling ของส่วน Outdoor"
     },
     {
-      'code': 'P6',
-      'problem': 'ตรวจสอบระบบน้ำยาในโหมด Cooling เนื่องจากท่อมีอุณหภูมิสูงเกินไป',
+      "code": "P6",
+      "problem": "ตรวจสอบระบบน้ำยาในโหมด Cooling เนื่องจากอุณหภูมิอุณหภูมิสูงเกินไป"
     },
     {
-      'code': 'P7',
-      'problem': 'ตรวจสอบระบบน้ำยาในโหมด Heating เนื่องจากท่อมีอุณหภูมิสูงเกินไป',
+      "code": "P7",
+      "problem": "ตรวจสอบระบบน้ำยาในโหมด Heating เนื่องจากอุณหภูมิอุณหภูมิสูงเกินไป"
     },
     {
-      'code': 'P8',
-      'problem': 'เซนเซอร์ตรวจวัดอุณหภูมิภายนอกค่าสูงหรือต่ำเกินไป',
+      "code": "P8",
+      "problem": "เซนเซอร์ตรวจวัดอุณหภูมิภายนอกค่าต่ำหรือสูงเกินไป"
     },
     {
-      'code': 'P9',
-      'problem': 'คอมเพรสเซอร์ทำงานผิดปกติ',
+      "code": "P9",
+      "problem": "คอมเพรสเซอร์ทำงานผิดปกติ"
     },
     {
-      'code': 'PA',
-      'problem': 'การสื่อสารผิดพลาด สำหรับ TOP / Preset mode มีปัญหา',
+      "code": "PA",
+      "problem": "การสื่อสารผิดพลาด สำหรับ TOP / Preset mode เกิดปัญหา"
     },
     {
-      'code': 'F0',
-      'problem': 'เซนเซอร์รับคำสั่งหรือตรวจสอบความรู้สึกของผู้ใช้งานทำงานผิดพลาด',
+      "code": "F0",
+      "problem": "เซนเซอร์วัดค่าเซนเซอร์ตรวจสอบความรู้สึกของผู้ใช้งานทำงานผิดพลาด"
     },
     {
-      'code': 'F1',
-      'problem': 'โมดูลตรวจสอบกำลังไฟทำงานผิดพลาด',
+      "code": "F1",
+      "problem": "โมดูลตรวจสอบกำลังไฟทำงานผิดพลาด"
     },
     {
-      'code': 'F2',
-      'problem': 'เซนเซอร์อุณหภูมิของท่อ Discharge ทำงานผิดพลาด',
+      "code": "F2",
+      "problem": "เซนเซอร์อุณหภูมิของท่อ Discharge ทำงานผิดพลาด"
     },
     {
-      'code': 'F3',
-      'problem': 'อุณหภูมิของคอยล์ร้อนผิดปกติ',
+      "code": "F3",
+      "problem": "อุณหภูมิของคอยล์ร้อนผิดปกติ"
     },
     {
-      'code': 'F4',
-      'problem': 'ระบบการไหลของน้ำยาผิดปกติ',
+      "code": "F4",
+      "problem": "ระบบการไหลของน้ำยาผิดปกติ"
     },
     {
-      'code': 'F5',
-      'problem': 'ตรวจจับกระแสไฟฟ้าสูงเกินไป / PFC สูงเกินไป',
+      "code": "F5",
+      "problem": "ตรวจวัดกระแสไฟฟ้าสูงเกินไป / PFC สูงเกินไป"
     },
     {
-      'code': 'F6',
-      'problem': 'กระแสไฟฟ้าวงจรของคอมเพรสเซอร์',
+      "code": "F6",
+      "problem": "กระแสไฟฟ้าวัวโมสวนของคอมเพรสเซอร์"
+    },
+    {
+      "code": "F7",
+      "problem": "อุณหภูมิของบอร์ดโมดูลผิดปกติ"
+    },
+    {
+      "code": "F8",
+      "problem": "ตำแหน่ง 4-Way สูงผิดปกติ"
+    },
+    {
+      "code": "F9",
+      "problem": "วงจรทดสอบอุณหภูมิของบอร์ดโมดูลทำงานผิดพลาด"
+    },
+    {
+      "code": "FA",
+      "problem": "วงจรทดสอบกระแสเฟสของคอมเพรสเซอร์ทำงานผิดพลาด"
+    },
+    {
+      "code": "Fb",
+      "problem": "รหัสป้องกันการเกิดน้ำแข็งที่คอยล์เย็นทำงานผิดปกติในโหมด Cooling/โหมด Heating"
+    },
+    {
+      "code": "FC",
+      "problem": "จำกัด/ลดความถี่ เพื่อป้องกันการใช้พลังงานสูงเกินไป"
+    },
+    {
+      "code": "FE",
+      "problem": "จำกัด/ลดความถี่ เพื่อป้องกันการกินกระแสของมอเตอร์โมดูล (เฟสของคอมเพรสเซอร์)"
+    },
+    {
+      "code": "FF",
+      "problem": "จำกัด/ลดความถี่ เพื่อป้องกันอุณหภูมิของมอเตอร์โมดูล"
+    },
+    {
+      "code": "FH",
+      "problem": "จำกัด/ลดความถี่ เพื่อป้องกันการทำงานของคอมเพรสเซอร์"
+    },
+    {
+      "code": "FP",
+      "problem": "จำกัด/ลดความถี่ เพื่อป้องกันการเกิดแผ่นดิน"
+    },
+    {
+      "code": "FU",
+      "problem": "จำกัด/ลดความถี่ เพื่อป้องกันการบาดเจ็บของนาฬิกา"
+    },
+    {
+      "code": "Fj",
+      "problem": "จำกัด/ลดความถี่ เพื่อป้องกันอุณหภูมิของท่อ Discharge"
+    },
+    {
+      "code": "Fn",
+      "problem": "จำกัด/ลดความถี่ เพื่อป้องกันการกินกระแสของส่วน Outdoor"
+    },
+    {
+      "code": "H1",
+      "problem": "การสลับระบบการทำความเย็นแรงดันสูงผิดปกติ"
+    },
+    {
+      "code": "H2",
+      "problem": "การสลับระบบการทำความเย็นแรงดันต่ำผิดปกติ"
+    },
+    {
+      "code": "BJ",
+      "problem": "เซนเซอร์วัดความชื้นทำงานผิดพลาด"
+    },
+    {
+      "code": "BF",
+      "problem": "TVOC เซนเซอร์ มีปัญหา"
+    },
+    {
+      "code": "BD",
+      "problem": "มอเตอร์พัดลมดูดอากาศมีปัญหา"
+    },
+    {
+      "code": "D4",
+      "problem": "ระบบระบายน้ำทิ้งมีปัญหา"
     }
-  ];
+  ],
+  "ไม่ใช่อาการเสีย": [
+    {
+      "code": "2A 3A 4A 5A 6A ",
+      "problem": "ถ้าปิดโหมดอยู่ ไฟกดบนเครื่องออกโดยการกดปุ่ม GEN หรือโหม กดปุ่มจนกว่าหน้าจอโทรโชว์ OF แล้วปล่อยมือ ประมาณ 5 วินาทีพัดผ้าก็จะหยุดไป หลังจากนั้นคอมเพรสเซอร์จะกลับมาทำงาน 100% หรือ เป็นเดิมที"
+    },
+    {
+      "code": " 7A 8A 9A 0A",
+      "problem": "ถ้าปิดโหมดอยู่ ไฟกดบนเครื่องออกโดยการกดปุ่ม GEN หรือโหม กดปุ่มจนกว่าหน้าจอโทรโชว์ OF แล้วปล่อยมือ ประมาณ 5 วินาทีพัดผ้าก็จะหยุดไป หลังจากนั้นคอมเพรสเซอร์จะกลับมาทำงาน 100% หรือ เป็นเดิมที"
+    },
+    {
+      "code": "CF PP SA AP",
+      "problem": "ไม่ใช่ error code แต่เป็นตัวการส่งสัญญาณเพื่อเชื่อมต่อหา wifi ในลักษณะนี้จะมีในแอร์ที่เชื่อมต่อ wifi ได้ครับ เป็นการทำงานปกติ"
+    }
+  ]
+  };
 
-  List<Map<String, String>> get filteredErrors {
-    if (searchQuery.isEmpty) {
-      return tclErrors;
+  // เพิ่มฟังก์ชันหาชื่อกลุ่มจาก error code
+  String getGroupNameForError(String errorCode) {
+    for (var entry in errorGroups.entries) {
+      if (entry.value.any((error) => error['code'] == errorCode)) {
+        return entry.key;
+      }
     }
-    return tclErrors.where((error) =>
-      error['code']!.toLowerCase().contains(searchQuery.toLowerCase()) ||
-      error['problem']!.toLowerCase().contains(searchQuery.toLowerCase())
-    ).toList();
+    return '';
   }
 
   @override
@@ -2435,10 +2642,10 @@ class _TclErrorCodePageState extends State<TclErrorCodePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('TCL Error Codes'),
-        backgroundColor: Colors.blue,
       ),
       body: Column(
         children: [
+          // ช่องค้นหา
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
@@ -2448,9 +2655,6 @@ class _TclErrorCodePageState extends State<TclErrorCodePage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                filled: true,
-                fillColor: Colors.white,
               ),
               onChanged: (value) {
                 setState(() {
@@ -2459,20 +2663,79 @@ class _TclErrorCodePageState extends State<TclErrorCodePage> {
               },
             ),
           ),
+          // แถบเลือกกลุ่ม
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Wrap(
+                    spacing: 8,
+                    children: [
+                      FilterChip(
+                        label: const Text('ทั้งหมด'),
+                        selected: selectedGroup.isEmpty,
+                        onSelected: (selected) {
+                          setState(() {
+                            selectedGroup = '';
+                          });
+                        },
+                      ),
+                      ...errorGroups.keys.map((group) => FilterChip(
+                        label: Text(group),
+                        selected: selectedGroup == group,
+                        onSelected: (selected) {
+                          setState(() {
+                            selectedGroup = selected ? group : '';
+                          });
+                        },
+                      )),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // แสดงรายการ Error Codes
           Expanded(
             child: ListView.builder(
-              itemCount: filteredErrors.length,
+              itemCount: _getFilteredErrors().length,
               itemBuilder: (context, index) {
-                final error = filteredErrors[index];
+                final error = _getFilteredErrors()[index];
+                final groupName = getGroupNameForError(error['code']!);
+                
                 return Card(
                   margin: const EdgeInsets.all(8),
                   child: ListTile(
-                    title: Text(
-                      'Error ${error['code']}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
+                    title: Row(
+                      children: [
+                        Text(
+                          'Error ${error['code']}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            groupName,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     subtitle: Text(
                       error['problem']!,
@@ -2488,6 +2751,28 @@ class _TclErrorCodePageState extends State<TclErrorCodePage> {
         ],
       ),
     );
+  }
+
+  List<Map<String, String>> _getFilteredErrors() {
+    List<Map<String, String>> filteredList = [];
+    
+    if (selectedGroup.isEmpty) {
+      // ถ้าไม่ได้เลือกกลุ่ม ให้แสดงทั้งหมด
+      filteredList = errorGroups.values.expand((group) => group).toList();
+    } else {
+      // แสดงเฉพาะกลุ่มที่เลือก
+      filteredList = errorGroups[selectedGroup] ?? [];
+    }
+
+    // กรองตามคำค้นหา
+    if (searchQuery.isNotEmpty) {
+      filteredList = filteredList.where((error) {
+        return error['code']!.toLowerCase().contains(searchQuery.toLowerCase()) ||
+               error['problem']!.toLowerCase().contains(searchQuery.toLowerCase());
+      }).toList();
+    }
+
+    return filteredList;
   }
 }
 
@@ -2678,6 +2963,360 @@ class _HaierErrorCodePageState extends State<HaierErrorCodePage> {
         ],
       ),
     );
+  }
+}
+
+class LGErrorCodePage extends StatefulWidget {
+  const LGErrorCodePage({Key? key}) : super(key: key);
+
+  @override
+  _LGErrorCodePageState createState() => _LGErrorCodePageState();
+}
+
+class _LGErrorCodePageState extends State<LGErrorCodePage> {
+  String searchQuery = '';
+  String selectedGroup = '';
+
+  // กำหนดกลุ่มข้อมูล
+  final Map<String, List<Map<String, String>>> errorGroups = {
+    'โค้ดแสดงความผิดปกติของคอยล์เป็น': [
+     {
+    "code": "1",
+    "problem": "เซ็นเซอร์อุณหภูมิห้องเสีย"
+  },
+  {
+    "code": "2",
+    "problem": "เซ็นเซอร์อุณหภูมิท่อคอยล์เย็นขาเข้าเสีย"
+  },
+  {
+    "code": "3",
+    "problem": "รีโมทแบบสายมีปัญหา"
+  },
+  {
+    "code": "4",
+    "problem": "ไฟเวอร์ไดร์เสีย(ลอคฟัน)"
+  },
+  {
+    "code": "5",
+    "problem": "การสื่อสัญญาณระหว่างคอยล์เย็น-คอยล์ร้อนมีปัญหา"
+  },
+  {
+    "code": "6",
+    "problem": "เซ็นเซอร์อุณหภูมิท่อคอยล์เย็นขาออกเสีย"
+  },
+  {
+    "code": "9",
+    "problem": "EEPROM มีปัญหา(หน่วยความจำคอยล์เย็นเสีย)"
+  },
+  {
+    "code": "10",
+    "problem": "มอเตอร์พัดลมเย็น ล็อค/ไม่หมุน"
+  },
+  {
+    "code": "12",
+    "problem": "เซ็นเซอร์อุณหภูมิท่อคอยล์เย็น(กลางแลกเปลี่ยนเย็น) เสีย"
+  },
+    ],
+    'โค้ดแสดงความผิดปกติของคอยดร้อน': [
+      {
+    "code": "21",
+    "problem": "แรงดันไฟ DC /ไฟ แรงดันไฟต่ำมากเกินไป(IPM เสีย/ มีปัญหา)"
+  },
+  {
+    "code": "22",
+    "problem": "กระแสค่าไฟสูงวงจร(CT 2 ไอเวอร์ไดรฟ์)"
+  },
+  {
+    "code": "23",
+    "problem": "แรงดันไฟ DC Link ค่าต่ำผิดปกติ(ไฟฟ้าขาเข้าอาจไม่เพียงพอ)"
+  },
+  {
+    "code": "26",
+    "problem": "แรงดันไฟ DC Comp มีปัญหา"
+  },
+  {
+    "code": "27",
+    "problem": "PSC มีปัญหา"
+  },
+  {
+    "code": "29",
+    "problem": "กระแสคอมเพรสเซอร์ในแต่ละเฟสผิดปกติ(สายหลุด/หลวม/สายขาด)"
+  },
+    ],
+    'โค้ดแสดงความผิดปกติของคอยล์ร้อน': [
+      {
+    "code": "32",
+    "problem": "อุณหภูมิท่อคอยล์แคนเดนเซอร์ (หลายๆค่า) สูงเกินไป"
+  },
+  {
+    "code": "34",
+    "problem": "เซ็นเซอร์High Pressure จับแรงดันได้สูงเกินไป"
+  },
+  {
+    "code": "35",
+    "problem": "เซ็นเซอร์Low Pressure จับแรงดันได้ต่ำเกินไป"
+  },
+  {
+    "code": "36(38)",
+    "problem": "น้ำแข็งจับ"
+  },
+  {
+    "code": "37",
+    "problem": "อัตราส่วนการอัดอากาศต่างๆผิดปกติ"
+  },
+  {
+    "code": "40",
+    "problem": "เซ็นเซอร์วัดระบบแรงดัน (CT) มีปัญหา"
+  },
+  {
+    "code": "41",
+    "problem": "เซ็นเซอร์วัดอุณหภูมิปล่อยลมร้อน (หลายๆค่า) มีปัญหา"
+  },
+  {
+    "code": "42",
+    "problem": "เซ็นเซอร์Low Pressure เสีย/ มีปัญหา"
+  },
+  {
+    "code": "43",
+    "problem": "เซ็นเซอร์High Pressure เสีย/ มีปัญหา"
+  },
+  {
+    "code": "44",
+    "problem": "เซ็นเซอร์อุณหภูมิอุณหภูมิเสีย (อุณหภูมิอากาศภายนอกห้อง)"
+  },
+  {
+    "code": "45",
+    "problem": "เซ็นเซอร์อุณหภูมิท่อไม่ปล่อยลมร้อน (คอลเลค) มีปัญหา"
+  },
+  {
+    "code": "46",
+    "problem": "เซ็นเซอร์ท่อดูดมีปัญหา(Suction-Pipe Sensor Error)"
+  },
+  {
+    "code": "51",
+    "problem": "ขาดแรงลมที่ดูดเจอลมเย็นและเกิดลมรั่ว(ไม่ตรงกับแผนที่ไม่สมดุล)"
+  },
+  {
+    "code": "53",
+    "problem": "การสื่อสัญญาณระหว่างคอยล์เย็น-คอยล์ร้อน มีปัญหา"
+  },
+  {
+    "code": "61",
+    "problem": "อุณหภูมิเย็นและท่อไอน้ำแบบเซอร์มิสเตอร์"
+  },
+  {
+    "code": "62",
+    "problem": "Heat Sink ร้อนเกิน(อุณหาจะร้อนไม่แลกเปลี่ยนกับ IPM)"
+  },
+  {
+    "code": "67",
+    "problem": "DC Motor คอยล์ร้อนมีปัญหา(สายขาด/ หลวม/ มอเตอร์เสีย)"
+  },
+  {
+    "code": "72",
+    "problem": "วาวส์4 Way มีปัญหาหลุด/หลวม/ เสีย"
+  }
+    ],
+  };
+
+  // เพิ่มฟังก์ชันหาชื่อกลุ่มจาก error code
+  String getGroupNameForError(String errorCode) {
+    for (var entry in errorGroups.entries) {
+      if (entry.value.any((error) => error['code'] == errorCode)) {
+        return entry.key;
+      }
+    }
+    return '';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('LG Error Codes'),
+      ),
+      body: Column(
+        children: [
+          // ช่องค้นหา
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'ค้นหารหัสข้อผิดพลาดหรือปัญหา...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
+            ),
+          ),
+          // แถบเลือกกลุ่ม
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Wrap(
+                    spacing: 8,
+                    children: [
+                      FilterChip(
+                        label: const Text('ทั้งหมด'),
+                        selected: selectedGroup.isEmpty,
+                        onSelected: (selected) {
+                          setState(() {
+                            selectedGroup = '';
+                          });
+                        },
+                      ),
+                      ...errorGroups.keys.map((group) => FilterChip(
+                        label: Text(group),
+                        selected: selectedGroup == group,
+                        onSelected: (selected) {
+                          setState(() {
+                            selectedGroup = selected ? group : '';
+                          });
+                        },
+                      )),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // แสดงรายการ Error Codes
+          Expanded(
+            child: ListView.builder(
+              itemCount: _getFilteredErrors().length,
+              itemBuilder: (context, index) {
+                final error = _getFilteredErrors()[index];
+                final groupName = getGroupNameForError(error['code']!);
+                
+                return Card(
+                  margin: const EdgeInsets.all(8),
+                  child: ListTile(
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Wrap(
+                          spacing: 8,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            error['code']!.length > 15 ? 
+                            Text(
+                              'Error ${error['code']}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ) :
+                            // แสดง error code ที่ยาวแบบแบ่ง 2 บรรทัด
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Error ${error['code']!.substring(0, error['code']!.length ~/ 2)}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Text(
+                                  '     ${error['code']!.substring(error['code']!.length ~/ 2)}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Text(
+                                      groupName,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey[700],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // แสดง tag กลุ่มในบรรทัดที่สองสำหรับ error code ที่ยาว
+                            if (error['code']!.length > 15)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    groupName,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey[700],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(
+                      error['problem']!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Map<String, String>> _getFilteredErrors() {
+    List<Map<String, String>> filteredList = [];
+    
+    if (selectedGroup.isEmpty) {
+      // ถ้าไม่ได้เลือกกลุ่ม ให้แสดงทั้งหมด
+      filteredList = errorGroups.values.expand((group) => group).toList();
+    } else {
+      // แสดงเฉพาะกลุ่มที่เลือก
+      filteredList = errorGroups[selectedGroup] ?? [];
+    }
+
+    // กรองตามคำค้นหา
+    if (searchQuery.isNotEmpty) {
+      filteredList = filteredList.where((error) {
+        return error['code']!.toLowerCase().contains(searchQuery.toLowerCase()) ||
+               error['problem']!.toLowerCase().contains(searchQuery.toLowerCase());
+      }).toList();
+    }
+
+    return filteredList;
   }
 }
 
