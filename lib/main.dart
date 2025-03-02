@@ -257,20 +257,15 @@ class _MyHomePageState extends State<MyHomePage> {
   };
 
   List<Map<String, dynamic>> brands = [
-    {'name': 'SAMSUNG', 'image': 'assets/images/list-samsung.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
     {'name': 'PANASONIC', 'image': 'assets/images/list-panasonic.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
-    {'name': 'TOSHIBA', 'image': 'assets/images/list-toshiba.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
     {'name': 'HITACHI', 'image': 'assets/images/list-hitachi.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
     {'name': 'LG', 'image': 'assets/images/list-lg.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
     {'name': 'CARRIER', 'image': 'assets/images/list-carrier.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
     {'name': 'DAIKIN', 'image': 'assets/images/list-daikin.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
-    {'name': 'ELECTROLUX', 'image': 'assets/images/list-electrolux.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
     {'name': 'GREE', 'image': 'assets/images/list-gree.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
     {'name': 'HAIER', 'image': 'assets/images/list-haier.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': true},
-    {'name': 'HISENSE', 'image': 'assets/images/list-hisense.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': true},
     {'name': 'MITSUBISHI', 'image': 'assets/images/list-mitsubishi.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
     {'name': 'TCL', 'image': 'assets/images/list-tcl.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
-    {'name': 'MIDEA', 'image': 'assets/images/list-midea.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false}
   ];
 
   List<Map<String, dynamic>> getFilteredBrands() {
@@ -993,20 +988,16 @@ class BrandCard extends StatelessWidget {
 // ====== Brand Detail Page ======
 class BrandDetailScreen extends StatelessWidget {
   static final Map<String, String> brandDescriptions = {
-    'SAMSUNG': 'แบรนด์ระดับโลกที่โดดเด่นด้านนวัตกรรม AI และเทคโนโลยีสมาร์ทโฮม มีระบบ SmartThings ควบคุมผ่านสมาร์ทโฟน ฟีเจอร์ AI Auto Cooling ปรับการทำงานอัตโนมัติตามการใช้งานและสภาพห้อง พร้อมระบบฟอกอากาศและประหยัดพลังงาน',
     'PANASONIC': 'แบรนด์ญี่ปุ่นที่มีประวัติยาวนานในการผลิตเครื่องใช้ไฟฟ้า โดดเด่นด้านเทคโนโลยี Inverter ที่ให้พลังงานคงที่ในระดับกลางและต่ำ มีระบบฟอกอากาศและควบคุมความชื้นอัตโนมัติ การออกแบบที่ทันสมัยและประหยัดพลังงาน',
-    'TOSHIBA': 'แบรนด์ญี่ปุ่นที่มีความเชี่ยวชาญด้านเทคโนโลยีและนวัตกรรม มีระบบ Self-Cleaning ป้องกันเชื้อราและแบคทีเรีย เทคโนโลยี Twin-Cooling พร้อมเซ็นเซอร์ 13 จุดเพื่อประสิทธิภาพการทำความเย็นสูงสุด',
     'HITACHI': 'แบรนด์ญี่ปุ่นที่มีนวัตกรรม Frost Wash ทำความสะอาดตัวเองด้วยการแช่แข็งและละลายน้ำแข็ง ระบบ Stainless Clean ป้องกันแบคทีเรียและฝุ่น มาพร้อมเทคโนโลยี IoT ควบคุมผ่านแอปพลิเคชัน',
     'LG': 'แบรนด์เกาหลีที่โดดเด่นด้านดีไซน์และเทคโนโลยี AI มีระบบ Dual Inverter Compressor ประหยัดพลังงานและลดเสียงรบกวน ฟังก์ชัน ThinQ ควบคุมแอร์ผ่านสมาร์ทโฟน มีระบบฟอกอากาศและฆ่าเชื้อแบคทีเรีย',
     'CARRIER': 'แบรนด์อเมริกันที่เป็นผู้นำด้านระบบปรับอากาศ มีเทคโนโลยี Smart Auto Mode ปรับความเร็วพัดลมอัตโนมัติตามคุณภาพอากาศ ระบบกรองอากาศประสิทธิภาพสูง และการควบคุมอุณหภูมิที่แม่นยำ',
     'DAIKIN': 'แบรนด์ญี่ปุ่นที่มีชื่อเสียงด้านเทคโนโลยีระบบปรับอากาศระดับโลก มีระบบ Streamer Discharge ที่ช่วยฟอกอากาศและฆ่าเชื้อโรค เทคโนโลยี Inverter ประหยัดพลังงานสูง คอมเพรสเซอร์ทนทาน และระบบควบคุมอุณหภูมิแม่นยำ',
-    'ELECTROLUX': 'แบรนด์สวีเดนที่ขึ้นชื่อเรื่องดีไซน์และคุณภาพ เทคโนโลยี Air Purification ช่วยฟอกอากาศให้บริสุทธิ์ ระบบ I-Feel ปรับอุณหภูมิให้เหมาะสมอัตโนมัติ ดีไซน์ทันสมัยและเสียงเงียบ',
     'GREE': 'แบรนด์จีนที่เป็นหนึ่งในผู้ผลิตแอร์รายใหญ่ของโลก มีเทคโนโลยี Cold Plasma ฆ่าเชื้อโรคและฟอกอากาศ ระบบ Self-Cleaning ลดการสะสมของฝุ่นและเชื้อรา ใช้คอมเพรสเซอร์ที่ทนทานและเงียบ',
     'HAIER': 'แบรนด์จีนที่มีความเชี่ยวชาญด้านอุปกรณ์เครื่องใช้ไฟฟ้า เทคโนโลยี Self-Cleaning ป้องกันเชื้อราและแบคทีเรีย ระบบ Hyper PCB ทำให้ทำงานได้เสถียรแม้ไฟตก คอมเพรสเซอร์ทนทานและประหยัดพลังงาน',
-    'HISENSE': 'แบรนด์จีนที่มีความเชี่ยวชาญด้านเทคโนโลยีดิจิทัล ระบบ Hi-Nano กำจัดเชื้อแบคทีเรียและไวรัส โหมด I Feel ปรับอุณหภูมิตามตำแหน่งของรีโมท คอมเพรสเซอร์ทนทาน และมีโหมดประหยัดพลังงาน',
     'MITSUBISHI': 'แบรนด์ญี่ปุ่นที่ขึ้นชื่อเรื่องความทนทานและประหยัดพลังงาน ระบบ Fast Cooling ทำให้เย็นเร็วทันใจ เทคโนโลยี Dual Barrier Coating ลดการสะสมของฝุ่นและคราบน้ำมัน ใช้น้ำยาทำความเย็น R32 ที่เป็นมิตรต่อสิ่งแวดล้อม',
     'TCL': 'แบรนด์จีนที่ให้ความคุ้มค่าราคาประหยัด ระบบ Gentle Breeze กระจายลมได้อย่างนุ่มนวล คอมเพรสเซอร์ Inverter ช่วยประหยัดไฟ ดีไซน์ทันสมัย รองรับการควบคุมผ่านแอป',
-    'MIDEA': 'แบรนด์จีนที่เป็นผู้ผลิตเครื่องปรับอากาศรายใหญ่ระดับโลก มีระบบ Flash Cooling ทำให้เย็นเร็ว เทคโนโลยี i-Clean ช่วยทำความสะอาดตัวเอง รองรับการควบคุมผ่านแอปสมาร์ทโฟน'
+    
   };
 
   final String brand;
@@ -1024,30 +1015,7 @@ class BrandDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (brand == 'CARRIER') {
-      return const CarrierErrorCodePage();
-    } else if (brand == 'DAIKIN') {
-      return const DaikinErrorCodePage();
-    } else if (brand == 'TCL') {
-      return const TclErrorCodePage();
-    } else if (brand == 'HAIER') {
-      return const HaierErrorCodePage();
-    } else if (brand == 'LG') {
-      return const LGErrorCodePage();
-    }
-    
-    return WillPopScope(
-      onWillPop: () async {
-        if (context.findAncestorStateOfType<_MyHomePageState>() != null) {
-          final homeState = context.findAncestorStateOfType<_MyHomePageState>()!;
-          homeState.searchController.clear();
-          homeState.setState(() {
-            homeState.searchQuery = '';
-          });
-        }
-        return true;
-      },
-      child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text(brand),
         backgroundColor: Colors.blue,
@@ -1055,9 +1023,9 @@ class BrandDetailScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-              Hero(
-                tag: 'brand-$brand',
-                child: Container(
+            Hero(
+              tag: 'brand-$brand',
+              child: Container(
               height: 200,
               width: double.infinity,
               color: Colors.grey[200],
@@ -1069,7 +1037,7 @@ class BrandDetailScreen extends StatelessWidget {
                   : Image.asset(
                       image,
                       fit: BoxFit.contain,
-                        ),
+                      ),
                     ),
             ),
             Padding(
@@ -1078,7 +1046,7 @@ class BrandDetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                      'ข้อมูลเครื่องปรับอากาศ $brand',
+                    'ข้อมูลเครื่องปรับอากาศ $brand',
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -1093,28 +1061,45 @@ class BrandDetailScreen extends StatelessWidget {
                   Center(
                     child: ElevatedButton.icon(
                       onPressed: () {
+                        // แก้ไขส่วนนี้เพื่อนำทางไปยังหน้า Error Code ที่เหมาะสม
+                        Widget errorPage;
+                        if (brand == 'CARRIER') {
+                          errorPage = const CarrierErrorCodePage();
+                        } else if (brand == 'DAIKIN') {
+                          errorPage = const DaikinErrorCodePage();
+                        } else if (brand == 'TCL') {
+                          errorPage = const TclErrorCodePage();
+                        } else if (brand == 'HAIER') {
+                          errorPage = const HaierErrorCodePage();
+                        } else if (brand == 'LG') {
+                          errorPage = const LGErrorCodePage();
+                        } else if (brand == 'PANASONIC') {
+                          errorPage = const PanasonicErrorCodePage();
+                        } else if (brand == 'MITSUBISHI') {
+                          errorPage = const MitsubishiErrorCodePage();
+                        } else {
+                          return; // ไม่มีหน้า Error Code สำหรับแบรนด์นี้
+                        }
+                        
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ErrorCodeScreen(
-                                brand: brand,
-                                isOutdoorOnly: isOutdoorOnly,
-                              ),
+                            builder: (context) => errorPage,
                           ),
                         );
                       },
-                        icon: const Icon(Icons.error_outline, color: Colors.red),
-                        label: const Text(
-                          'รหัสข้อผิดพลาด',
-                          style: TextStyle(color: Colors.red),
-                        ),
+                      icon: const Icon(Icons.error_outline, color: Colors.red),
+                      label: const Text(
+                        'รหัสข้อผิดพลาด',
+                        style: TextStyle(color: Colors.red),
+                      ),
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 32,
                           vertical: 16,
                         ),
-                          backgroundColor: Colors.white,
-                          side: const BorderSide(color: Colors.red),
+                        backgroundColor: Colors.white,
+                        side: const BorderSide(color: Colors.red),
                       ),
                     ),
                   ),
@@ -1122,7 +1107,6 @@ class BrandDetailScreen extends StatelessWidget {
               ),
             ),
           ],
-          ),
         ),
       ),
     );
@@ -1358,57 +1342,6 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
         'problem': 'ไม่ใช่ error code แต่มันคือการส่งสัญญาณเพื่อเชื่อมต่อหา wifi ในลักษณะนี้จะมีในแอร์รุ่นที่เชื่อมต่อ wifi ได้ครับ เป็นการทำงานปกติ',
        
     }
-      ],
-      'SAMSUNG': [
-        {
-          'code': '4C/4E',
-          'problem': 'ปัญหาระบบน้ำ',
-          'solution': '1. ตรวจสอบวาล์วน้ำ\n2. ตรวจสอบท่อน้ำ\n3. ตรวจสอบตัวกรองที่อุดตัน'
-        },
-        {
-          'code': '5C/5E',
-          'problem': 'ปัญหาการระบายน้ำ',
-          'solution': '1. ตรวจสอบท่อระบายน้ำไม่ให้อุดตัน\n2. ทำความสะอาดตัวกรองน้ำทิ้ง'
-        },
-        {
-          'code': '3C/3E',
-          'problem': 'มอเตอร์ผิดปกติหรือทำงานหนักเกินไป',
-          'solution': '1. ลดปริมาณการใช้งาน\n2. รีสตาร์ทเครื่อง'
-        }
-      ],
-      'PANASONIC': [
-        {
-          'code': 'E01',
-          'problem': 'ประตูไม่ล็อค',
-          'solution': '1. ตรวจสอบการจัดตำแหน่งประตู\n2. ตรวจสอบการปิดประตูให้สนิท'
-        },
-        {
-          'code': 'E02',
-          'problem': 'ปัญหาการจ่ายน้ำ',
-          'solution': '1. ตรวจสอบวาล์วน้ำเข้า\n2. ตรวจสอบแหล่งจ่ายน้ำ'
-        },
-        {
-          'code': 'E03',
-          'problem': 'ปั๊มทำงานผิดปกติ',
-          'solution': '1. ตรวจสอบปั๊ม\n2. ทำความสะอาดตัวกรอง\n3. ติดต่อช่างซ่อม'
-        }
-      ],
-      'TOSHIBA': [
-        {
-          'code': 'E1',
-          'problem': 'ปัญหาการระบายน้ำ',
-          'solution': '1. ตรวจสอบการเชื่อมต่อท่อระบายน้ำ\n2. กำจัดสิ่งอุดตัน\n3. ตรวจสอบความสูงของท่อระบายน้ำ'
-        },
-        {
-          'code': 'E2',
-          'problem': 'ฝาปิดมีปัญหา',
-          'solution': '1. ปิดฝาให้สนิท\n2. นำสิ่งแปลกปลอมออก\n3. ตรวจสอบกลไกฝาปิด'
-        },
-        {
-          'code': 'E3',
-          'problem': 'น้ำหนักไม่สมดุล',
-          'solution': '1. จัดเรียงเสื้อผ้าใหม่ให้กระจายตัว\n2. ปรับระดับเครื่อง'
-        }
       ],
       'HITACHI': [
         {
@@ -1692,13 +1625,6 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
          
         }
       ],
-       'HISENSE': [
-        {
-          'code': 'E1',
-          'problem': 'ล็อคประตูมีปัญหา',
-          'solution': '1. ตรวจสอบกลไกล็อคประตู\n2. ตรวจสอบการปิดประตูให้สนิท'
-        }
-      ]
     };
 
     final brandCodes = errorCodes[widget.brand] ?? [];
@@ -2356,6 +2282,42 @@ class _DaikinErrorCodePageState extends State<DaikinErrorCodePage> {
 
   final List<Map<String, String>> daikinErrors = [
     {
+      'code': 'A1',
+      'problem': 'แผง PCB ชุดคอยล์เย็นเสียหรือไฟฟ้าตก',
+    },
+     {
+      'code': 'A5',
+      'problem': 'ระบบป้องกันการเป็นน้ำแข็ง',
+    },
+     {
+      'code': 'A6',
+      'problem': 'มอเตอร์คอยล์เย็นเสียหรือแผง PCB เสีย',
+    },
+     {
+      'code': 'C4',
+      'problem': 'เซ็นเชอร์น้ำแข็งค่าความต้านทานผิดปกติ',
+    },
+     {
+      'code': 'C9',
+      'problem': 'เซ็นเซอร์อุณหภูมิค่าความต้านทานผิดปกติ',
+    },
+     {
+      'code': 'CC',
+      'problem': 'เซ็นเซอร์ความชื้นค่าความต้านทานผิดปกติ',
+    },
+     {
+      'code': 'U4',
+      'problem': 'การส่งสัญญาณระห่างชุดคอยล์เย็นกับคอยล์ร้อนผิดปกติหรือแผง PCB ชุดคอยล์ร้อนเสีย',
+    },
+     {
+      'code': 'F3',
+      'problem': 'การทำงานผิดปกติของอุณหภูมิท่อด้านจ่าย',
+    },
+     {
+      'code': 'L5',
+      'problem': 'คอมเพรสเซอร์หรือแผง PCB ชุดคอยล์ร้อนเสีย',
+    },
+     {
       'code': 'H6',
       'problem': 'คอมเพรสเซอร์กินกระแสสูง',
     },
@@ -2721,12 +2683,12 @@ class _TclErrorCodePageState extends State<TclErrorCodePage> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Container(
+          Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 8,
                             vertical: 2,
                           ),
-                          decoration: BoxDecoration(
+            decoration: BoxDecoration(
                             color: Colors.grey[200],
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -3227,7 +3189,7 @@ class _LGErrorCodePageState extends State<LGErrorCodePage> {
                           ),
                           child: Text(
                             groupName,
-                            style: TextStyle(
+                  style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[700],
                             ),
@@ -3271,6 +3233,540 @@ class _LGErrorCodePageState extends State<LGErrorCodePage> {
     }
 
     return filteredList;
+  }
+}
+
+class PanasonicErrorCodePage extends StatefulWidget {
+  const PanasonicErrorCodePage({Key? key}) : super(key: key);
+
+  @override
+  _PanasonicErrorCodePageState createState() => _PanasonicErrorCodePageState();
+}
+
+class _PanasonicErrorCodePageState extends State<PanasonicErrorCodePage> {
+  String searchQuery = '';
+
+  final List<Map<String, dynamic>> panasonicErrors = [
+     {
+    "code": "E0",
+    "LED_blink": "ไฟ RUN กระพริบ 1 ครั้งในวินาที",
+    "status": "เมื่อหยุดเครื่อง หลอดไฟอลาร์มติด, ไฟรัน (RUN) กระพริบ",
+    "problem": "ระบบการทำลายน้ำแข็งล้มเหลว หรือเสียหายชำรุด"
+  },
+  {
+    "code": "P3",
+    "LED_blink": "ไฟ RUN กระพริบ 1 ครั้งในวินาที",
+    "status": "เมื่อหยุดเครื่อง หลอดไฟอลาร์มติด, ไฟรัน (RUN) กระพริบ",
+    "problem": "อยู่ในสถานะการละลายน้ำแข็ง (ปุ่มกดละลายน้ำแข็งค้าง)"
+  },
+  {
+    "code": "P1",
+    "LED_blink": "ไฟ RUN กระพริบ 2 ครั้งใน 4 วินาที",
+    "status": "เมื่อหยุดเครื่อง หลอดไฟอลาร์มติด, ไฟรัน (RUN) กระพริบ",
+    "problem": "อยู่ในสถานะการต่อคอมเพรสเซอร์โดยตรง"
+  },
+  {
+    "code": "E2",
+    "LED_blink": "ไฟ RUN กระพริบ 2 ครั้งใน 4 วินาที",
+    "status": "เมื่อหยุดเครื่อง หลอดไฟอลาร์มติด, ไฟรัน (RUN) กระพริบ",
+    "problem": "ขดลวดเซ็นเซอร์อีวาพอเรเตอร์เสียหาย"
+  },
+  {
+    "code": "E3",
+    "LED_blink": "ไฟ RUN กระพริบ 3 ครั้งใน 5 วินาที",
+    "status": "เมื่อหยุดเครื่อง หลอดไฟอลาร์มติด, ไฟรัน (RUN) กระพริบ",
+    "problem": "ขดลวดเซ็นเซอร์คอยล์ร้อนเสียหาย"
+  },
+  {
+    "code": "P5",
+    "LED_blink": "ไฟ RUN กระพริบ 4 ครั้งใน 6 วินาที",
+    "status": "เมื่อหยุดเครื่อง หลอดไฟอลาร์มติด, ไฟรัน (RUN) กระพริบ",
+    "problem": "คอมเพรสเซอร์โหลดคู่มอเตอร์"
+  },
+  {
+    "code": "P6",
+    "LED_blink": "ไฟ RUN กระพริบ 5 ครั้งใน 7 วินาที",
+    "status": "เมื่อหยุดเครื่อง หลอดไฟอลาร์มติด, ไฟรัน (RUN) กระพริบ",
+    "problem": "คอมเพรสเซอร์โหลดคู่มอเตอร์ 5 kW."
+  },
+  {
+    "code": "E9",
+    "LED_blink": "ไฟ RUN กระพริบ 6 ครั้งใน 8 วินาที",
+    "status": "เมื่อหยุดเครื่อง หลอดไฟอลาร์มติด, ไฟรัน (RUN) กระพริบ",
+    "problem": "กำลังละลายน้ำแข็งต่อเนื่อง"
+  },
+  {
+    "code": "F4",
+    "LED_blink": "ไฟ RUN กระพริบ 7 ครั้งใน 9 วินาที",
+    "status": "เมื่อหยุดเครื่อง หลอดไฟอลาร์มติด, ไฟรัน (RUN) กระพริบ",
+    "problem": "สภาวะป้องกันความดันต่ำเกินต่ำ (Low-pressure)"
+  },
+  {
+    "code": "F2",
+    "LED_blink": "ไฟ RUN กระพริบ 8 ครั้งใน 10 วินาที",
+    "status": "เมื่อหยุดเครื่อง หลอดไฟอลาร์มติด, ไฟรัน (RUN) กระพริบ",
+    "problem": "ขาดไฟฟ้าภายในห้องเย็น, ลำลุ"
+  },
+  {
+    "code": "EA",
+    "LED_blink": "ไฟ RUN กระพริบ 9 ครั้งใน 11 วินาที",
+    "status": "เมื่อหยุดเครื่อง หลอดไฟอลาร์มติด, ไฟรัน (RUN) กระพริบ",
+    "problem": "เกิดโอเวอร์โหลดในระบบ"
+  },
+  {
+    "code": "F5",
+    "LED_blink": "ไฟ RUN กระพริบ 10 ครั้งใน 12 วินาที",
+    "status": "เมื่อหยุดเครื่อง หลอดไฟอลาร์มติด, ไฟรัน (RUN) กระพริบ",
+    "problem": "ปีกน้ำแข็งบล็อกเซ็นเซอร์"
+  },
+  {
+    "code": "E5",
+    "LED_blink": "ไฟ RUN กระพริบ 11 ครั้งใน 13 วินาที",
+    "status": "เมื่อหยุดเครื่อง หลอดไฟอลาร์มติด, ไฟรัน (RUN) กระพริบ",
+    "problem": "เซ็นเซอร์อุณหภูมิห้องเย็นผิดพลาดผิดปกติหรือหลุดออก"
+  },
+  {
+    "code": "E2",
+    "LED_blink": "ไฟ TIMER กระพริบตลอด",
+    "status": "ไฟ TIMER กระพริบตลอด",
+    "problem": "ขดลวดเซ็นเซอร์อีวาพอเรเตอร์เสียหาย"
+  },
+  {
+    "code": "E3",
+    "LED_blink": "ไฟ RUN กระพริบตลอด",
+    "status": "ไฟ RUN กระพริบตลอด",
+    "problem": "ขดลวดเซ็นเซอร์คอยล์ร้อนเสียหาย"
+  },
+  {
+    "code": "E5",
+    "LED_blink": "ไฟ DEFROST กระพริบตลอด",
+    "status": "ไฟ DEFROST กระพริบตลอด",
+    "problem": "เซ็นเซอร์อุณหภูมิห้องเย็นผิดปกติ"
+  },
+  {
+    "code": "F5",
+    "LED_blink": "ไฟ อลาร์มแดง กระพริบตลอด",
+    "status": "ไฟ อลาร์มแดง กระพริบตลอด",
+    "problem": "ปีกน้ำแข็งบล็อกเซ็นเซอร์"
+  },
+  {
+    "code": "F2",
+    "LED_blink": "ไฟ DEFROST กระพริบตลอด",
+    "status": "ไฟ DEFROST กระพริบตลอด",
+    "problem": "คอมเพรสเซอร์โหลดผิดปกติ"
+  },
+  {
+    "code": "E1",
+    "LED_blink": "ไฟ RUN กระพริบตลอด",
+    "status": "ไฟ RUN กระพริบตลอด",
+    "problem": "เซ็นเซอร์อุณหภูมิผิดปกติ"
+  },
+  {
+    "code": "P6",
+    "LED_blink": "ไฟ DEFROST กระพริบ TIMER กระพริบ",
+    "status": "ไฟ DEFROST กระพริบ TIMER กระพริบ",
+    "problem": "ระบบ EEPROM หล่อมลายผิดปกติ"
+  },
+  {
+    "code": "N0",
+    "LED_blink": "ไฟ RUN กระพริบตลอด",
+    "status": "ไฟ RUN กระพริบตลอด",
+    "problem": "อยู่ในโหมดทดสอบ (ปกติ)"
+  },
+  {
+    "code": "P3",
+    "LED_blink": "ไฟ DEFROST ติดตลอด",
+    "status": "ไฟ DEFROST ติดตลอด",
+    "problem": "กำลังละลายน้ำแข็ง"
+  }
+    // เพิ่ม error codes อื่นๆ ตามต้องการ
+  ];
+
+  List<Map<String, dynamic>> get filteredErrors {
+    if (searchQuery.isEmpty) {
+      return panasonicErrors;
+    }
+    return panasonicErrors.where((error) =>
+      error['code'].toString().toLowerCase().contains(searchQuery.toLowerCase()) ||
+      error['problem'].toString().toLowerCase().contains(searchQuery.toLowerCase())
+    ).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('PANASONIC Error Codes'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'ค้นหารหัสข้อผิดพลาดหรือปัญหา...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredErrors.length,
+              itemBuilder: (context, index) {
+                final error = filteredErrors[index];
+                return Card(
+                  margin: const EdgeInsets.all(8),
+                  child: ListTile(
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Error ${error['code']}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.lightbulb_outline,
+                              size: 16,
+                              color: Colors.red,
+                            ),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                '${error['LED_blink']}',
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            'สถานะ: ${error['status']}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text(
+                        error['problem'],
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MitsubishiErrorCodePage extends StatefulWidget {
+  const MitsubishiErrorCodePage({Key? key}) : super(key: key);
+
+  static const String PROBLEM_LABEL = 'สาเหตุของปัญหา : ';
+  static const String STATUS_LABEL = 'สภาวะทำงาน : ';
+  static const String CONTROL_LABEL = 'จุดสังเกตุ : ';
+  static const String SOLUTION_LABEL = 'การแก้ไข : ';
+  static const String Errorss = 'รหัสข้อผิดพลาด';
+
+  @override
+  State<MitsubishiErrorCodePage> createState() => _MitsubishiErrorCodePageState();
+}
+
+class _MitsubishiErrorCodePageState extends State<MitsubishiErrorCodePage> {
+  String searchQuery = '';
+  String selectedGroup = '';
+  
+  final Map<String, List<Map<String, dynamic>>> errorGroups = {
+      'ปัญหาเกี่ยวกับเซ็นเซอร์': [
+      {
+        "code": "E1",
+        "LED_blink": "ไฟ OPERATION กระพริบ 1 ครั้ง",
+        "LED_out": "กะพริบ 1 ครั้ง ทุก 2 วินาที",
+        "problem": "เซ็นเซอร์อุณหภูมิห้องเสียหาย",
+        "test": "เมื่อหยุดเครื่อง ไฟ OPERATION กระพริบ"
+      },
+      {
+        "code": "E2",
+        "LED_blink": "ไฟ OPERATION กระพริบ 2 ครั้ง",
+        "LED_out": "กะพริบ 2 ครั้ง ทุก 3 วินาที", 
+        "problem": "เซ็นเซอร์แลกเปลี่ยนความร้อนเสียหาย",
+        "test": "เมื่อหยุดเครื่อง ไฟ OPERATION กระพริบ"
+      },
+      {
+        "code": "E3",
+        "LED_blink": "ไฟ OPERATION กระพริบ 3 ครั้ง",
+        "LED_out": "กะพริบ 3 ครั้ง ทุก 3 วินาที",
+        "problem": "เซ็นเซอร์ท่อคอนเดนเซอร์เสียหาย",
+        "test": "เมื่อหยุดเครื่อง ไฟ OPERATION กระพริบ"
+      }
+    ],
+    'อาการเสียเครื่องตัวในบ้าน': [
+      {
+        "code": "00",
+        "problem": "ไม่มี"
+      },
+      {
+        "code": "E5",
+        "LED_blink": "ไฟ OPERATION กระพริบ 5 ครั้ง",
+        "LED_out": "กะพริบ 5 ครั้ง ทุก 3 วินาที",
+        "problem": "ระบบควบคุมความดันสูงผิดปกติ",
+        "test": "เมื่อหยุดเครื่อง ไฟ OPERATION กระพริบ"
+      }
+    ],
+  };
+
+  List<Map<String, dynamic>> get filteredErrors {
+    if (selectedGroup.isEmpty && searchQuery.isEmpty) {
+      return errorGroups.values.expand((errors) => errors).toList();
+    }
+    var errors = selectedGroup.isEmpty
+        ? errorGroups.values.expand((errors) => errors).toList()
+        : errorGroups[selectedGroup] ?? [];
+    
+    if (searchQuery.isEmpty) return errors;
+    
+    return errors.where((error) {
+      final searchLower = searchQuery.toLowerCase();
+      return error['code'].toString().toLowerCase().contains(searchLower) ||
+             error['problem'].toString().toLowerCase().contains(searchLower);
+    }).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('MITSUBISHI Error Codes'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Column(
+        children: [
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'ค้นหารหัสข้อผิดพลาด',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+          // Filter Chips
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Wrap(
+                    spacing: 8,
+                    children: [
+                      FilterChip(
+                        label: const Text('ทั้งหมด'),
+                        selected: selectedGroup.isEmpty,
+                        onSelected: (selected) {
+                          setState(() {
+                            selectedGroup = '';
+                          });
+                        },
+                      ),
+                      ...errorGroups.keys.map((group) => FilterChip(
+                        label: Text(group),
+                        selected: selectedGroup == group,
+                        onSelected: (selected) {
+                          setState(() {
+                            selectedGroup = selected ? group : '';
+                          });
+                        },
+                      )).toList(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Error List
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredErrors.length,
+              itemBuilder: (context, index) {
+                final error = filteredErrors[index];
+                return Card(
+                  margin: const EdgeInsets.all(8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: MitsubishiErrorCodePage.Errorss,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              TextSpan(
+                                text: ' ${error['code']}',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: MitsubishiErrorCodePage.STATUS_LABEL,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              TextSpan(
+                                text: '${error['LED_out']}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: MitsubishiErrorCodePage.CONTROL_LABEL,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              TextSpan(
+                                text: '${error['LED_blink']}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: MitsubishiErrorCodePage.PROBLEM_LABEL,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              TextSpan(
+                                text: '${error['problem']}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: MitsubishiErrorCodePage.SOLUTION_LABEL,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              TextSpan(
+                                text: '${error['test']}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
