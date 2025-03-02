@@ -220,7 +220,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Color appBackgroundColor;
-  late Color brandTextColor;
+  static Color textColor = Colors.black;
+  static Color brandTextColor = Colors.black;
   final searchController = TextEditingController();
   String searchQuery = '';
   List<String> recentBrands = [];
@@ -228,10 +229,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final Color _defaultCardColor = const Color(0xFFE0E0E0);
   final Color _defaultAppColor = Colors.white;
   final Color _defaultAppBarColor = Colors.blue;
-  
-
-  late Color cardBackgroundColor;
-  late Color appBarColor;
+  static Color appBarColor = Colors.blue;
+  static Color cardBackgroundColor = const Color(0xFFE0E0E0);
 
   final List<Color> textColorOptions = [
     Colors.black,      // Default
@@ -258,11 +257,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Map<String, dynamic>> brands = [
     {'name': 'PANASONIC', 'image': 'assets/images/list-panasonic.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
-    {'name': 'HITACHI', 'image': 'assets/images/list-hitachi.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
     {'name': 'LG', 'image': 'assets/images/list-lg.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
     {'name': 'CARRIER', 'image': 'assets/images/list-carrier.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
     {'name': 'DAIKIN', 'image': 'assets/images/list-daikin.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
-    {'name': 'GREE', 'image': 'assets/images/list-gree.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
     {'name': 'HAIER', 'image': 'assets/images/list-haier.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': true},
     {'name': 'MITSUBISHI', 'image': 'assets/images/list-mitsubishi.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
     {'name': 'TCL', 'image': 'assets/images/list-tcl.svg', 'subtitle': 'Air Conditioner', 'isOutdoorOnly': false},
@@ -291,7 +288,8 @@ class _MyHomePageState extends State<MyHomePage> {
       appBackgroundColor = Color(prefs.getInt('backgroundColor') ?? Colors.white.value);
       cardBackgroundColor = Color(prefs.getInt('cardColor') ?? _defaultCardColor.value);
       appBarColor = Color(prefs.getInt('appBarColor') ?? _defaultAppBarColor.value);
-      brandTextColor = Color(prefs.getInt('textColor') ?? Colors.black.value);
+      textColor = Color(prefs.getInt('textColor') ?? Colors.black.value);
+      brandTextColor = textColor;
     });
   }
 
@@ -300,7 +298,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await prefs.setInt('cardColor', cardBackgroundColor.value);
     await prefs.setInt('appColor', appBackgroundColor.value);
     await prefs.setInt('appBarColor', appBarColor.value);
-    await prefs.setInt('textColor', brandTextColor.value);
+    await prefs.setInt('textColor', textColor.value);
   }
 
   void resetColors() {
@@ -308,6 +306,7 @@ class _MyHomePageState extends State<MyHomePage> {
       cardBackgroundColor = _defaultCardColor;
       appBackgroundColor = _defaultAppColor;
       appBarColor = _defaultAppBarColor;
+      textColor = Colors.black;
       brandTextColor = Colors.black;
     });
     saveColors(); 
@@ -351,7 +350,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 tileColor: Colors.transparent,
                 onTap: () {
                   setState(() {
-                    brandTextColor = color;
+                    textColor = color;
                   });
                   saveColors();
                   Navigator.pop(context);
@@ -530,7 +529,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (appBackgroundColor == null || brandTextColor == null) {
+    if (appBackgroundColor == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -546,7 +545,7 @@ class _MyHomePageState extends State<MyHomePage> {
       },
       child: Scaffold(
         backgroundColor: appBackgroundColor,
-      appBar: AppBar(
+        appBar: AppBar(
           backgroundColor: appBarColor,
           elevation: 0,
           toolbarHeight: 140,
@@ -662,13 +661,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 if (recentBrands.isNotEmpty) ...[
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(24, 16, 24, 8),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
                     child: Text(
                       'เข้าชมล่าสุด',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
+                        color: textColor,
                       ),
                     ),
                   ),
@@ -712,9 +712,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             title: Text(
                               brand['name']!,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                                color: brandTextColor,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: textColor,
                                 fontSize: 14,
                               ),
                             ),
@@ -722,13 +722,13 @@ class _MyHomePageState extends State<MyHomePage> {
                               brand['subtitle']!,
                               style: TextStyle(
                                 fontSize: 12,
-                                color: brandTextColor.withOpacity(0.7),
+                                color: textColor.withOpacity(0.7),
                               ),
                             ),
                             trailing: Icon(
                               Icons.chevron_right,
                               size: 16,
-                              color: brandTextColor.withOpacity(0.7),
+                              color: textColor.withOpacity(0.7),
                             ),
                             onTap: () async {
                               await saveRecentBrand(brand['name']!);
@@ -989,11 +989,9 @@ class BrandCard extends StatelessWidget {
 class BrandDetailScreen extends StatelessWidget {
   static final Map<String, String> brandDescriptions = {
     'PANASONIC': 'แบรนด์ญี่ปุ่นที่มีประวัติยาวนานในการผลิตเครื่องใช้ไฟฟ้า โดดเด่นด้านเทคโนโลยี Inverter ที่ให้พลังงานคงที่ในระดับกลางและต่ำ มีระบบฟอกอากาศและควบคุมความชื้นอัตโนมัติ การออกแบบที่ทันสมัยและประหยัดพลังงาน',
-    'HITACHI': 'แบรนด์ญี่ปุ่นที่มีนวัตกรรม Frost Wash ทำความสะอาดตัวเองด้วยการแช่แข็งและละลายน้ำแข็ง ระบบ Stainless Clean ป้องกันแบคทีเรียและฝุ่น มาพร้อมเทคโนโลยี IoT ควบคุมผ่านแอปพลิเคชัน',
     'LG': 'แบรนด์เกาหลีที่โดดเด่นด้านดีไซน์และเทคโนโลยี AI มีระบบ Dual Inverter Compressor ประหยัดพลังงานและลดเสียงรบกวน ฟังก์ชัน ThinQ ควบคุมแอร์ผ่านสมาร์ทโฟน มีระบบฟอกอากาศและฆ่าเชื้อแบคทีเรีย',
     'CARRIER': 'แบรนด์อเมริกันที่เป็นผู้นำด้านระบบปรับอากาศ มีเทคโนโลยี Smart Auto Mode ปรับความเร็วพัดลมอัตโนมัติตามคุณภาพอากาศ ระบบกรองอากาศประสิทธิภาพสูง และการควบคุมอุณหภูมิที่แม่นยำ',
     'DAIKIN': 'แบรนด์ญี่ปุ่นที่มีชื่อเสียงด้านเทคโนโลยีระบบปรับอากาศระดับโลก มีระบบ Streamer Discharge ที่ช่วยฟอกอากาศและฆ่าเชื้อโรค เทคโนโลยี Inverter ประหยัดพลังงานสูง คอมเพรสเซอร์ทนทาน และระบบควบคุมอุณหภูมิแม่นยำ',
-    'GREE': 'แบรนด์จีนที่เป็นหนึ่งในผู้ผลิตแอร์รายใหญ่ของโลก มีเทคโนโลยี Cold Plasma ฆ่าเชื้อโรคและฟอกอากาศ ระบบ Self-Cleaning ลดการสะสมของฝุ่นและเชื้อรา ใช้คอมเพรสเซอร์ที่ทนทานและเงียบ',
     'HAIER': 'แบรนด์จีนที่มีความเชี่ยวชาญด้านอุปกรณ์เครื่องใช้ไฟฟ้า เทคโนโลยี Self-Cleaning ป้องกันเชื้อราและแบคทีเรีย ระบบ Hyper PCB ทำให้ทำงานได้เสถียรแม้ไฟตก คอมเพรสเซอร์ทนทานและประหยัดพลังงาน',
     'MITSUBISHI': 'แบรนด์ญี่ปุ่นที่ขึ้นชื่อเรื่องความทนทานและประหยัดพลังงาน ระบบ Fast Cooling ทำให้เย็นเร็วทันใจ เทคโนโลยี Dual Barrier Coating ลดการสะสมของฝุ่นและคราบน้ำมัน ใช้น้ำยาทำความเย็น R32 ที่เป็นมิตรต่อสิ่งแวดล้อม',
     'TCL': 'แบรนด์จีนที่ให้ความคุ้มค่าราคาประหยัด ระบบ Gentle Breeze กระจายลมได้อย่างนุ่มนวล คอมเพรสเซอร์ Inverter ช่วยประหยัดไฟ ดีไซน์ทันสมัย รองรับการควบคุมผ่านแอป',
@@ -1018,7 +1016,7 @@ class BrandDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(brand),
-        backgroundColor: Colors.blue,
+        backgroundColor: _MyHomePageState.appBarColor,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -1045,17 +1043,35 @@ class BrandDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'ข้อมูลเครื่องปรับอากาศ $brand',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        const TextSpan(
+                          text: 'ข้อมูลเครื่องปรับอากาศ ',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: brand,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: _MyHomePageState.textColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 16),
                   Text(
                     brandDescriptions[brand] ?? 'Brand description not available.',
-                    style: const TextStyle(fontSize: 16),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: _MyHomePageState.textColor,
+                    ),
                   ),
                   const SizedBox(height: 24),
                   Center(
@@ -1528,23 +1544,7 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
           'problem': 'มอเตอร์พัดลมคอยล์ร้อนเสียหรือ PCB เสีย',
         }
       ],
-      'GREE': [
-        {
-          'code': 'E1',
-          'problem': 'ระบบป้องกันความดันสูง',
-          'solution': '1. ตรวจสอบระดับน้ำยา\n2. ทำความสะอาดคอนเดนเซอร์\n3. ตรวจสอบพัดลมคอยล์ร้อน'
-        },
-        {
-          'code': 'E2',
-          'problem': 'ระบบป้องกันน้ำแข็ง',
-          'solution': '1. ทำความสะอาดแผ่นกรอง\n2. ตรวจสอบน้ำยา\n3. ตรวจสอบพัดลมคอยล์เย็น'
-        },
-        {
-          'code': 'E6',
-          'problem': 'การสื่อสารผิดพลาด',
-          'solution': '1. ตรวจสอบสายสัญญาณ\n2. ตรวจสอบแรงดันไฟฟ้า\n3. ตรวจสอบแผงวงจร'
-        }
-      ],
+    
       'HAIER': [
         {
           'code': 'E12',
@@ -1636,7 +1636,7 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.brand} Error Code'),
-        backgroundColor: Colors.blue,
+        backgroundColor: _MyHomePageState.appBarColor,
       ),
       body: Column(
         children: [
@@ -1667,84 +1667,125 @@ class _ErrorCodeScreenState extends State<ErrorCodeScreen> {
                 final error = filteredCodes[index];
           return Card(
             margin: const EdgeInsets.all(8),
+            color: _MyHomePageState.cardBackgroundColor,
             child: ExpansionTile(
-              title: Text(
-                'Error ${error['code']}',
-                      style: const TextStyle(
+              title: Text.rich(
+                TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: 'Error: ',
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        fontSize: 16,
                         color: Colors.black,
                       ),
                     ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (widget.brand == 'HAIER' && error['LED_blink'] != null)
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.lightbulb_outline,
-                                size: 16,
-                                color: Colors.red,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                'ไฟกระพริบ ${error['LED_blink']} ครั้ง',
-                                style: const TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: 'Problem: ',
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                    TextSpan(
+                      text: '${error['code']}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: _MyHomePageState.textColor,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-                              TextSpan(text: error['problem'] ?? ''),
-                            ],
-                          ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (widget.brand == 'HAIER' && error['LED_blink'] != null)
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.lightbulb_outline,
+                          size: 16,
+                          color: Colors.red,
                         ),
-                        const SizedBox(height: 8),
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: 'Status: ',
-                                style: const TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: error['status'] ?? ''),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: 'Control: ',
-                                style: const TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: error['control'] ?? ''),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: 'Solution: ',
-                                style: const TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: error['solution'] ?? ''),
-                            ],
+                        const SizedBox(width: 4),
+                        Text(
+                          'ไฟกระพริบ ${error['LED_blink']} ครั้ง',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
                           ),
                         ),
                       ],
                     ),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'ปัญหา: ',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: error['problem'],
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: _MyHomePageState.textColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'สถานะ: ',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: error['status'],
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: _MyHomePageState.textColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'การควบคุม: ',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: error['control'],
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: _MyHomePageState.textColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'วิธีแก้ไข: ',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: error['solution'],
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: _MyHomePageState.textColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -1849,10 +1890,10 @@ class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
   String selectedGroup = '';
 
   // Add these constants at the top of the class
-  static const String PROBLEM_LABEL = 'สาเหตุของปัญหา : ';
-  static const String STATUS_LABEL = 'สภาวะทำงาน : ';
-  static const String CONTROL_LABEL = 'จุดสังเกตุ : ';
-  static const String SOLUTION_LABEL = 'การแก้ไข : ';
+  static const String PROBLEM_LABEL = 'ปัญหา: ';
+  static const String STATUS_LABEL = 'สถานะการทำงาน: ';
+  static const String CONTROL_LABEL = 'จุดสังเกต: ';
+  static const String SOLUTION_LABEL = 'วิธีแก้ไข: ';
 
   final Map<String, List<Map<String, String>>> errorData = {
     '00': [
@@ -1870,7 +1911,7 @@ class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
         'problem': 'สายสัญญาณไฟฟ้า (PowerTA) หลวมหรือหลุด',
         'status': 'หยุดทำงาน',
         'control': 'แสงดมลเมื่อพบข้อบกพร่อง',
-        'solution': '1. ตรวจสอบสายไฟฟ้า\n \t\t             2. รีเซ็ตเครื่องหรือรีบูต PC นอก',
+        'solution': '1. ตรวจสอบสายไฟฟ้า\n \t\t             2. รีเซ็ทเครื่องหรือรีบูต PC นอก',
       },
         {
         'group': 'PC บอร์ด/ภายใน',
@@ -1878,7 +1919,7 @@ class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
         'problem': 'ปัญหาจาก PC. บอร์ด อื่นๆ',
         'status': 'ดับหมด',
         'control': 'แสดงว่าเมื่อพบข้อบกพร่อง',
-        'solution': 'เปลี่ยน PC. บอร์ค',
+        'solution': 'เปลี่ยน PC. บอร์ด',
       },
         {
         'group': 'ไม่แสดง',
@@ -2066,6 +2107,7 @@ class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('CARRIER Error Codes'),
+        backgroundColor: _MyHomePageState.appBarColor, // Use the static appBarColor
       ),
       body: Column(
         children: [
@@ -2158,13 +2200,35 @@ class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
 
                 return Card(
                   margin: const EdgeInsets.all(8),
+                  color: _MyHomePageState.cardBackgroundColor,
                   child: ExpansionTile(
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
-                            Text('Error Code: ${error['code']}'),
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  const TextSpan(
+                                    text: 'Error: ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '${error['code']}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: _MyHomePageState.textColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                             const SizedBox(width: 8),
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -2214,7 +2278,13 @@ class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
                                     text: PROBLEM_LABEL,
                                     style: const TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  TextSpan(text: error['problem'] ?? ''),
+                                  TextSpan(
+                                    text: error['problem'],
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: _MyHomePageState.textColor,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -2226,7 +2296,13 @@ class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
                                     text: STATUS_LABEL,
                                     style: const TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  TextSpan(text: error['status'] ?? ''),
+                                  TextSpan(
+                                    text: error['status'],
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: _MyHomePageState.textColor,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -2238,7 +2314,13 @@ class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
                                     text: CONTROL_LABEL,
                                     style: const TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  TextSpan(text: error['control'] ?? ''),
+                                  TextSpan(
+                                    text: error['control'],
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: _MyHomePageState.textColor,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -2250,7 +2332,13 @@ class _CarrierErrorCodePageState extends State<CarrierErrorCodePage> {
                                     text: SOLUTION_LABEL,
                                     style: const TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  TextSpan(text: error['solution'] ?? ''),
+                                  TextSpan(
+                                    text: error['solution'],
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: _MyHomePageState.textColor,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -2358,7 +2446,7 @@ class _DaikinErrorCodePageState extends State<DaikinErrorCodePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('DAIKIN Error Codes'),
-        backgroundColor: Colors.blue,
+        backgroundColor: _MyHomePageState.appBarColor, // Use the static appBarColor
       ),
       body: Column(
         children: [
@@ -2389,30 +2477,46 @@ class _DaikinErrorCodePageState extends State<DaikinErrorCodePage> {
                 final error = filteredErrors[index];
                 return Card(
                   margin: const EdgeInsets.all(8),
+                  color: _MyHomePageState.cardBackgroundColor,
                   child: ListTile(
-                    title: Text(
-                      'Error ${error['code']}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                    title: Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: 'Error: ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                          TextSpan(
+                            text: error['code'],
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: _MyHomePageState.textColor,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                          subtitle: Text.rich(
                       TextSpan(
                         children: [
-                          const TextSpan(
+                          TextSpan(
                             text: 'ปัญหา: ',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
-                              color: Colors.black,
+                              color: _MyHomePageState.textColor,
                             ),
                           ),
                           TextSpan(
                             text: error['problem'],
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
-                              color: Colors.black,
+                              color: _MyHomePageState.textColor,
                             ),
                           ),
                         ],
@@ -2619,6 +2723,7 @@ class _TclErrorCodePageState extends State<TclErrorCodePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('TCL Error Codes'),
+        backgroundColor: _MyHomePageState.appBarColor, // Use the static appBarColor
       ),
       body: Column(
         children: [
@@ -2684,16 +2789,32 @@ class _TclErrorCodePageState extends State<TclErrorCodePage> {
                 
                 return Card(
                   margin: const EdgeInsets.all(8),
+                  color: _MyHomePageState.cardBackgroundColor,
                   child: ListTile(
                     title: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
-                          child: Text(
-                            'Error ${error['code']}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                const TextSpan(
+                                  text: 'Error: ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '${error['code']}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: _MyHomePageState.textColor,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -2704,14 +2825,14 @@ class _TclErrorCodePageState extends State<TclErrorCodePage> {
                             vertical: 2,
                           ),
             decoration: BoxDecoration(
-                            color: Colors.grey[200],
+                            color: Colors.blue.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
                             groupName,
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey[700],
+                              color: Colors.blue[700],
                             ),
                           ),
                         ),
@@ -2720,19 +2841,19 @@ class _TclErrorCodePageState extends State<TclErrorCodePage> {
                       subtitle: Text.rich(
                       TextSpan(
                         children: [
-                          const TextSpan(
+                          TextSpan(
                             text: 'ปัญหา: ',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
-                              color: Colors.black,
+                              color: _MyHomePageState.textColor,
                             ),
                           ),
                           TextSpan(
                             text: error['problem'],
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
-                              color: Colors.black,
+                              color: _MyHomePageState.textColor,
                             ),
                           ),
                         ],
@@ -2878,7 +2999,7 @@ class _HaierErrorCodePageState extends State<HaierErrorCodePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('HAIER Error Codes'),
-        backgroundColor: Colors.blue,
+        backgroundColor: _MyHomePageState.appBarColor, // Use the static appBarColor
       ),
       body: Column(
         children: [
@@ -2909,17 +3030,33 @@ class _HaierErrorCodePageState extends State<HaierErrorCodePage> {
                 final error = filteredErrors[index];
                 return Card(
                   margin: const EdgeInsets.all(8),
+                  color: _MyHomePageState.cardBackgroundColor,
                   child: ListTile(
                     title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                          'Error ${error['code']}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      const TextSpan(
+                        text: 'Error: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black,
                         ),
+                      ),
+                      TextSpan(
+                        text: '${error['code']}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: _MyHomePageState.textColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                         const SizedBox(height: 8), // Add spacing
                         Row(
                           children: [
@@ -2931,7 +3068,7 @@ class _HaierErrorCodePageState extends State<HaierErrorCodePage> {
                             const SizedBox(width: 4),
                 Text(
                               'ไฟกระพริบ ${error['LED_blink']} ครั้ง',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.red,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14,
@@ -2944,19 +3081,19 @@ class _HaierErrorCodePageState extends State<HaierErrorCodePage> {
                       subtitle: Text.rich(
                       TextSpan(
                         children: [
-                          const TextSpan(
+                          TextSpan(
                             text: 'ปัญหา: ',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
-                              color: Colors.black,
+                              color: _MyHomePageState.textColor,
                             ),
                           ),
                           TextSpan(
                             text: error['problem'],
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
-                              color: Colors.black,
+                              color: _MyHomePageState.textColor,
                             ),
                           ),
                         ],
@@ -3141,6 +3278,7 @@ class _LGErrorCodePageState extends State<LGErrorCodePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('LG Error Codes'),
+        backgroundColor: _MyHomePageState.appBarColor, // Use the static appBarColor
       ),
       body: Column(
         children: [
@@ -3206,16 +3344,32 @@ class _LGErrorCodePageState extends State<LGErrorCodePage> {
                 
                 return Card(
                   margin: const EdgeInsets.all(8),
+                  color: _MyHomePageState.cardBackgroundColor,
                   child: ListTile(
                     title: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
-                          child: Text(
-                            'Error ${error['code']}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                const TextSpan(
+                                  text: 'Error: ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '${error['code']}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: _MyHomePageState.textColor,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -3226,14 +3380,15 @@ class _LGErrorCodePageState extends State<LGErrorCodePage> {
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.grey[200],
+                              color: Colors.blue.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
                             groupName,
                   style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey[700],
+                              color: Colors.blue[700],
+                                  fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
@@ -3242,19 +3397,19 @@ class _LGErrorCodePageState extends State<LGErrorCodePage> {
                    subtitle: Text.rich(
                       TextSpan(
                         children: [
-                          const TextSpan(
+                          TextSpan(
                             text: 'ปัญหา: ',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
-                              color: Colors.black,
+                              color: _MyHomePageState.textColor,
                             ),
                           ),
                           TextSpan(
                             text: error['problem'],
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
-                              color: Colors.black,
+                              color: _MyHomePageState.textColor,
                             ),
                           ),
                         ],
@@ -3454,7 +3609,7 @@ class _PanasonicErrorCodePageState extends State<PanasonicErrorCodePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('PANASONIC Error Codes'),
-        backgroundColor: Colors.blue,
+        backgroundColor: _MyHomePageState.appBarColor, // Use the static appBarColor
       ),
       body: Column(
         children: [
@@ -3485,18 +3640,34 @@ class _PanasonicErrorCodePageState extends State<PanasonicErrorCodePage> {
                 final error = filteredErrors[index];
                 return Card(
                   margin: const EdgeInsets.all(8),
+                  color: _MyHomePageState.cardBackgroundColor,
                   child: ListTile(
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Error ${error['code']}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 8),
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              const TextSpan(
+                                text: 'Error: ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              TextSpan(
+                                text: '${error['code']}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: _MyHomePageState.textColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
                         Row(
                           children: [
                             const Icon(
@@ -3508,7 +3679,7 @@ class _PanasonicErrorCodePageState extends State<PanasonicErrorCodePage> {
                             Expanded(
                               child: Text(
                                 '${error['LED_blink']}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: Colors.red,
                                   fontWeight: FontWeight.w500,
                                   fontSize: 14,
@@ -3523,15 +3694,26 @@ class _PanasonicErrorCodePageState extends State<PanasonicErrorCodePage> {
                             horizontal: 8,
                             vertical: 2,
                           ),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            'สถานะ: ${error['status']}',
-                            style: TextStyle(
-                              fontSize: 14,
-                            color: Colors.black,
+                       
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'สถานะ: ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                   // color: _MyHomePageState.textColor,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '${error['status']}',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: _MyHomePageState.textColor,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -3540,19 +3722,19 @@ class _PanasonicErrorCodePageState extends State<PanasonicErrorCodePage> {
                      subtitle: Text.rich(
                       TextSpan(
                         children: [ 
-                          const TextSpan(
+                          TextSpan(
                             text: 'ปัญหา: ',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
-                              color: Colors.black,
+                              
                             ),
                           ),
                           TextSpan(
                             text: error['problem'],
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
-                              color: Colors.black,
+                              color: _MyHomePageState.textColor,
                             ),
                           ),
                         ],
@@ -3572,10 +3754,10 @@ class _PanasonicErrorCodePageState extends State<PanasonicErrorCodePage> {
 class MitsubishiErrorCodePage extends StatefulWidget {
   const MitsubishiErrorCodePage({Key? key}) : super(key: key);
 
-  static const String PROBLEM_LABEL = 'สาเหตุของปัญหา : ';
-  static const String STATUS_LABEL = 'สภาวะทำงาน : ';
-  static const String CONTROL_LABEL = 'จุดสังเกตุ : ';
-  static const String SOLUTION_LABEL = 'การแก้ไข : ';
+  static const String PROBLEM_LABEL = 'ปัญหา: ';
+  static const String STATUS_LABEL = 'สถานะการทำงาน: ';
+  static const String CONTROL_LABEL = 'จุดสังเกต: ';
+  static const String SOLUTION_LABEL = 'วิธีแก้ไข: ';
   static const String Errorss = 'Error';
 
   @override
@@ -3647,7 +3829,7 @@ class _MitsubishiErrorCodePageState extends State<MitsubishiErrorCodePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('MITSUBISHI Error Codes'),
-        backgroundColor: Colors.blue,
+        backgroundColor: _MyHomePageState.appBarColor, // Use the static appBarColor
       ),
       body: Column(
         children: [
@@ -3711,6 +3893,7 @@ class _MitsubishiErrorCodePageState extends State<MitsubishiErrorCodePage> {
                 final error = filteredErrors[index];
                 return Card(
                   margin: const EdgeInsets.all(8),
+                  color: _MyHomePageState.cardBackgroundColor,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -3729,10 +3912,10 @@ class _MitsubishiErrorCodePageState extends State<MitsubishiErrorCodePage> {
                               ),
                               TextSpan(
                                 text: ' ${error['code']}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                  color: _MyHomePageState.textColor, // Update to use static textColor
                                 ),
                               ),
                             ],
@@ -3796,9 +3979,9 @@ class _MitsubishiErrorCodePageState extends State<MitsubishiErrorCodePage> {
                               ),
                               TextSpan(
                                 text: '${error['problem']}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.black,
+                                  color: _MyHomePageState.textColor,
                                 ),
                               ),
                             ],
@@ -3820,7 +4003,7 @@ class _MitsubishiErrorCodePageState extends State<MitsubishiErrorCodePage> {
                                 text: '${error['test']}',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.black,
+                                  color: _MyHomePageState.textColor, // Update to use static textColor
                                 ),
                               ),
                             ],
