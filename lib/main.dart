@@ -2397,10 +2397,25 @@ class _DaikinErrorCodePageState extends State<DaikinErrorCodePage> {
                         fontSize: 16,
                       ),
                     ),
-                    subtitle: Text(
-                      error['problem']!,
-                      style: const TextStyle(
-                        fontSize: 14,
+                         subtitle: Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: 'ปัญหา: ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                          TextSpan(
+                            text: error['problem'],
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -2702,10 +2717,25 @@ class _TclErrorCodePageState extends State<TclErrorCodePage> {
                         ),
                       ],
                     ),
-                    subtitle: Text(
-                      error['problem']!,
-                      style: const TextStyle(
-                        fontSize: 14,
+                      subtitle: Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: 'ปัญหา: ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                          TextSpan(
+                            text: error['problem'],
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -2911,13 +2941,25 @@ class _HaierErrorCodePageState extends State<HaierErrorCodePage> {
                         ),
                       ],
                     ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 8), // Add spacing
-                      child: Text(
-                        error['problem'],
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
+                      subtitle: Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: 'ปัญหา: ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                          TextSpan(
+                            text: error['problem'],
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -3197,10 +3239,25 @@ class _LGErrorCodePageState extends State<LGErrorCodePage> {
                         ),
                       ],
                     ),
-                    subtitle: Text(
-                      error['problem']!,
-                      style: const TextStyle(
-                        fontSize: 14,
+                   subtitle: Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: 'ปัญหา: ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                          TextSpan(
+                            text: error['problem'],
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -3473,20 +3530,32 @@ class _PanasonicErrorCodePageState extends State<PanasonicErrorCodePage> {
                           child: Text(
                             'สถานะ: ${error['status']}',
                             style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[700],
+                              fontSize: 14,
+                            color: Colors.black,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        error['problem'],
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
+                     subtitle: Text.rich(
+                      TextSpan(
+                        children: [ 
+                          const TextSpan(
+                            text: 'ปัญหา: ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                          TextSpan(
+                            text: error['problem'],
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -3507,7 +3576,7 @@ class MitsubishiErrorCodePage extends StatefulWidget {
   static const String STATUS_LABEL = 'สภาวะทำงาน : ';
   static const String CONTROL_LABEL = 'จุดสังเกตุ : ';
   static const String SOLUTION_LABEL = 'การแก้ไข : ';
-  static const String Errorss = 'รหัสข้อผิดพลาด';
+  static const String Errorss = 'Error';
 
   @override
   State<MitsubishiErrorCodePage> createState() => _MitsubishiErrorCodePageState();
